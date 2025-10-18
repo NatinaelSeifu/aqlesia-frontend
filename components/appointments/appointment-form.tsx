@@ -1,0 +1,316 @@
+"use client"
+
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { appointmentService } from "@/lib/appointments"
+import type { CreateAppointmentRequest } from "@/lib/appointments"
+import { Calendar, Clock, AlertCircle, CheckCircle, Info } from "lucide-react"
+
+interface AppointmentFormProps {
+  onSuccess?: () => void
+  onCancel?: () => void
+}
+
+export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
+  const [formData, setFormData] = useState<CreateAppointmentRequest>({
+    appointment_date: "",
+    notes: "",
+  })
+  const [availableDates, setAvailableDates] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+  const [loadingDates, setLoadingDates] = useState(true)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
+
+  useEffect(() => {
+    loadAvailableDates()
+  }, [])
+
+  const loadAvailableDates = async () => {
+    try {
+      setLoadingDates(true)
+      setError("") // Clear previous errors
+      
+      // Get available dates for the next 30 days
+      const today = new Date()
+      const endDate = new Date(today)
+      endDate.setDate(today.getDate() + 30)
+      
+      const startDateStr = today.toISOString().split("T")[0]
+      const endDateStr = endDate.toISOString().split("T")[0]
+      
+      const response = await appointmentService.getAvailableDates(startDateStr, endDateStr)
+      console.log('Available dates from API:', response) // Debug log
+      
+      // The API should return the response in the format expected by handleResponse
+      // Handle both direct array and wrapped response
+      let dates = response
+      if (response && typeof response === 'object' && 'data' in response) {
+        dates = response.data
+      }
+      if (response && typeof response === 'object' && 'available_dates' in response) {
+        dates = response.available_dates
+      }
+      
+      // Ensure we always have an array
+      setAvailableDates(Array.isArray(dates) ? dates : [])
+    } catch (err) {
+      console.error('Error loading available dates:', err)
+      setError("Failed to load available dates. Please try again.")
+      setAvailableDates([]) // Set to empty array on error
+    } finally {
+      setLoadingDates(false)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setSuccess(false)
+
+    if (!formData.appointment_date) {
+      setError("Please select an appointment date")
+      return
+    }
+
+    try {
+      setLoading(true)
+      const newAppointment = await appointmentService.createAppointment(formData)
+      console.log('Appointment created successfully:', newAppointment)
+      setSuccess(true)
+      
+      // Redirect after 3 seconds to give user time to see the confirmation
+      setTimeout(() => {
+        onSuccess?.()
+      }, 3000)
+    } catch (err) {
+      console.error('Appointment creation error:', err)
+      
+      let errorMessage = "Failed to create appointment"
+      
+      if (err instanceof Error) {
+        errorMessage = err.message
+        
+        // Handle specific backend error messages
+        if (err.message.toLowerCase().includes('already has')) {
+          errorMessage = "You already have an active appointment. Please cancel your existing appointment before booking a new one."
+        } else if (err.message.toLowerCase().includes('date is full')) {
+          errorMessage = "This date is no longer available. Please select a different date."
+        } else if (err.message.toLowerCase().includes('invalid date')) {
+          errorMessage = "Please select a valid appointment date."
+        }
+      }
+      
+      setError(errorMessage)
+      
+      // If the error is about already having an appointment, refresh available dates
+      if (errorMessage.includes('already has')) {
+        loadAvailableDates()
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDateSelect = (date: string) => {
+    setFormData((prev) => ({ ...prev, appointment_date: date }))
+  }
+
+  const getDisplayDates = () => {
+    if (!Array.isArray(availableDates)) {
+      return []
+    }
+
+    // Convert the available dates from API into display format
+    return availableDates.map(dateStr => {
+      const date = new Date(dateStr)
+      return {
+        date: dateStr,
+        display: date.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+        available: true, // All dates from API are available
+      }
+    }).sort((a, b) => a.date.localeCompare(b.date)) // Sort by date
+  }
+
+  if (success) {
+    return (
+      <Card className="w-full max-w-md mx-auto bg-white border-gray-200">
+        <CardContent className="pt-6 bg-white">
+          <div className="text-center space-y-4">
+            <CheckCircle className="h-12 w-12 text-green-600 mx-auto" />
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Appointment Booked!</h3>
+              <p className="text-sm text-gray-600 mb-4">Your appointment has been successfully scheduled.</p>
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-gray-900">Date: {new Date(formData.appointment_date).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}</p>
+                {formData.notes && (
+                  <p className="text-sm text-gray-600">Notes: {formData.notes}</p>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 mt-4">Redirecting to your appointments...</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <Card className="w-full max-w-2xl mx-auto bg-white border-gray-200">
+      <CardHeader className="bg-white">
+        <CardTitle className="flex items-center space-x-2 text-gray-900">
+          <Calendar className="h-5 w-5 text-blue-600" />
+          <span>Book New Appointment</span>
+        </CardTitle>
+        <CardDescription className="text-gray-600">
+          Schedule your appointment. Available on Monday, Wednesday, and Friday only.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="bg-white">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <Alert variant="destructive" className="border-red-200 bg-red-50">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-800">{error}</AlertDescription>
+            </Alert>
+          )}
+          
+          {/* Temporary debug section */}
+          {process.env.NODE_ENV === 'development' && error && (
+            <details className="text-xs bg-gray-100 p-2 rounded border border-gray-200">
+              <summary className="cursor-pointer text-gray-700">Debug Error Info</summary>
+              <pre className="mt-2 text-xs overflow-auto text-gray-900">
+                Error: {error}
+              </pre>
+            </details>
+          )}
+
+          <Alert className="border-blue-200 bg-blue-50">
+            <Info className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
+              Appointments are available on Monday, Wednesday, and Friday. Maximum 10 appointments per day. You can only have one active appointment at a time.
+            </AlertDescription>
+          </Alert>
+
+          {/* Date Selection */}
+          <div className="space-y-4">
+            <Label className="text-gray-900 font-medium">Select Appointment Date</Label>
+
+            {loadingDates ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="flex items-center space-x-2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                  <span className="text-gray-700">Loading dates...</span>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                {getDisplayDates().length === 0 ? (
+                  <div className="col-span-full text-center py-8 text-gray-600">
+                    <Calendar className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                    <p className="text-gray-700">No available dates found.</p>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-2 border-gray-300 text-gray-700 hover:bg-gray-50"
+                      onClick={loadAvailableDates}
+                    >
+                      Refresh
+                    </Button>
+                  </div>
+                ) : (
+                  getDisplayDates().map(({ date, display, available }) => (
+                  <button
+                    key={date}
+                    type="button"
+                    onClick={() => available && handleDateSelect(date)}
+                    disabled={!available}
+                    className={`p-3 text-left rounded-lg border transition-colors bg-white ${
+                      formData.appointment_date === date
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : available
+                          ? "border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-900"
+                          : "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-sm">{display}</p>
+                        <p className="text-xs text-gray-500">{date}</p>
+                      </div>
+                      <div>
+                        {available ? (
+                          <Badge className="text-xs bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
+                            Available
+                          </Badge>
+                        ) : (
+                          <Badge variant="destructive" className="text-xs bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
+                            Full
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                ))
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Notes */}
+          <div className="space-y-2">
+            <Label htmlFor="notes" className="text-gray-900 font-medium">Notes (Optional)</Label>
+            <Textarea
+              id="notes"
+              placeholder="Add any additional notes about your appointment..."
+              value={formData.notes}
+              onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
+              rows={3}
+              className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="flex space-x-4">
+            <Button 
+              type="submit" 
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white" 
+              disabled={loading || !formData.appointment_date}
+            >
+              <Clock className="h-4 w-4 mr-2" />
+              {loading ? "Booking..." : "Book Appointment"}
+            </Button>
+            {onCancel && (
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onCancel}
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  )
+}

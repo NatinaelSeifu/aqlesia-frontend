@@ -1,0 +1,54 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Church Building Base -->
+  <rect x="60" y="120" width="80" height="70" fill="#D4A574" stroke="#B8956A" stroke-width="2"/>
+  
+  <!-- Main Dome -->
+  <ellipse cx="100" cy="90" rx="35" ry="25" fill="#C4945C" stroke="#A67B47" stroke-width="2"/>
+  
+  <!-- Central Cross on Dome -->
+  <g transform="translate(100, 70)">
+    <rect x="-2" y="-15" width="4" height="30" fill="#8B4513"/>
+    <rect x="-10" y="-3" width="20" height="4" fill="#8B4513"/>
+    <circle cx="0" cy="-15" r="3" fill="#8B4513"/>
+  </g>
+  
+  <!-- Side Towers -->
+  <rect x="40" y="100" width="20" height="50" fill="#D4A574" stroke="#B8956A" stroke-width="1"/>
+  <rect x="140" y="100" width="20" height="50" fill="#D4A574" stroke="#B8956A" stroke-width="1"/>
+  
+  <!-- Tower Domes -->
+  <ellipse cx="50" cy="95" rx="12" ry="8" fill="#C4945C" stroke="#A67B47" stroke-width="1"/>
+  <ellipse cx="150" cy="95" rx="12" ry="8" fill="#C4945C" stroke="#A67B47" stroke-width="1"/>
+  
+  <!-- Small crosses on towers -->
+  <g transform="translate(50, 85)">
+    <rect x="-1" y="-8" width="2" height="16" fill="#8B4513"/>
+    <rect x="-6" y="-2" width="12" height="2" fill="#8B4513"/>
+  </g>
+  <g transform="translate(150, 85)">
+    <rect x="-1" y="-8" width="2" height="16" fill="#8B4513"/>
+    <rect x="-6" y="-2" width="12" height="2" fill="#8B4513"/>
+  </g>
+  
+  <!-- Main Entrance -->
+  <path d="M85 120 Q85 110 100 110 Q115 110 115 120 Z" fill="#8B4513"/>
+  <rect x="88" y="120" width="24" height="40" fill="#8B4513"/>
+  
+  <!-- Windows -->
+  <circle cx="75" cy="135" r="6" fill="#4A5568" stroke="#2D3748" stroke-width="1"/>
+  <circle cx="125" cy="135" r="6" fill="#4A5568" stroke="#2D3748" stroke-width="1"/>
+  
+  <!-- Ethiopian Pattern Border -->
+  <rect x="65" y="115" width="70" height="3" fill="#8B4513"/>
+  
+  <!-- Decorative Ethiopian Cross Pattern at base -->
+  <g transform="translate(100, 175)">
+    <rect x="-12" y="-2" width="24" height="4" fill="#8B4513"/>
+    <rect x="-2" y="-12" width="4" height="24" fill="#8B4513"/>
+    <rect x="-8" y="-8" width="16" height="2" fill="#8B4513"/>
+    <rect x="-8" y="6" width="16" height="2" fill="#8B4513"/>
+  </g>
+  
+  <!-- Mountains in background -->
+  <path d="M0 150 L30 120 L60 140 L90 110 L120 130 L150 100 L180 120 L200 110 L200 200 L0 200 Z" fill="#E2E8F0" opacity="0.3"/>
+</svg>

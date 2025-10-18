@@ -1,0 +1,615 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useAuth } from "../../../hooks/use-auth"
+import { redirect } from "next/navigation"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Badge } from "../../../components/ui/badge"
+import { Input } from "../../../components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from "@/components/ui/table"
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { 
+  CheckCircle2, 
+  XCircle, 
+  Clock, 
+  Users, 
+  Calendar,
+  RefreshCw,
+  Eye,
+  Trash2,
+  Phone,
+  Search
+} from "lucide-react"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import { useToast } from "@/components/ui/use-toast"
+import { Communion, UpdateCommunionStatusRequest, communionService } from "@/lib/communion"
+import { format } from "date-fns"
+
+export default function AdminCommunionPage() {
+  const { user, loading } = useAuth()
+  const { toast } = useToast()
+  
+  // State management
+  const [allCommunions, setAllCommunions] = useState<Communion[]>([])
+  const [pendingCommunions, setPendingCommunions] = useState<Communion[]>([])
+  const [loadingAll, setLoadingAll] = useState(true)
+  const [loadingPending, setLoadingPending] = useState(true)
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState("")
+  
+  // Pagination state
+  const [allPage, setAllPage] = useState(1)
+  const [pendingPage, setPendingPage] = useState(1)
+  const [allTotal, setAllTotal] = useState(0)
+  const [pendingTotal, setPendingTotal] = useState(0)
+  const pageSize = 20
+
+  useEffect(() => {
+    if (!loading && !user) {
+      redirect("/")
+    }
+    
+    if (!loading && user && user.role !== "admin") {
+      redirect("/dashboard")
+    }
+  }, [user, loading])
+
+  useEffect(() => {
+    if (user && user.role === "admin") {
+      loadAllCommunions()
+      loadPendingCommunions()
+    }
+  }, [user, allPage, pendingPage])
+
+  const loadAllCommunions = async () => {
+    try {
+      setLoadingAll(true)
+      const response = await communionService.getAllCommunions(allPage, pageSize)
+      setAllCommunions(response.communions)
+      setAllTotal(response.total)
+    } catch (error) {
+      console.error('Failed to load all communions:', error)
+      toast({
+        title: "Failed to load communion requests",
+        description: error instanceof Error ? error.message : "Please try again later",
+        variant: "destructive"
+      })
+    } finally {
+      setLoadingAll(false)
+    }
+  }
+
+  const loadPendingCommunions = async () => {
+    try {
+      setLoadingPending(true)
+      const response = await communionService.getPendingCommunions(pendingPage, pageSize)
+      setPendingCommunions(response.communions)
+      setPendingTotal(response.total)
+    } catch (error) {
+      console.error('Failed to load pending communions:', error)
+      toast({
+        title: "Failed to load pending requests",
+        description: error instanceof Error ? error.message : "Please try again later",
+        variant: "destructive"
+      })
+    } finally {
+      setLoadingPending(false)
+    }
+  }
+
+  const handleStatusUpdate = async (communionId: string, status: 'approved' | 'rejected') => {
+    try {
+      setActionLoading(communionId)
+      const request: UpdateCommunionStatusRequest = { status }
+      
+      await communionService.updateCommunionStatus(communionId, request)
+      
+      toast({
+        title: `Communion request ${status}`,
+        description: `The communion request has been ${status} successfully.`,
+        variant: status === 'approved' ? "default" : "destructive"
+      })
+      
+      // Reload data
+      loadAllCommunions()
+      loadPendingCommunions()
+    } catch (error) {
+      console.error(`Failed to ${status} communion:`, error)
+      toast({
+        title: `Failed to ${status} request`,
+        description: error instanceof Error ? error.message : "Please try again later",
+        variant: "destructive"
+      })
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleDeleteCommunion = async (communionId: string) => {
+    try {
+      setActionLoading(communionId)
+      await communionService.deleteCommunion(communionId)
+      
+      toast({
+        title: "Communion request deleted",
+        description: "The communion request has been deleted successfully.",
+        variant: "default"
+      })
+      
+      // Reload data
+      loadAllCommunions()
+      loadPendingCommunions()
+    } catch (error) {
+      console.error('Failed to delete communion:', error)
+      toast({
+        title: "Failed to delete request",
+        description: error instanceof Error ? error.message : "Please try again later",
+        variant: "destructive"
+      })
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'approved':
+        return (
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
+            <CheckCircle2 className="h-3 w-3 mr-1" />
+            Approved
+          </Badge>
+        )
+      case 'rejected':
+        return (
+          <Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
+            <XCircle className="h-3 w-3 mr-1" />
+            Rejected
+          </Badge>
+        )
+      case 'pending':
+        return (
+          <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-300">
+            <Clock className="h-3 w-3 mr-1" />
+            Pending
+          </Badge>
+        )
+      default:
+        return (
+          <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300">
+            <Clock className="h-3 w-3 mr-1" />
+            {status}
+          </Badge>
+        )
+    }
+  }
+
+  const filteredAllCommunions = allCommunions.filter(communion =>
+    communion.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    communion.user?.lastname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    communion.user?.phone_number?.includes(searchTerm) ||
+    communion.status?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const filteredPendingCommunions = pendingCommunions.filter(communion =>
+    communion.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    communion.user?.lastname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    communion.user?.phone_number?.includes(searchTerm) ||
+    communion.status?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const CommunionTable = ({
+    communions, 
+    loading, 
+    showActions = true 
+  }: { 
+    communions: Communion[], 
+    loading: boolean,
+    showActions?: boolean 
+  }) => (
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-gray-50 border-b border-gray-200">
+            <TableHead className="font-semibold text-gray-900">User</TableHead>
+            <TableHead className="font-semibold text-gray-900">Phone</TableHead>
+            <TableHead className="font-semibold text-gray-900">Communion Date</TableHead>
+            <TableHead className="font-semibold text-gray-900">Status</TableHead>
+            <TableHead className="font-semibold text-gray-900">Requested At</TableHead>
+            {showActions && <TableHead className="font-semibold text-gray-900">Actions</TableHead>}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {loading ? (
+            <TableRow>
+              <TableCell colSpan={showActions ? 6 : 5} className="text-center py-12">
+                <div className="flex items-center justify-center space-x-2">
+                  <RefreshCw className="h-4 w-4 animate-spin text-indigo-600" />
+                  <span className="text-gray-700">Loading...</span>
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : communions.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={showActions ? 6 : 5} className="text-center py-12">
+                <div className="text-gray-500 text-lg font-medium mb-2">No communion requests found</div>
+                <div className="text-gray-400">Try refreshing or check back later</div>
+              </TableCell>
+            </TableRow>
+          ) : (
+            communions.map((communion) => (
+              <TableRow key={communion.id} className="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                <TableCell className="font-medium text-gray-900">
+                  {communion.user?.name || 'Unknown User'}
+                  {communion.user?.lastname && ` ${communion.user.lastname}`}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center text-gray-700">
+                    <Phone className="h-4 w-4 mr-2 text-gray-500" />
+                    {communion.user?.phone_number || 'N/A'}
+                  </div>
+                </TableCell>
+                <TableCell className="text-gray-700">
+                  {format(new Date(communion.communion_date), 'MMM d, yyyy')}
+                </TableCell>
+                <TableCell>{getStatusBadge(communion.status)}</TableCell>
+                <TableCell className="text-gray-700">
+                  {format(new Date(communion.requested_at), 'MMM d, yyyy h:mm a')}
+                </TableCell>
+                {showActions && (
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end space-x-1.5">
+                      {communion.status === 'pending' && (
+                        <>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                disabled={actionLoading === communion.id}
+                                className="h-8 w-8 p-0 text-green-600 hover:bg-green-100 hover:text-green-700 rounded-md"
+                                title="Approve Request"
+                              >
+                                <CheckCircle2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Approve Communion Request</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to approve this communion request from {communion.user?.name}?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction 
+                                  onClick={() => handleStatusUpdate(communion.id, 'approved')}
+                                  className="bg-green-600 hover:bg-green-700"
+                                >
+                                  Approve
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                disabled={actionLoading === communion.id}
+                                className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
+                                title="Reject Request"
+                              >
+                                <XCircle className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Reject Communion Request</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to reject this communion request from {communion.user?.name}?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction 
+                                  onClick={() => handleStatusUpdate(communion.id, 'rejected')}
+                                  className="bg-red-600 hover:bg-red-700"
+                                >
+                                  Reject
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </>
+                      )}
+                      
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            disabled={actionLoading === communion.id}
+                            className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
+                            title="Delete Request"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Communion Request</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete this communion request? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction 
+                              onClick={() => handleDeleteCommunion(communion.id)}
+                              className="bg-red-600 hover:bg-red-700"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  )
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
+  if (!user || user.role !== "admin") return null
+
+  return (
+    <div className="min-h-screen bg-white">
+      <DashboardHeader />
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8 bg-white">
+        <div className="mb-8">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-4">
+              <Users className="h-8 w-8 text-blue-600" />
+            </div>
+            <h2 className="text-3xl font-bold mb-2 text-gray-900">Communion Management</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Review, approve, and manage all communion requests from church members</p>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+              <CardTitle className="text-base font-semibold text-blue-900">Total Requests</CardTitle>
+              <div className="p-2 bg-blue-200 rounded-lg">
+                <Users className="h-5 w-5 text-blue-700" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-blue-900">{allTotal}</div>
+              <p className="text-sm text-blue-700 mt-1">All communion requests</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+              <CardTitle className="text-base font-semibold text-amber-900">Pending Approval</CardTitle>
+              <div className="p-2 bg-amber-200 rounded-lg">
+                <Clock className="h-5 w-5 text-amber-700" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-amber-900">{pendingTotal}</div>
+              <p className="text-sm text-amber-700 mt-1">Awaiting approval</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+              <CardTitle className="text-base font-semibold text-green-900">Approved Today</CardTitle>
+              <div className="p-2 bg-green-200 rounded-lg">
+                <CheckCircle2 className="h-5 w-5 text-green-700" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-green-900">
+                {allCommunions.filter(c => 
+                  c.status === 'approved' && 
+                  c.approved_at && 
+                  format(new Date(c.approved_at), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
+                ).length}
+              </div>
+              <p className="text-sm text-green-700 mt-1">Approved today</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Search */}
+        <Card className="mb-8 border-gray-200 shadow-sm bg-white">
+          <CardContent className="p-6 bg-white">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+              <Input
+                placeholder="Search communion requests by name, phone, or status..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tabs for different views */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+          <Tabs defaultValue="pending">
+            <div className="border-b border-gray-200 bg-gray-50">
+              <TabsList className="bg-transparent border-none p-6">
+                <TabsTrigger 
+                  value="pending" 
+                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-6 py-3.5 rounded-lg font-semibold text-base text-gray-600 hover:bg-gray-100 transition-colors"
+                >
+                  <Clock className="h-5 w-5 mr-3" />
+                  Pending Requests ({filteredPendingCommunions.length})
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="all"
+                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-6 py-3.5 rounded-lg font-semibold text-base text-gray-600 ml-3 hover:bg-gray-100 transition-colors"
+                >
+                  <Users className="h-5 w-5 mr-3" />
+                  All Requests ({filteredAllCommunions.length})
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          
+            <TabsContent value="pending" className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-semibold text-gray-900">Pending Communion Requests</h3>
+                <Button 
+                  onClick={loadPendingCommunions} 
+                  className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium shadow-lg"
+                  size="sm"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${loadingPending ? 'animate-spin' : ''}`} />
+                  Refresh
+                </Button>
+              </div>
+            
+              <CommunionTable 
+                communions={filteredPendingCommunions} 
+                loading={loadingPending}
+                showActions={true}
+              />
+            
+              {/* Pagination for pending */}
+              {pendingTotal > pageSize && (
+                <div className="mt-6 flex items-center justify-between bg-white">
+                  <div className="text-sm text-gray-700 font-medium">
+                    Showing {((pendingPage - 1) * pageSize) + 1} to {Math.min(pendingPage * pageSize, pendingTotal)} of {pendingTotal} communion requests
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => setPendingPage(p => Math.max(1, p - 1))}
+                      disabled={pendingPage <= 1 || loadingPending}
+                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                        pendingPage <= 1 || loadingPending
+                          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      Previous
+                    </button>
+                    <span className="px-3 py-2 text-sm font-medium bg-amber-600 text-white border border-amber-600 rounded-md">
+                      {pendingPage}
+                    </span>
+                    <button
+                      onClick={() => setPendingPage(p => p + 1)}
+                      disabled={pendingPage >= Math.ceil(pendingTotal / pageSize) || loadingPending}
+                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                        pendingPage >= Math.ceil(pendingTotal / pageSize) || loadingPending
+                          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+          </TabsContent>
+          
+            <TabsContent value="all" className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-semibold text-gray-900">All Communion Requests</h3>
+                <Button 
+                  onClick={loadAllCommunions} 
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-lg"
+                  size="sm"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${loadingAll ? 'animate-spin' : ''}`} />
+                  Refresh
+                </Button>
+              </div>
+              
+              <CommunionTable 
+                communions={filteredAllCommunions} 
+                loading={loadingAll}
+                showActions={true}
+              />
+              
+              {/* Pagination for all */}
+              {allTotal > pageSize && (
+                <div className="mt-6 flex items-center justify-between bg-white">
+                  <div className="text-sm text-gray-700 font-medium">
+                    Showing {((allPage - 1) * pageSize) + 1} to {Math.min(allPage * pageSize, allTotal)} of {allTotal} communion requests
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => setAllPage(p => Math.max(1, p - 1))}
+                      disabled={allPage <= 1 || loadingAll}
+                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                        allPage <= 1 || loadingAll
+                          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      Previous
+                    </button>
+                    <span className="px-3 py-2 text-sm font-medium bg-indigo-600 text-white border border-indigo-600 rounded-md">
+                      {allPage}
+                    </span>
+                    <button
+                      onClick={() => setAllPage(p => p + 1)}
+                      disabled={allPage >= Math.ceil(allTotal / pageSize) || loadingAll}
+                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                        allPage >= Math.ceil(allTotal / pageSize) || loadingAll
+                          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
+    </div>
+  )
+}
