@@ -38,7 +38,8 @@ import {
   Trash2,
   Search,
   Phone,
-  User
+  User,
+  AlertCircle
 } from "lucide-react"
 import { DashboardHeader } from "../../../components/dashboard/dashboard-header"
 import { useToast } from "../../../components/ui/use-toast"
@@ -131,7 +132,7 @@ export default function AdminAppointmentsPage() {
         appointmentsList = appointments.data
       }
       
-      // Filter for pending appointments
+      // Filter for pending appointments (including overdue ones)
       const pendingList = appointmentsList.filter(apt => apt.status === 'pending')
       setPendingAppointments(pendingList)
     } catch (error) {
@@ -198,12 +199,28 @@ export default function AdminAppointmentsPage() {
     }
   }
 
+  // Overdue logic
+  const isOverdue = (appointment: Appointment) => {
+    if (appointment.status !== "pending") return false
+    const appointmentDate = new Date(appointment.appointment_date)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    appointmentDate.setHours(0, 0, 0, 0)
+    return appointmentDate < today
+  }
+
+  const getEffectiveStatus = (appointment: Appointment): string => {
+    return isOverdue(appointment) ? "overdue" : appointment.status
+  }
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
         return <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">Completed</Badge>
       case 'cancelled':
         return <Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">Cancelled</Badge>
+      case 'overdue':
+        return <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-300">Overdue</Badge>
       case 'pending':
         return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-300">Pending</Badge>
       default:
@@ -215,13 +232,15 @@ export default function AdminAppointmentsPage() {
     appointment.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     appointment.user?.lastname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     appointment.user?.phone_number?.includes(searchTerm) ||
-    appointment.status.toLowerCase().includes(searchTerm.toLowerCase())
+    appointment.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    getEffectiveStatus(appointment).toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const filteredPendingAppointments = pendingAppointments.filter(appointment =>
     appointment.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     appointment.user?.lastname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    appointment.user?.phone_number?.includes(searchTerm)
+    appointment.user?.phone_number?.includes(searchTerm) ||
+    getEffectiveStatus(appointment).toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const AppointmentTable = ({ 
@@ -281,22 +300,26 @@ export default function AdminAppointmentsPage() {
                 <TableCell>
                   <Badge 
                     className={
-                      appointment.status === 'completed' 
+                      getEffectiveStatus(appointment) === 'completed' 
                         ? "bg-green-100 text-green-800 hover:bg-green-200 border-green-300"
-                        : appointment.status === 'cancelled'
+                        : getEffectiveStatus(appointment) === 'cancelled'
                         ? "bg-red-100 text-red-800 hover:bg-red-200 border-red-300"
+                        : getEffectiveStatus(appointment) === 'overdue'
+                        ? "bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-300"
                         : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-300"
                     }
                   >
                     <span className="flex items-center space-x-1">
-                      {appointment.status === 'completed' ? (
+                      {getEffectiveStatus(appointment) === 'completed' ? (
                         <CheckCircle2 className="h-3 w-3" />
-                      ) : appointment.status === 'cancelled' ? (
+                      ) : getEffectiveStatus(appointment) === 'cancelled' ? (
                         <XCircle className="h-3 w-3" />
+                      ) : getEffectiveStatus(appointment) === 'overdue' ? (
+                        <AlertCircle className="h-3 w-3" />
                       ) : (
                         <Clock className="h-3 w-3" />
                       )}
-                      <span className="capitalize">{appointment.status}</span>
+                      <span className="capitalize">{getEffectiveStatus(appointment)}</span>
                     </span>
                   </Badge>
                 </TableCell>
@@ -438,14 +461,16 @@ export default function AdminAppointmentsPage() {
           
           <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-amber-900">Pending</CardTitle>
+              <CardTitle className="text-base font-semibold text-amber-900">Pending & Overdue</CardTitle>
               <div className="p-2 bg-amber-200 rounded-lg">
                 <Clock className="h-5 w-5 text-amber-700" />
               </div>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-amber-900">{pendingAppointments.length}</div>
-              <p className="text-sm text-amber-700 mt-1">Awaiting completion</p>
+              <p className="text-sm text-amber-700 mt-1">
+                {pendingAppointments.filter(apt => isOverdue(apt)).length} overdue, {pendingAppointments.filter(apt => !isOverdue(apt)).length} pending
+              </p>
             </CardContent>
           </Card>
           

@@ -160,6 +160,8 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
         return "default"
       case "cancelled":
         return "destructive"
+      case "overdue":
+        return "destructive"
       default:
         return "secondary"
     }
@@ -171,6 +173,8 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
         return <CheckCircle className="h-4 w-4" />
       case "cancelled":
         return <X className="h-4 w-4" />
+      case "overdue":
+        return <AlertCircle className="h-4 w-4" />
       default:
         return <Clock className="h-4 w-4" />
     }
@@ -194,6 +198,20 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
 
   const canCompleteAppointment = (appointment: Appointment) => {
     return appointment.status === "pending" && user && PermissionService.canCompleteAppointments(user.role as UserRole)
+  }
+
+  // Overdue logic
+  const isOverdue = (appointment: Appointment) => {
+    if (appointment.status !== "pending") return false
+    const appointmentDate = new Date(appointment.appointment_date)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    appointmentDate.setHours(0, 0, 0, 0)
+    return appointmentDate < today
+  }
+
+  const getEffectiveStatus = (appointment: Appointment): string => {
+    return isOverdue(appointment) ? "overdue" : appointment.status
   }
 
   // Pagination logic
@@ -319,18 +337,20 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                       <div className="space-y-2">
                         <div className="flex items-center space-x-2">
                           <Badge 
-                            variant={getStatusBadgeVariant(appointment.status)} 
+                            variant={getStatusBadgeVariant(getEffectiveStatus(appointment))} 
                             className={
-                              appointment.status === 'completed' 
+                              getEffectiveStatus(appointment) === 'completed' 
                                 ? "bg-green-100 text-green-800 hover:bg-green-200 border-green-300 px-3 py-1"
-                                : appointment.status === 'cancelled'
+                                : getEffectiveStatus(appointment) === 'cancelled'
                                 ? "bg-red-100 text-red-800 hover:bg-red-200 border-red-300 px-3 py-1"
+                                : getEffectiveStatus(appointment) === 'overdue'
+                                ? "bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-300 px-3 py-1"
                                 : "bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300 px-3 py-1"
                             }
                           >
                             <span className="flex items-center space-x-1.5">
-                              {getStatusIcon(appointment.status)}
-                              <span className="capitalize font-medium">{appointment.status}</span>
+                              {getStatusIcon(getEffectiveStatus(appointment))}
+                              <span className="capitalize font-medium">{getEffectiveStatus(appointment)}</span>
                             </span>
                           </Badge>
                         </div>
@@ -396,18 +416,20 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                                 <label className="text-sm font-medium text-gray-700">Status</label>
                                 <div className="mt-1">
                                   <Badge 
-                                    variant={getStatusBadgeVariant(selectedAppointment.status)} 
+                                    variant={getStatusBadgeVariant(getEffectiveStatus(selectedAppointment))} 
                                     className={
-                                      selectedAppointment.status === 'completed' 
+                                      getEffectiveStatus(selectedAppointment) === 'completed' 
                                         ? "bg-green-100 text-green-800 border-green-300"
-                                        : selectedAppointment.status === 'cancelled'
+                                        : getEffectiveStatus(selectedAppointment) === 'cancelled'
                                         ? "bg-red-100 text-red-800 border-red-300"
+                                        : getEffectiveStatus(selectedAppointment) === 'overdue'
+                                        ? "bg-orange-100 text-orange-800 border-orange-300"
                                         : "bg-blue-100 text-blue-800 border-blue-300"
                                     }
                                   >
                                     <span className="flex items-center space-x-1.5">
-                                      {getStatusIcon(selectedAppointment.status)}
-                                      <span className="capitalize">{selectedAppointment.status}</span>
+                                      {getStatusIcon(getEffectiveStatus(selectedAppointment))}
+                                      <span className="capitalize">{getEffectiveStatus(selectedAppointment)}</span>
                                     </span>
                                   </Badge>
                                 </div>
