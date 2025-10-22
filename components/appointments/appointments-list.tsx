@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -267,15 +267,16 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
         </Alert>
       )}
 
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">{showAllAppointments ? "All Appointments" : "My Appointments"}</h3>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900">{showAllAppointments ? "All Appointments" : "My Appointments"}</h3>
         <Button 
           onClick={loadAppointments} 
-          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium shadow-lg"
+          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium shadow-lg self-start sm:self-auto"
           size="sm"
         >
           <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
+          <span className="hidden sm:inline">Refresh</span>
+          <span className="sm:hidden">Reload</span>
         </Button>
       </div>
 
@@ -304,16 +305,16 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                 key={appointment.id} 
                 className="border-gray-200 bg-white hover:shadow-md transition-all duration-200 hover:border-purple-300"
               >
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                    {/* Left section - Date and Status */}
-                    <div className="flex items-center space-x-4">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex flex-col space-y-4">
+                    {/* Top section - Date and Status */}
+                    <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg">
-                          <Calendar className="h-6 w-6 text-purple-600" />
+                        <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex-shrink-0">
+                          <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
                         </div>
-                        <div>
-                          <div className="font-semibold text-gray-900 text-lg">
+                        <div className="min-w-0 flex-1">
+                          <div className="font-semibold text-gray-900 text-base sm:text-lg">
                             {new Date(appointment.appointment_date).toLocaleDateString("en-US", {
                               weekday: "short",
                               month: "short",
@@ -321,7 +322,7 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                               year: "numeric",
                             })}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-xs sm:text-sm text-gray-500">
                             Booked on {new Date(appointment.created_at).toLocaleDateString("en-US", {
                               month: "short",
                               day: "numeric",
@@ -330,65 +331,61 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                           </div>
                         </div>
                       </div>
+                      {/* Status badge moved to top right */}
+                      <Badge 
+                        variant={getStatusBadgeVariant(getEffectiveStatus(appointment))} 
+                        className={
+                          getEffectiveStatus(appointment) === 'completed' 
+                            ? "bg-green-100 text-green-800 hover:bg-green-200 border-green-300 px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm"
+                            : getEffectiveStatus(appointment) === 'cancelled'
+                            ? "bg-red-100 text-red-800 hover:bg-red-200 border-red-300 px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm"
+                            : getEffectiveStatus(appointment) === 'overdue'
+                            ? "bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-300 px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm"
+                            : "bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300 px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm"
+                        }
+                      >
+                        <span className="flex items-center space-x-1 sm:space-x-1.5">
+                          {getStatusIcon(getEffectiveStatus(appointment))}
+                          <span className="capitalize font-medium">{getEffectiveStatus(appointment)}</span>
+                        </span>
+                      </Badge>
                     </div>
 
-                    {/* Middle section - Status and Details */}
-                    <div className="flex-1 md:mx-6">
-                      <div className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <Badge 
-                            variant={getStatusBadgeVariant(getEffectiveStatus(appointment))} 
-                            className={
-                              getEffectiveStatus(appointment) === 'completed' 
-                                ? "bg-green-100 text-green-800 hover:bg-green-200 border-green-300 px-3 py-1"
-                                : getEffectiveStatus(appointment) === 'cancelled'
-                                ? "bg-red-100 text-red-800 hover:bg-red-200 border-red-300 px-3 py-1"
-                                : getEffectiveStatus(appointment) === 'overdue'
-                                ? "bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-300 px-3 py-1"
-                                : "bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300 px-3 py-1"
-                            }
-                          >
-                            <span className="flex items-center space-x-1.5">
-                              {getStatusIcon(getEffectiveStatus(appointment))}
-                              <span className="capitalize font-medium">{getEffectiveStatus(appointment)}</span>
-                            </span>
-                          </Badge>
+                    {/* Details section */}
+                    <div className="space-y-2">
+                      {/* Patient info for admin view */}
+                      {showAllAppointments && appointment.user && (
+                        <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
+                          <User className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                          <span className="truncate">{`${appointment.user.name} ${appointment.user.lastname}`}</span>
+                          <span className="text-gray-400 hidden sm:inline">•</span>
+                          <Phone className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                          <span className="truncate">{appointment.user.phone_number}</span>
                         </div>
-                        
-                        {/* Patient info for admin view */}
-                        {showAllAppointments && appointment.user && (
-                          <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <User className="h-4 w-4" />
-                            <span>{`${appointment.user.name} ${appointment.user.lastname}`}</span>
-                            <span className="text-gray-400">•</span>
-                            <Phone className="h-4 w-4" />
-                            <span>{appointment.user.phone_number}</span>
-                          </div>
-                        )}
-                        
-                        {/* Notes */}
-                        {appointment.notes && (
-                          <div className="flex items-start space-x-2 text-sm">
-                            <FileText className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                            <span className="text-gray-700 line-clamp-2" title={appointment.notes}>
-                              {appointment.notes}
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                      )}
+                      
+                      {/* Notes */}
+                      {appointment.notes && (
+                        <div className="flex items-start space-x-2 text-xs sm:text-sm">
+                          <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-700 line-clamp-2" title={appointment.notes}>
+                            {appointment.notes}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
-                    {/* Right section - Actions */}
-                    <div className="flex items-center space-x-2 md:flex-shrink-0">
+                    {/* Actions section */}
+                    <div className="flex items-center justify-end space-x-2 pt-2 border-t border-gray-100">
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button 
                             variant="default" 
                             size="sm" 
                             onClick={() => setSelectedAppointment(appointment)} 
-                            className="rounded-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-sm hover:shadow ring-1 ring-blue-400/30"
+                            className="rounded-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-sm hover:shadow ring-1 ring-blue-400/30 text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                           >
-                            <Eye className="h-4 w-4 mr-2" />
+                            <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                             View
                           </Button>
                         </DialogTrigger>
@@ -462,10 +459,11 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                           variant="default"
                           size="sm"
                           onClick={() => handleCompleteAppointment(appointment)}
-                          className="rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-sm hover:shadow ring-1 ring-green-400/30"
+                          className="rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-sm hover:shadow ring-1 ring-green-400/30 text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                         >
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Complete
+                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                          <span className="hidden sm:inline">Complete</span>
+                          <span className="sm:hidden">Done</span>
                         </Button>
                       )}
 
@@ -477,9 +475,9 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                             setAppointmentToCancel(appointment)
                             setCancelDialogOpen(true)
                           }}
-                          className="rounded-full bg-gradient-to-r from-rose-500 to-red-600 text-white hover:from-rose-600 hover:to-red-700 shadow-sm hover:shadow ring-1 ring-red-400/30"
+                          className="rounded-full bg-gradient-to-r from-rose-500 to-red-600 text-white hover:from-rose-600 hover:to-red-700 shadow-sm hover:shadow ring-1 ring-red-400/30 text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                         >
-                          <X className="h-4 w-4 mr-2" />
+                          <X className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                           Cancel
                         </Button>
                       )}
@@ -492,9 +490,9 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-8">
+            <div className="mt-6 sm:mt-8">
               <Pagination>
-                <PaginationContent>
+                <PaginationContent className="flex-wrap justify-center">
                   <PaginationItem>
                     <PaginationPrevious 
                       href="#"
@@ -502,25 +500,44 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                         e.preventDefault()
                         if (currentPage > 1) handlePageChange(currentPage - 1)
                       }}
-                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                      className={`text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 ${currentPage === 1 ? "pointer-events-none opacity-50" : ""}`}
                     />
                   </PaginationItem>
                   
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handlePageChange(page)
-                        }}
-                        isActive={currentPage === page}
-                        className={currentPage === page ? "bg-purple-100 text-purple-700 border-purple-200" : ""}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(page => {
+                      // On mobile, show only current page and adjacent pages
+                      if (typeof window !== 'undefined' && window.innerWidth < 640) {
+                        return Math.abs(page - currentPage) <= 1 || page === 1 || page === totalPages
+                      }
+                      return true
+                    })
+                    .map((page, index, filteredPages) => {
+                      // Add ellipsis for skipped pages on mobile
+                      const showEllipsis = index > 0 && filteredPages[index - 1] !== page - 1
+                      return (
+                        <React.Fragment key={page}>
+                          {showEllipsis && (
+                            <PaginationItem>
+                              <span className="px-2 py-1 text-xs text-gray-400">...</span>
+                            </PaginationItem>
+                          )}
+                          <PaginationItem>
+                            <PaginationLink
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handlePageChange(page)
+                              }}
+                              isActive={currentPage === page}
+                              className={`text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 ${currentPage === page ? "bg-purple-100 text-purple-700 border-purple-200" : ""}`}
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        </React.Fragment>
+                      )
+                    })}
                   
                   <PaginationItem>
                     <PaginationNext 
@@ -529,15 +546,20 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                         e.preventDefault()
                         if (currentPage < totalPages) handlePageChange(currentPage + 1)
                       }}
-                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                      className={`text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 ${currentPage === totalPages ? "pointer-events-none opacity-50" : ""}`}
                     />
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
               
               {/* Pagination Info */}
-              <div className="text-center mt-4 text-sm text-gray-600">
-                Showing {Math.min((currentPage - 1) * itemsPerPage + 1, appointments.length)} to {Math.min(currentPage * itemsPerPage, appointments.length)} of {appointments.length} appointments
+              <div className="text-center mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 px-2">
+                <span className="hidden sm:inline">
+                  Showing {Math.min((currentPage - 1) * itemsPerPage + 1, appointments.length)} to {Math.min(currentPage * itemsPerPage, appointments.length)} of {appointments.length} appointments
+                </span>
+                <span className="sm:hidden">
+                  {currentPage} of {totalPages} pages ({appointments.length} total)
+                </span>
               </div>
             </div>
           )}

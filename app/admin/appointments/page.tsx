@@ -252,16 +252,26 @@ export default function AdminAppointmentsPage() {
     loading: boolean,
     showActions?: boolean 
   }) => (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-lg overflow-x-auto shadow-sm">
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-50 border-b border-gray-200">
-            <TableHead className="font-semibold text-gray-900">User</TableHead>
-            <TableHead className="font-semibold text-gray-900">Phone</TableHead>
-            <TableHead className="font-semibold text-gray-900">Appointment Date</TableHead>
-            <TableHead className="font-semibold text-gray-900">Status</TableHead>
-            <TableHead className="font-semibold text-gray-900">Booked At</TableHead>
-            {showActions && <TableHead className="font-semibold text-gray-900">Actions</TableHead>}
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[120px]">
+              <div className="flex items-center space-x-1">
+                <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">User</span>
+              </div>
+            </TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[100px]">
+              <div className="flex items-center space-x-1">
+                <Phone className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Phone</span>
+              </div>
+            </TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[120px]">Date</TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[80px]">Status</TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[100px] hidden sm:table-cell">Booked At</TableHead>
+            {showActions && <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[100px]">Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -284,22 +294,30 @@ export default function AdminAppointmentsPage() {
           ) : (
             appointments.map((appointment) => (
               <TableRow key={appointment.id} className="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                <TableCell className="font-medium text-gray-900">
-                  {appointment.user?.name || 'Unknown User'}
-                  {appointment.user?.lastname && ` ${appointment.user.lastname}`}
+                <TableCell className="font-medium text-gray-900 text-xs sm:text-sm">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{appointment.user?.name || 'Unknown User'}</p>
+                    {appointment.user?.lastname && (
+                      <p className="truncate text-gray-600 text-xs">{appointment.user.lastname}</p>
+                    )}
+                  </div>
                 </TableCell>
-                <TableCell className="text-gray-700">{appointment.user?.phone_number || 'N/A'}</TableCell>
-                <TableCell className="text-gray-700">
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="h-4 w-4 text-purple-600" />
-                    <span>
-                      {format(new Date(appointment.appointment_date), 'MMM d, yyyy')}
+                <TableCell className="text-gray-700 text-xs sm:text-sm">
+                  <div className="min-w-0">
+                    <p className="truncate">{appointment.user?.phone_number || 'N/A'}</p>
+                  </div>
+                </TableCell>
+                <TableCell className="text-gray-700 text-xs sm:text-sm">
+                  <div className="flex items-center space-x-1 sm:space-x-2">
+                    <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-purple-600 flex-shrink-0" />
+                    <span className="truncate">
+                      {format(new Date(appointment.appointment_date), 'MMM d, yy')}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell>
                   <Badge 
-                    className={
+                    className={`text-xs ${
                       getEffectiveStatus(appointment) === 'completed' 
                         ? "bg-green-100 text-green-800 hover:bg-green-200 border-green-300"
                         : getEffectiveStatus(appointment) === 'cancelled'
@@ -307,28 +325,28 @@ export default function AdminAppointmentsPage() {
                         : getEffectiveStatus(appointment) === 'overdue'
                         ? "bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-300"
                         : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-300"
-                    }
+                    }`}
                   >
                     <span className="flex items-center space-x-1">
                       {getEffectiveStatus(appointment) === 'completed' ? (
-                        <CheckCircle2 className="h-3 w-3" />
+                        <CheckCircle2 className="h-2 w-2 sm:h-3 sm:w-3" />
                       ) : getEffectiveStatus(appointment) === 'cancelled' ? (
-                        <XCircle className="h-3 w-3" />
+                        <XCircle className="h-2 w-2 sm:h-3 sm:w-3" />
                       ) : getEffectiveStatus(appointment) === 'overdue' ? (
-                        <AlertCircle className="h-3 w-3" />
+                        <AlertCircle className="h-2 w-2 sm:h-3 sm:w-3" />
                       ) : (
-                        <Clock className="h-3 w-3" />
+                        <Clock className="h-2 w-2 sm:h-3 sm:w-3" />
                       )}
-                      <span className="capitalize">{getEffectiveStatus(appointment)}</span>
+                      <span className="capitalize text-xs">{getEffectiveStatus(appointment)}</span>
                     </span>
                   </Badge>
                 </TableCell>
-                <TableCell className="text-gray-600 text-sm">
-                  {format(new Date(appointment.created_at), 'MMM d, yyyy')}
+                <TableCell className="text-gray-600 text-xs hidden sm:table-cell">
+                  {format(new Date(appointment.created_at), 'MMM d, yy')}
                 </TableCell>
                 {showActions && (
                   <TableCell>
-                    <div className="flex items-center space-x-1.5">
+                    <div className="flex items-center space-x-1">
                       {appointment.status === 'pending' && (
                         <>
                           <AlertDialog>
@@ -337,10 +355,10 @@ export default function AdminAppointmentsPage() {
                                 variant="ghost" 
                                 size="sm"
                                 disabled={actionLoading === appointment.id}
-                                className="h-8 w-8 p-0 text-green-600 hover:bg-green-100 hover:text-green-700 rounded-md"
+                                className="h-6 w-6 sm:h-8 sm:w-8 p-0 text-green-600 hover:bg-green-100 hover:text-green-700 rounded-md"
                                 title="Mark as Complete"
                               >
-                                <CheckCircle2 className="h-4 w-4" />
+                                <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4" />
                               </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
@@ -368,10 +386,10 @@ export default function AdminAppointmentsPage() {
                                 variant="ghost" 
                                 size="sm"
                                 disabled={actionLoading === appointment.id}
-                                className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
+                                className="h-6 w-6 sm:h-8 sm:w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
                                 title="Cancel Appointment"
                               >
-                                <XCircle className="h-4 w-4" />
+                                <XCircle className="h-3 w-3 sm:h-4 sm:w-4" />
                               </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
@@ -435,74 +453,74 @@ export default function AdminAppointmentsPage() {
       <DashboardHeader />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 bg-white">
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full mb-4">
-            <Calendar className="h-8 w-8 text-white" />
+      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 bg-white">
+        <div className="mb-6 sm:mb-8 text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full mb-4">
+            <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
           </div>
-          <h2 className="text-3xl font-bold mb-2 text-gray-900">Appointment Management</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">Review, manage, and track all appointment requests from church members</p>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900">Appointment Management</h2>
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-2">Review, manage, and track all appointment requests from church members</p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-purple-900">Total Appointments</CardTitle>
-              <div className="p-2 bg-purple-200 rounded-lg">
-                <Calendar className="h-5 w-5 text-purple-700" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
+              <CardTitle className="text-sm sm:text-base font-semibold text-purple-900">Total Appointments</CardTitle>
+              <div className="p-1.5 sm:p-2 bg-purple-200 rounded-lg">
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-purple-700" />
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-purple-900">{allAppointments.length}</div>
-              <p className="text-sm text-purple-700 mt-1">All appointments</p>
+            <CardContent className="pt-2 sm:pt-4">
+              <div className="text-2xl sm:text-3xl font-bold text-purple-900">{allAppointments.length}</div>
+              <p className="text-xs sm:text-sm text-purple-700 mt-1">All appointments</p>
             </CardContent>
           </Card>
           
           <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-amber-900">Pending & Overdue</CardTitle>
-              <div className="p-2 bg-amber-200 rounded-lg">
-                <Clock className="h-5 w-5 text-amber-700" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
+              <CardTitle className="text-sm sm:text-base font-semibold text-amber-900">Pending & Overdue</CardTitle>
+              <div className="p-1.5 sm:p-2 bg-amber-200 rounded-lg">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-amber-700" />
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-amber-900">{pendingAppointments.length}</div>
-              <p className="text-sm text-amber-700 mt-1">
+            <CardContent className="pt-2 sm:pt-4">
+              <div className="text-2xl sm:text-3xl font-bold text-amber-900">{pendingAppointments.length}</div>
+              <p className="text-xs sm:text-sm text-amber-700 mt-1">
                 {pendingAppointments.filter(apt => isOverdue(apt)).length} overdue, {pendingAppointments.filter(apt => !isOverdue(apt)).length} pending
               </p>
             </CardContent>
           </Card>
           
           <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-green-900">Completed Today</CardTitle>
-              <div className="p-2 bg-green-200 rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-green-700" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
+              <CardTitle className="text-sm sm:text-base font-semibold text-green-900">Completed Today</CardTitle>
+              <div className="p-1.5 sm:p-2 bg-green-200 rounded-lg">
+                <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-700" />
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-green-900">
+            <CardContent className="pt-2 sm:pt-4">
+              <div className="text-2xl sm:text-3xl font-bold text-green-900">
                 {allAppointments.filter(a => 
                   a.status === 'completed' && 
                   format(new Date(a.appointment_date), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
                 ).length}
               </div>
-              <p className="text-sm text-green-700 mt-1">Completed today</p>
+              <p className="text-xs sm:text-sm text-green-700 mt-1">Completed today</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Search */}
-        <Card className="mb-8 border-gray-200 shadow-sm bg-white">
-          <CardContent className="p-6 bg-white">
+        <Card className="mb-6 sm:mb-8 border-gray-200 shadow-sm bg-white">
+          <CardContent className="p-3 sm:p-6 bg-white">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
               <Input
-                placeholder="Search appointments by name, phone, or status..."
+                placeholder="Search appointments..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white border-gray-300 focus:border-purple-500 focus:ring-purple-500 text-gray-900 placeholder-gray-500"
+                className="pl-10 bg-white border-gray-300 focus:border-purple-500 focus:ring-purple-500 text-gray-900 placeholder-gray-500 text-sm sm:text-base"
               />
             </div>
           </CardContent>
@@ -512,34 +530,36 @@ export default function AdminAppointmentsPage() {
         <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
           <Tabs defaultValue="pending">
             <div className="border-b border-gray-200 bg-gray-50">
-              <TabsList className="bg-transparent border-none p-6">
+              <TabsList className="bg-transparent border-none p-3 sm:p-6 w-full">
                 <TabsTrigger 
                   value="pending" 
-                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-6 py-3.5 rounded-lg font-semibold text-base text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-3 sm:px-6 py-2 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base text-gray-600 hover:bg-gray-100 transition-colors flex-1 sm:flex-none"
                 >
-                  <Clock className="h-5 w-5 mr-3" />
-                  Pending Appointments ({filteredPendingAppointments.length})
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-3" />
+                  <span className="hidden sm:inline">Pending Appointments ({filteredPendingAppointments.length})</span>
+                  <span className="sm:hidden">Pending ({filteredPendingAppointments.length})</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="all"
-                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-6 py-3.5 rounded-lg font-semibold text-base text-gray-600 ml-3 hover:bg-gray-100 transition-colors"
+                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-3 sm:px-6 py-2 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base text-gray-600 ml-2 sm:ml-3 hover:bg-gray-100 transition-colors flex-1 sm:flex-none"
                 >
-                  <Calendar className="h-5 w-5 mr-3" />
-                  All Appointments ({filteredAllAppointments.length})
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-3" />
+                  <span className="hidden sm:inline">All Appointments ({filteredAllAppointments.length})</span>
+                  <span className="sm:hidden">All ({filteredAllAppointments.length})</span>
                 </TabsTrigger>
               </TabsList>
             </div>
           
-            <TabsContent value="pending" className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">Pending Appointments</h3>
+            <TabsContent value="pending" className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Pending Appointments</h3>
                 <Button 
                   onClick={loadPendingAppointments} 
                   className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium shadow-lg"
                   size="sm"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${loadingPending ? 'animate-spin' : ''}`} />
-                  Refresh
+                  <span className="hidden sm:inline">Refresh</span>
                 </Button>
               </div>
             
@@ -550,16 +570,16 @@ export default function AdminAppointmentsPage() {
               />
             </TabsContent>
           
-            <TabsContent value="all" className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">All Appointments</h3>
+            <TabsContent value="all" className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">All Appointments</h3>
                 <Button 
                   onClick={loadAllAppointments} 
                   className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium shadow-lg"
                   size="sm"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${loadingAll ? 'animate-spin' : ''}`} />
-                  Refresh
+                  <span className="hidden sm:inline">Refresh</span>
                 </Button>
               </div>
               

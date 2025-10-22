@@ -174,17 +174,17 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
 
   return (
     <Card className="w-full max-w-2xl mx-auto bg-white border-gray-200">
-      <CardHeader className="bg-white">
-        <CardTitle className="flex items-center space-x-2 text-gray-900">
-          <Calendar className="h-5 w-5 text-blue-600" />
+      <CardHeader className="bg-white p-4 sm:p-6">
+        <CardTitle className="flex items-center space-x-2 text-gray-900 text-lg sm:text-xl">
+          <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
           <span>Book New Appointment</span>
         </CardTitle>
-        <CardDescription className="text-gray-600">
+        <CardDescription className="text-gray-600 text-sm sm:text-base">
           Schedule your appointment. Available on Monday, Wednesday, and Friday only.
         </CardDescription>
       </CardHeader>
-      <CardContent className="bg-white">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <CardContent className="bg-white p-4 sm:p-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {error && (
             <Alert variant="destructive" className="border-red-200 bg-red-50">
               <AlertCircle className="h-4 w-4 text-red-600" />
@@ -211,7 +211,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
 
           {/* Date Selection */}
           <div className="space-y-4">
-            <Label className="text-gray-900 font-medium">Select Appointment Date</Label>
+            <Label className="text-gray-900 font-medium text-sm sm:text-base">Select Appointment Date</Label>
 
             {loadingDates ? (
               <div className="flex items-center justify-center py-8">
@@ -221,16 +221,16 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+              <div className="grid grid-cols-1 gap-3 max-h-64 sm:max-h-80 overflow-y-auto">
                 {getDisplayDates().length === 0 ? (
-                  <div className="col-span-full text-center py-8 text-gray-600">
-                    <Calendar className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-gray-700">No available dates found.</p>
+                  <div className="text-center py-6 sm:py-8 text-gray-600">
+                    <Calendar className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 text-gray-400" />
+                    <p className="text-gray-700 text-sm sm:text-base">No available dates found.</p>
                     <Button 
                       type="button" 
                       variant="outline" 
                       size="sm" 
-                      className="mt-2 border-gray-300 text-gray-700 hover:bg-gray-50"
+                      className="mt-2 border-gray-300 text-gray-700 hover:bg-gray-50 text-xs sm:text-sm"
                       onClick={loadAvailableDates}
                     >
                       Refresh
@@ -243,7 +243,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                     type="button"
                     onClick={() => available && handleDateSelect(date)}
                     disabled={!available}
-                    className={`p-3 text-left rounded-lg border transition-colors bg-white ${
+                    className={`p-3 sm:p-4 text-left rounded-lg border transition-colors bg-white ${
                       formData.appointment_date === date
                         ? "border-blue-500 bg-blue-50 text-blue-700"
                         : available
@@ -252,8 +252,8 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-sm">{display}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm sm:text-base truncate">{display}</p>
                         <p className="text-xs text-gray-500">{date}</p>
                       </div>
                       <div>
@@ -277,22 +277,22 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label htmlFor="notes" className="text-gray-900 font-medium">Notes (Optional)</Label>
+            <Label htmlFor="notes" className="text-gray-900 font-medium text-sm sm:text-base">Notes (Optional)</Label>
             <Textarea
               id="notes"
               placeholder="Add any additional notes about your appointment..."
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
               rows={3}
-              className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
+              className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex space-x-4">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <Button 
               type="submit" 
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white" 
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-2 text-sm sm:text-base" 
               disabled={loading || !formData.appointment_date}
             >
               <Clock className="h-4 w-4 mr-2" />
@@ -303,7 +303,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                 type="button" 
                 variant="outline" 
                 onClick={onCancel}
-                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                className="border-gray-300 text-gray-700 hover:bg-gray-50 py-2.5 sm:py-2 text-sm sm:text-base sm:min-w-[100px]"
               >
                 Cancel
               </Button>

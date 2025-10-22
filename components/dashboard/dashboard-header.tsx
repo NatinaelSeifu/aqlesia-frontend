@@ -43,13 +43,15 @@ export function DashboardHeader() {
         { href: "/admin/appointments", label: "Appointments", icon: Calendar },
         { href: "/admin/communion", label: "Communion", icon: MessageSquare },
         { href: "/admin/available-dates", label: "Dates", icon: CalendarCheck },
+        { href: "/admin/questions", label: "Questions", icon: HelpCircle },
       ]
     } else if (user.role === "manager") {
       return [
         { href: "/appointments", label: "Appointments", icon: Calendar },
-        { href: "/admin/appointments", label: "Manage", icon: CalendarCheck },
+        { href: "/admin/appointments", label: "Manage Appointments", icon: CalendarCheck },
         { href: "/communion", label: "Communion", icon: MessageSquare },
         { href: "/users", label: "Users", icon: Users },
+        { href: "/questions", label: "Questions", icon: HelpCircle },
       ]
     } else {
       return [
