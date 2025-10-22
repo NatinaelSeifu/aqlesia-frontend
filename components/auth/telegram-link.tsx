@@ -91,17 +91,16 @@ export function TelegramLink({ phoneNumber, onBack, onSuccess, onReturnToForgotP
       setError("")
       setVerificationMessage("")
       
-      // Try to get user profile to check verification status
-      // We'll call the same endpoint that forgot password would call
-      const response = await authService.forgotPassword({ phone_number: formData.phone_number })
+      // Use the proper verification check endpoint that doesn't send OTP
+      const response = await authService.checkTelegramVerification({ phone_number: formData.phone_number })
       
-      // If successful and user has verified Telegram, the response should indicate readiness
-      setIsVerified(true)
-      setVerificationMessage("Telegram successfully linked! You can now receive password reset links.")
+      setIsVerified(response.verified)
+      setVerificationMessage(response.message)
     } catch (err) {
-      // This might mean user doesn't exist or Telegram not verified
+      const errorMessage = err instanceof Error ? err.message : "Verification check failed"
+      setError(errorMessage)
       setIsVerified(false)
-      setVerificationMessage("Telegram not linked. Please send the code to the Telegram bot.")
+      setVerificationMessage("Failed to check verification status. Please try again.")
     } finally {
       setCheckingVerification(false)
     }
@@ -157,10 +156,10 @@ export function TelegramLink({ phoneNumber, onBack, onSuccess, onReturnToForgotP
                 <div>
                   <h4 className="font-medium text-blue-900 mb-2">{"How to Link"}</h4>
                   <ol className="text-blue-800 text-sm space-y-2">
-                    <li>{"1. Click here to open Telegram"}</li>
-                    <li>{"2. Look at the message sent by the bot"}</li>
-                    <li>{"3. Send the code above to the bot"}</li>
-                    <li>{"4. The link will be completed within a few minutes"}</li>
+                    <li>{"1. Click 'Open Telegram' to start a chat with our bot"}</li>
+                    <li>{"2. Send the link code above to the bot"}</li>
+                    <li>{"3. The bot will verify and link your account"}</li>
+                    <li>{"4. Use 'Check if Linked' to confirm the connection"}</li>
                   </ol>
                 </div>
               </div>
@@ -169,18 +168,26 @@ export function TelegramLink({ phoneNumber, onBack, onSuccess, onReturnToForgotP
             {/* Verification Status */}
             {verificationMessage && (
               <div className={`border rounded-lg p-4 ${
-                isVerified 
-                  ? 'bg-green-50 border-green-200' 
-                  : 'bg-yellow-50 border-yellow-200'
+                isVerified === true
+                  ? 'bg-green-50 border-green-200'
+                  : isVerified === false
+                  ? 'bg-yellow-50 border-yellow-200'
+                  : 'bg-blue-50 border-blue-200'
               }`}>
                 <div className="flex items-start">
-                  {isVerified ? (
+                  {isVerified === true ? (
                     <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  ) : (
+                  ) : isVerified === false ? (
                     <Info className="h-5 w-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" />
+                  ) : (
+                    <Info className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
                   )}
                   <p className={`text-sm ${
-                    isVerified ? 'text-green-800' : 'text-yellow-800'
+                    isVerified === true
+                      ? 'text-green-800'
+                      : isVerified === false
+                      ? 'text-yellow-800'
+                      : 'text-blue-800'
                   }`}>
                     {verificationMessage}
                   </p>
@@ -296,7 +303,7 @@ export function TelegramLink({ phoneNumber, onBack, onSuccess, onReturnToForgotP
               <div>
                 <h4 className="font-medium text-blue-900 mb-1">{"Why Telegram?"}</h4>
                 <p className="text-blue-800 text-sm">
-                  {"Linking Telegram allows you to securely receive password reset links. This protects your privacy and security."}
+                  {"Linking Telegram allows you to securely receive OTP codes for password reset. This provides an extra layer of security for your account."}
                 </p>
               </div>
             </div>
@@ -337,23 +344,31 @@ export function TelegramLink({ phoneNumber, onBack, onSuccess, onReturnToForgotP
         {/* Verification Status */}
         {verificationMessage && (
           <div className={`mt-4 border rounded-lg p-4 ${
-            isVerified 
-              ? 'bg-green-50 border-green-200' 
-              : 'bg-yellow-50 border-yellow-200'
+            isVerified === true
+              ? 'bg-green-50 border-green-200'
+              : isVerified === false
+              ? 'bg-yellow-50 border-yellow-200'
+              : 'bg-blue-50 border-blue-200'
           }`}>
             <div className="flex items-start">
-              {isVerified ? (
+              {isVerified === true ? (
                 <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-              ) : (
+              ) : isVerified === false ? (
                 <Info className="h-5 w-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" />
+              ) : (
+                <Info className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
               )}
               <p className={`text-sm ${
-                isVerified ? 'text-green-800' : 'text-yellow-800'
+                isVerified === true
+                  ? 'text-green-800'
+                  : isVerified === false
+                  ? 'text-yellow-800'
+                  : 'text-blue-800'
               }`}>
                 {verificationMessage}
               </p>
             </div>
-            {isVerified && onReturnToForgotPassword && (
+            {isVerified === true && onReturnToForgotPassword && (
               <div className="mt-3">
                 <Button
                   onClick={onReturnToForgotPassword}

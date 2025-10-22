@@ -99,8 +99,8 @@ export default function HomePage() {
 	};
 
 	const handleForgotPasswordSuccess = () => {
-		// Keep on forgot password page - don't auto-navigate
-		// User can manually navigate using the provided buttons
+		// After successful password reset, return to login view
+		changeView("login")
 	};
 
 	const handleShowTelegramLink = (phone?: string) => {

@@ -15,6 +15,8 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { authService } from "@/lib/auth";
 import type { ForgotPasswordRequest } from "@/lib/auth";
+import { VerifyOTP } from "./verify-otp";
+import { ResetPassword } from "./reset-password";
 import {
 	Phone,
 	AlertCircle,
@@ -30,14 +32,18 @@ interface ForgotPasswordProps {
 	onShowTelegramLink?: (phoneNumber: string) => void;
 }
 
+type FlowStep = "request" | "verify-otp" | "reset-password"
+
 export function ForgotPassword({
 	onBack,
 	onSuccess,
 	onShowTelegramLink,
 }: ForgotPasswordProps) {
+	const [step, setStep] = useState<FlowStep>("request");
 	const [formData, setFormData] = useState<ForgotPasswordRequest>({
 		phone_number: "",
 	});
+	const [resetToken, setResetToken] = useState<string | null>(null);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
 	const [message, setMessage] = useState("");
@@ -57,14 +63,11 @@ export function ForgotPassword({
 		try {
 			setLoading(true);
 			const response = await authService.forgotPassword(formData);
-			setSuccess(true);
 			setMessage(response.message);
-
-			setTimeout(() => {
-				onSuccess?.();
-			}, 3000);
+			// Move to OTP verification step
+			setStep("verify-otp");
 		} catch (err) {
-			setError(err instanceof Error ? err.message : "የፓስወርድ እርሳትማት ተነሳ");
+			setError(err instanceof Error ? err.message : "የፓስወርድ እርሳት ማግኘት ተስኖ");
 		} finally {
 			setLoading(false);
 		}
@@ -73,6 +76,69 @@ export function ForgotPassword({
 	const handleChange = (field: keyof ForgotPasswordRequest, value: string) => {
 		setFormData((prev) => ({ ...prev, [field]: value }));
 	};
+
+	const handleOTPVerified = (token: string) => {
+		setResetToken(token);
+		setStep("reset-password");
+	};
+
+	const handleBackToRequest = () => {
+		setStep("request");
+		setError("");
+		setMessage("");
+	};
+
+	const handleBackToOTP = () => {
+		setStep("verify-otp");
+		setError("");
+	};
+
+	const handleResendOTP = async () => {
+		setError("");
+		setMessage("");
+		setLoading(true);
+
+		try {
+			const response = await authService.forgotPassword(formData);
+			setMessage(response.message);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "OTP resend failed");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleResetSuccess = () => {
+		setSuccess(true);
+		setTimeout(() => {
+			onSuccess?.();
+		}, 2000);
+	};
+
+	// Show different components based on the current step
+	if (step === "verify-otp") {
+		return (
+			<VerifyOTP
+				phoneNumber={formData.phone_number}
+				onBack={handleBackToRequest}
+				onSuccess={handleOTPVerified}
+				onResendOTP={handleResendOTP}
+			/>
+		);
+	}
+
+	if (step === "reset-password" && resetToken) {
+		return (
+			<ResetPassword
+				token={resetToken}
+				onSuccess={handleResetSuccess}
+				onError={(error) => {
+					setError(error);
+					setStep("verify-otp"); // Go back to OTP verification on error
+				}}
+			/>
+		);
+	}
 
 	if (success) {
 		return (
@@ -86,39 +152,10 @@ export function ForgotPassword({
 						</div>
 						<div>
 							<h3 className="text-xl font-semibold text-gray-900 mb-4">
-								{"Request Sent Successfully!"}
+								{"Password Reset Successfully!"}
 							</h3>
-							<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-								<div className="flex items-center mb-2">
-									<MessageCircle className="h-5 w-5 text-blue-600 mr-2" />
-									<span className="font-medium text-blue-900">
-										{"Telegram Required"}
-									</span>
-								</div>
-								<p className="text-blue-800 text-sm">
-									{
-										"If you don't have a linked Telegram account, you won't receive password reset links. Click the button below to link Telegram."
-									}
-								</p>
-							</div>
-							<p className="text-gray-600 text-sm">{message}</p>
-						</div>
-						<div className="space-y-3">
-							{onShowTelegramLink && (
-								<Button
-									onClick={() => onShowTelegramLink(formData.phone_number)}
-									className="w-full bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-medium"
-								>
-									<MessageCircle className="h-4 w-4 mr-2" />
-									{"Link Telegram"}
-								</Button>
-							)}
-							{onBack && (
-								<Button onClick={onBack} variant="outline" className="w-full">
-									<ArrowLeft className="h-4 w-4 mr-2" />
-									{"Back to Login"}
-								</Button>
-							)}
+							<p className="text-gray-600 text-sm mb-2">{"Password has been reset successfully. You can now login with your new password."}</p>
+							<p className="text-blue-600 text-sm font-medium">{"Redirecting to login page..."}</p>
 						</div>
 					</div>
 				</CardContent>
@@ -201,7 +238,7 @@ export function ForgotPassword({
 						disabled={loading}
 					>
 						<KeyRound className="h-4 w-4 mr-2" />
-						{loading ? "Sending..." : "Send Reset Link"}
+						{loading ? "Sending OTP..." : "Send OTP Code"}
 					</Button>
 				</form>
 
