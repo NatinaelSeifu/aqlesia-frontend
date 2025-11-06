@@ -2,9 +2,13 @@ version: "3.8"
 
 services:
   app:
-    image: natinael/aqlesia-frontend:v1
-    container_name: kesis-appointment-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/v1
+    container_name: kesis-frontend
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/v1

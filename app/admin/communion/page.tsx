@@ -37,7 +37,8 @@ import {
   Eye,
   Trash2,
   Phone,
-  Search
+  Search,
+  User
 } from "lucide-react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useToast } from "@/components/ui/use-toast"
@@ -226,16 +227,26 @@ export default function AdminCommunionPage() {
     loading: boolean,
     showActions?: boolean 
   }) => (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-lg overflow-x-auto shadow-sm">
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-50 border-b border-gray-200">
-            <TableHead className="font-semibold text-gray-900">User</TableHead>
-            <TableHead className="font-semibold text-gray-900">Phone</TableHead>
-            <TableHead className="font-semibold text-gray-900">Communion Date</TableHead>
-            <TableHead className="font-semibold text-gray-900">Status</TableHead>
-            <TableHead className="font-semibold text-gray-900">Requested At</TableHead>
-            {showActions && <TableHead className="font-semibold text-gray-900">Actions</TableHead>}
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[120px]">
+              <div className="flex items-center space-x-1">
+                <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">User</span>
+              </div>
+            </TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[100px]">
+              <div className="flex items-center space-x-1">
+                <Phone className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Phone</span>
+              </div>
+            </TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[120px]">Date</TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[80px]">Status</TableHead>
+            <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[100px] hidden sm:table-cell">Requested At</TableHead>
+            {showActions && <TableHead className="font-semibold text-gray-900 text-xs sm:text-sm min-w-[120px]">Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -258,22 +269,28 @@ export default function AdminCommunionPage() {
           ) : (
             communions.map((communion) => (
               <TableRow key={communion.id} className="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                <TableCell className="font-medium text-gray-900">
-                  {communion.user?.name || 'Unknown User'}
-                  {communion.user?.lastname && ` ${communion.user.lastname}`}
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center text-gray-700">
-                    <Phone className="h-4 w-4 mr-2 text-gray-500" />
-                    {communion.user?.phone_number || 'N/A'}
+                <TableCell className="font-medium text-gray-900 text-xs sm:text-sm">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{communion.user?.name || 'Unknown User'}</p>
+                    {communion.user?.lastname && (
+                      <p className="truncate text-gray-600 text-xs">{communion.user.lastname}</p>
+                    )}
                   </div>
                 </TableCell>
-                <TableCell className="text-gray-700">
-                  {format(new Date(communion.communion_date), 'MMM d, yyyy')}
+                <TableCell className="text-xs sm:text-sm">
+                  <div className="flex items-center text-gray-700 min-w-0">
+                    <Phone className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-gray-500 flex-shrink-0" />
+                    <span className="truncate">{communion.user?.phone_number || 'N/A'}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="text-gray-700 text-xs sm:text-sm">
+                  <span className="whitespace-nowrap">
+                    {format(new Date(communion.communion_date), 'MMM d, yy')}
+                  </span>
                 </TableCell>
                 <TableCell>{getStatusBadge(communion.status)}</TableCell>
-                <TableCell className="text-gray-700">
-                  {format(new Date(communion.requested_at), 'MMM d, yyyy h:mm a')}
+                <TableCell className="text-gray-700 text-xs hidden sm:table-cell">
+                  {format(new Date(communion.requested_at), 'MMM d, yy')}
                 </TableCell>
                 {showActions && (
                   <TableCell className="text-right">
@@ -400,75 +417,75 @@ export default function AdminCommunionPage() {
       <DashboardHeader />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 bg-white">
-        <div className="mb-8">
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-4">
-              <Users className="h-8 w-8 text-blue-600" />
+      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 bg-white">
+        <div className="mb-6 sm:mb-8">
+          <div className="text-center mb-4 sm:mb-6">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-blue-50 rounded-full mb-4">
+              <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
             </div>
-            <h2 className="text-3xl font-bold mb-2 text-gray-900">Communion Management</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Review, approve, and manage all communion requests from church members</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900">Communion Management</h2>
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-2">Review, approve, and manage all communion requests from church members</p>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-blue-900">Total Requests</CardTitle>
-              <div className="p-2 bg-blue-200 rounded-lg">
-                <Users className="h-5 w-5 text-blue-700" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
+              <CardTitle className="text-sm sm:text-base font-semibold text-blue-900">Total Requests</CardTitle>
+              <div className="p-1.5 sm:p-2 bg-blue-200 rounded-lg">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" />
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-blue-900">{allTotal}</div>
-              <p className="text-sm text-blue-700 mt-1">All communion requests</p>
+            <CardContent className="pt-2 sm:pt-4">
+              <div className="text-2xl sm:text-3xl font-bold text-blue-900">{allTotal}</div>
+              <p className="text-xs sm:text-sm text-blue-700 mt-1">All communion requests</p>
             </CardContent>
           </Card>
           
           <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-amber-900">Pending Approval</CardTitle>
-              <div className="p-2 bg-amber-200 rounded-lg">
-                <Clock className="h-5 w-5 text-amber-700" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
+              <CardTitle className="text-sm sm:text-base font-semibold text-amber-900">Pending Approval</CardTitle>
+              <div className="p-1.5 sm:p-2 bg-amber-200 rounded-lg">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-amber-700" />
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-amber-900">{pendingTotal}</div>
-              <p className="text-sm text-amber-700 mt-1">Awaiting approval</p>
+            <CardContent className="pt-2 sm:pt-4">
+              <div className="text-2xl sm:text-3xl font-bold text-amber-900">{pendingTotal}</div>
+              <p className="text-xs sm:text-sm text-amber-700 mt-1">Awaiting approval</p>
             </CardContent>
           </Card>
           
           <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-green-900">Approved Today</CardTitle>
-              <div className="p-2 bg-green-200 rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-green-700" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
+              <CardTitle className="text-sm sm:text-base font-semibold text-green-900">Approved Today</CardTitle>
+              <div className="p-1.5 sm:p-2 bg-green-200 rounded-lg">
+                <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-700" />
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-green-900">
+            <CardContent className="pt-2 sm:pt-4">
+              <div className="text-2xl sm:text-3xl font-bold text-green-900">
                 {allCommunions.filter(c => 
                   c.status === 'approved' && 
                   c.approved_at && 
                   format(new Date(c.approved_at), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
                 ).length}
               </div>
-              <p className="text-sm text-green-700 mt-1">Approved today</p>
+              <p className="text-xs sm:text-sm text-green-700 mt-1">Approved today</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Search */}
-        <Card className="mb-8 border-gray-200 shadow-sm bg-white">
-          <CardContent className="p-6 bg-white">
+        <Card className="mb-6 sm:mb-8 border-gray-200 shadow-sm bg-white">
+          <CardContent className="p-3 sm:p-6 bg-white">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
               <Input
-                placeholder="Search communion requests by name, phone, or status..."
+                placeholder="Search communion requests..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+                className="pl-10 bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 placeholder-gray-500 text-sm sm:text-base"
               />
             </div>
           </CardContent>
@@ -478,34 +495,36 @@ export default function AdminCommunionPage() {
         <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
           <Tabs defaultValue="pending">
             <div className="border-b border-gray-200 bg-gray-50">
-              <TabsList className="bg-transparent border-none p-6">
+              <TabsList className="bg-transparent border-none p-3 sm:p-6 w-full">
                 <TabsTrigger 
                   value="pending" 
-                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-6 py-3.5 rounded-lg font-semibold text-base text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-3 sm:px-6 py-2 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base text-gray-600 hover:bg-gray-100 transition-colors flex-1 sm:flex-none"
                 >
-                  <Clock className="h-5 w-5 mr-3" />
-                  Pending Requests ({filteredPendingCommunions.length})
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-3" />
+                  <span className="hidden sm:inline">Pending Requests ({filteredPendingCommunions.length})</span>
+                  <span className="sm:hidden">Pending ({filteredPendingCommunions.length})</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="all"
-                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-6 py-3.5 rounded-lg font-semibold text-base text-gray-600 ml-3 hover:bg-gray-100 transition-colors"
+                  className="data-[state=active]:!bg-blue-600 data-[state=active]:!text-white data-[state=active]:!border-blue-600 data-[state=active]:shadow-sm border border-transparent px-3 sm:px-6 py-2 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base text-gray-600 ml-2 sm:ml-3 hover:bg-gray-100 transition-colors flex-1 sm:flex-none"
                 >
-                  <Users className="h-5 w-5 mr-3" />
-                  All Requests ({filteredAllCommunions.length})
+                  <Users className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-3" />
+                  <span className="hidden sm:inline">All Requests ({filteredAllCommunions.length})</span>
+                  <span className="sm:hidden">All ({filteredAllCommunions.length})</span>
                 </TabsTrigger>
               </TabsList>
             </div>
           
-            <TabsContent value="pending" className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">Pending Communion Requests</h3>
+            <TabsContent value="pending" className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Pending Communion Requests</h3>
                 <Button 
                   onClick={loadPendingCommunions} 
                   className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium shadow-lg"
                   size="sm"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${loadingPending ? 'animate-spin' : ''}`} />
-                  Refresh
+                  <span className="hidden sm:inline">Refresh</span>
                 </Button>
               </div>
             
@@ -517,29 +536,30 @@ export default function AdminCommunionPage() {
             
               {/* Pagination for pending */}
               {pendingTotal > pageSize && (
-                <div className="mt-6 flex items-center justify-between bg-white">
-                  <div className="text-sm text-gray-700 font-medium">
-                    Showing {((pendingPage - 1) * pageSize) + 1} to {Math.min(pendingPage * pageSize, pendingTotal)} of {pendingTotal} communion requests
+                <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-white">
+                  <div className="text-xs sm:text-sm text-gray-700 font-medium order-2 sm:order-1">
+                    Showing {((pendingPage - 1) * pageSize) + 1} to {Math.min(pendingPage * pageSize, pendingTotal)} of {pendingTotal}
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 order-1 sm:order-2">
                     <button
                       onClick={() => setPendingPage(p => Math.max(1, p - 1))}
                       disabled={pendingPage <= 1 || loadingPending}
-                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                      className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md border ${
                         pendingPage <= 1 || loadingPending
                           ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
                           : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
                       }`}
                     >
-                      Previous
+                      <span className="hidden sm:inline">Previous</span>
+                      <span className="sm:hidden">Prev</span>
                     </button>
-                    <span className="px-3 py-2 text-sm font-medium bg-amber-600 text-white border border-amber-600 rounded-md">
+                    <span className="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-amber-600 text-white border border-amber-600 rounded-md">
                       {pendingPage}
                     </span>
                     <button
                       onClick={() => setPendingPage(p => p + 1)}
                       disabled={pendingPage >= Math.ceil(pendingTotal / pageSize) || loadingPending}
-                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                      className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md border ${
                         pendingPage >= Math.ceil(pendingTotal / pageSize) || loadingPending
                           ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
                           : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
@@ -552,16 +572,16 @@ export default function AdminCommunionPage() {
               )}
           </TabsContent>
           
-            <TabsContent value="all" className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">All Communion Requests</h3>
+            <TabsContent value="all" className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">All Communion Requests</h3>
                 <Button 
                   onClick={loadAllCommunions} 
                   className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-lg"
                   size="sm"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${loadingAll ? 'animate-spin' : ''}`} />
-                  Refresh
+                  <span className="hidden sm:inline">Refresh</span>
                 </Button>
               </div>
               
@@ -573,29 +593,30 @@ export default function AdminCommunionPage() {
               
               {/* Pagination for all */}
               {allTotal > pageSize && (
-                <div className="mt-6 flex items-center justify-between bg-white">
-                  <div className="text-sm text-gray-700 font-medium">
-                    Showing {((allPage - 1) * pageSize) + 1} to {Math.min(allPage * pageSize, allTotal)} of {allTotal} communion requests
+                <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-white">
+                  <div className="text-xs sm:text-sm text-gray-700 font-medium order-2 sm:order-1">
+                    Showing {((allPage - 1) * pageSize) + 1} to {Math.min(allPage * pageSize, allTotal)} of {allTotal}
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 order-1 sm:order-2">
                     <button
                       onClick={() => setAllPage(p => Math.max(1, p - 1))}
                       disabled={allPage <= 1 || loadingAll}
-                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                      className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md border ${
                         allPage <= 1 || loadingAll
                           ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
                           : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
                       }`}
                     >
-                      Previous
+                      <span className="hidden sm:inline">Previous</span>
+                      <span className="sm:hidden">Prev</span>
                     </button>
-                    <span className="px-3 py-2 text-sm font-medium bg-indigo-600 text-white border border-indigo-600 rounded-md">
+                    <span className="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-blue-600 text-white border border-blue-600 rounded-md">
                       {allPage}
                     </span>
                     <button
                       onClick={() => setAllPage(p => p + 1)}
                       disabled={allPage >= Math.ceil(allTotal / pageSize) || loadingAll}
-                      className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                      className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md border ${
                         allPage >= Math.ceil(allTotal / pageSize) || loadingAll
                           ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
                           : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'

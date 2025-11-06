@@ -50,8 +50,19 @@ export interface ForgotPasswordResponse {
   message: string
 }
 
+export interface VerifyOTPRequest {
+  phone_number: string
+  otp: string
+}
+
+export interface VerifyOTPResponse {
+  valid: boolean
+  message: string
+  reset_token?: string
+}
+
 export interface ResetPasswordRequest {
-  token: string
+  reset_token: string
   new_password: string
 }
 
@@ -223,6 +234,25 @@ class AuthService {
     return data
   }
 
+  async verifyOTP(requestData: VerifyOTPRequest): Promise<VerifyOTPResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestData),
+    })
+
+    const body = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      const message = body?.error?.message || body?.message || "OTP verification failed"
+      throw new Error(message)
+    }
+
+    // The Go backend returns { ok: true, data: {...} }
+    const data: VerifyOTPResponse = body?.data ?? body
+    return data
+  }
+
   async resetPassword(requestData: ResetPasswordRequest): Promise<ResetPasswordResponse> {
     const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
       method: "POST",
@@ -258,6 +288,25 @@ class AuthService {
 
     // The Go backend returns { ok: true, data: {...} }
     const data: TelegramLinkResponse = body?.data ?? body
+    return data
+  }
+
+  async checkTelegramVerification(requestData: TelegramLinkRequest): Promise<{verified: boolean, message: string}> {
+    const response = await fetch(`${API_BASE_URL}/auth/check-telegram`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestData),
+    })
+
+    const body = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      const message = body?.error?.message || body?.message || "Telegram verification check failed"
+      throw new Error(message)
+    }
+
+    // The Go backend returns { ok: true, data: {...} }
+    const data = body?.data ?? body
     return data
   }
 

@@ -338,7 +338,8 @@ export function UsersList() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50 border-b border-gray-200">
-                    <TableHead className="font-semibold text-gray-900">Name</TableHead>
+                    <TableHead className="font-semibold text-gray-900">ስም</TableHead>
+                    <TableHead className="font-semibold text-gray-900">ክ/ስም</TableHead>
                     <TableHead className="font-semibold text-gray-900">ስልክ</TableHead>
                     <TableHead className="font-semibold text-gray-900">Role</TableHead>
                     <TableHead className="font-semibold text-gray-900">የስራ አይነት</TableHead>
@@ -350,7 +351,8 @@ export function UsersList() {
                 <TableBody>
                   {filteredUsers.map((user) => (
                     <TableRow key={user.id} className="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                      <TableCell className="font-medium text-gray-900">{`${user.name} ${user.lastname}`}</TableCell>
+                      <TableCell className="font-medium text-gray-900">{user.name || "—"}</TableCell>
+                      <TableCell className="text-gray-700">{user.lastname || "—"}</TableCell>
                       <TableCell>
                         <div className="flex items-center text-gray-700">
                           <Phone className="h-4 w-4 mr-2 text-gray-500" />
@@ -388,8 +390,12 @@ export function UsersList() {
                                 {selectedUser && (
                                   <div className="space-y-4">
                                     <div>
-                                      <label className="text-sm font-medium text-gray-700">Full Name</label>
-                                      <p className="text-gray-900">{`${selectedUser.name} ${selectedUser.lastname}`}</p>
+                                      <label className="text-sm font-medium text-gray-700">ስም</label>
+                                      <p className="text-gray-900">{selectedUser.name || "—"}</p>
+                                    </div>
+                                    <div>
+                                      <label className="text-sm font-medium text-gray-700">ክ/ስም</label>
+                                      <p className="text-gray-900">{selectedUser.lastname || "—"}</p>
                                     </div>
                                     <div>
                                         <label className="text-sm font-medium text-gray-700">ስልክ</label>

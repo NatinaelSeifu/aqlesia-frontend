@@ -111,53 +111,59 @@ export function CommunionRequestCard({
       communion.status === 'rejected' ? 'border-red-200 bg-red-50/30' : 
       'border-yellow-200 bg-yellow-50/30'
     }`}>
-      <CardHeader className="pb-3">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-lg flex items-center space-x-2">
-            <User className="h-5 w-5 text-muted-foreground" />
-            <span>
+      <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0">
+          <CardTitle className="text-base sm:text-lg flex items-center space-x-2">
+            <User className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground flex-shrink-0" />
+            <span className="truncate">
               {communion.user?.name || 'Unknown User'}
               {communion.user?.lastname && ` ${communion.user.lastname}`}
             </span>
           </CardTitle>
-          {getStatusBadge(communion.status)}
+          <div className="self-start sm:self-center">
+            {getStatusBadge(communion.status)}
+          </div>
         </div>
       </CardHeader>
       
-      <CardContent className="space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+      <CardContent className="space-y-3 p-3 sm:p-6 pt-0 sm:pt-0">
+        <div className="grid grid-cols-1 gap-2 sm:gap-3 text-xs sm:text-sm">
           <div className="flex items-center space-x-2">
-            <Phone className="h-4 w-4 text-muted-foreground" />
-            <span>{communion.user?.phone_number || 'No phone'}</span>
+            <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+            <span className="truncate">{communion.user?.phone_number || 'No phone'}</span>
           </div>
           
           <div className="flex items-center space-x-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span>
+            <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+            <span className="truncate">
               Communion: {format(new Date(communion.communion_date), 'MMM d, yyyy')}
             </span>
           </div>
           
           <div className="flex items-center space-x-2">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <span>
-              Requested: {format(new Date(communion.requested_at), 'MMM d, yyyy h:mm a')}
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+            <span className="truncate">
+              Requested: {format(new Date(communion.requested_at), 'MMM d, yy')}
             </span>
           </div>
           
           {communion.status !== 'pending' && communion.approved_by && (
-            <div className="flex items-center space-x-2 text-xs">
-              <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-              <span>
+            <div className="flex items-start space-x-2 text-xs">
+              <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+              <span className="min-w-0">
                 {communion.status === 'approved' ? 'Approved' : 'Rejected'} by: {communion.approved_by.name}
-                {communion.approved_at && ` on ${format(new Date(communion.approved_at), 'MMM d, yyyy')}`}
+                {communion.approved_at && (
+                  <span className="block sm:inline">
+                    {" "}{format(new Date(communion.approved_at), 'MMM d, yyyy')}
+                  </span>
+                )}
               </span>
             </div>
           )}
         </div>
 
         {showActions && (
-          <div className="flex justify-end space-x-2 pt-3 border-t">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-2 sm:space-x-0 pt-3 border-t">
             {communion.status === 'pending' && (
               <>
                 <AlertDialog>
@@ -166,9 +172,9 @@ export function CommunionRequestCard({
                       variant="outline" 
                       size="sm"
                       disabled={actionLoading}
-                      className="text-green-600 hover:text-green-700"
+                      className="text-green-600 hover:text-green-700 text-xs sm:text-sm"
                     >
-                      <CheckCircle2 className="h-4 w-4 mr-1" />
+                      <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                       Approve
                     </Button>
                   </AlertDialogTrigger>
@@ -197,9 +203,9 @@ export function CommunionRequestCard({
                       variant="outline" 
                       size="sm"
                       disabled={actionLoading}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-red-600 hover:text-red-700 text-xs sm:text-sm"
                     >
-                      <XCircle className="h-4 w-4 mr-1" />
+                      <XCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                       Reject
                     </Button>
                   </AlertDialogTrigger>
@@ -230,9 +236,9 @@ export function CommunionRequestCard({
                   variant="outline" 
                   size="sm"
                   disabled={actionLoading}
-                  className="text-red-600 hover:text-red-700"
+                  className="text-red-600 hover:text-red-700 text-xs sm:text-sm"
                 >
-                  <Trash2 className="h-4 w-4 mr-1" />
+                  <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                   Delete
                 </Button>
               </AlertDialogTrigger>

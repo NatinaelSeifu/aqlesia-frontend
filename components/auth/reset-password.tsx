@@ -19,7 +19,7 @@ interface ResetPasswordProps {
 
 export function ResetPassword({ token, onSuccess, onError }: ResetPasswordProps) {
   const [formData, setFormData] = useState<ResetPasswordRequest>({
-    token: token || "",
+    reset_token: token || "",
     new_password: "",
   })
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -33,7 +33,7 @@ export function ResetPassword({ token, onSuccess, onError }: ResetPasswordProps)
   // Update token if it changes
   useEffect(() => {
     if (token) {
-      setFormData(prev => ({ ...prev, token }))
+      setFormData(prev => ({ ...prev, reset_token: token }))
     }
   }, [token])
 
@@ -44,7 +44,7 @@ export function ResetPassword({ token, onSuccess, onError }: ResetPasswordProps)
     setMessage("")
 
     // Validation
-    if (!formData.token.trim()) {
+    if (!formData.reset_token.trim()) {
       setError("No reset token provided")
       return
     }
@@ -102,8 +102,8 @@ export function ResetPassword({ token, onSuccess, onError }: ResetPasswordProps)
             </div>
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">{"Password Reset Successful!"}</h3>
-              <p className="text-gray-600 mb-4">{message}</p>
-              <p className="text-sm text-gray-500">{"You can now login with your new password"}</p>
+              <p className="text-gray-600 mb-2">{message}</p>
+              <p className="text-blue-600 text-sm font-medium">{"Redirecting to login page..."}</p>
             </div>
           </div>
         </CardContent>
@@ -136,12 +136,12 @@ export function ResetPassword({ token, onSuccess, onError }: ResetPasswordProps)
           {/* Token field (hidden or readonly for user info) */}
           {!token && (
             <div className="space-y-2">
-              <Label htmlFor="token" className="text-gray-700 font-medium">{"ዳግም አስጀመሪያ ማስመሪያ"}</Label>
+              <Label htmlFor="reset_token" className="text-gray-700 font-medium">{"ዳግም አስጀመሪያ ማስመሪያ"}</Label>
               <Input
-                id="token"
+                id="reset_token"
                 type="text"
-                value={formData.token}
-                onChange={(e) => handleChange("token", e.target.value)}
+                value={formData.reset_token}
+                onChange={(e) => handleChange("reset_token", e.target.value)}
                 placeholder="የዳግም አስጀመሪያ ማስመሪያን ያስገቡ"
                 className="bg-white border-gray-300 focus:border-green-500 focus:ring-green-500"
                 required
