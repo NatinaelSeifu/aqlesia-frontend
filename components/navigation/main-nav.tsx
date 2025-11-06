@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
+import { translations as t } from "@/lib/translations"
 
 interface MenuItem {
   title: string
@@ -58,49 +59,49 @@ export function MainNav() {
       // Admin menu - full access
       return [
         {
-          title: "Aqlesia",
+          title: t.appName,
           href: "/dashboard",
           icon: Church,
           show: true,
           color: "bg-blue-50 text-blue-600"
         },
         {
-          title: "Manage Users",
+          title: t.nav.manageUsers,
           href: "/users",
           icon: Users,
           show: true,
           color: "bg-red-50 text-red-600"
         },
         {
-          title: "Manage Appointments",
+          title: t.nav.manageAppointments,
           href: "/admin/appointments",
           icon: Calendar,
           show: true,
           color: "bg-purple-50 text-purple-600"
         },
         {
-          title: "Manage Communion",
+          title: t.nav.manageCommunion,
           href: "/admin/communion",
           icon: Settings,
           show: true,
           color: "bg-orange-50 text-orange-600"
         },
         {
-          title: "Available Dates",
+          title: t.nav.availableDates,
           href: "/admin/available-dates",
           icon: CalendarClock,
           show: true,
           color: "bg-green-50 text-green-600"
         },
         {
-          title: "Questions",
+          title: t.nav.questions,
           href: "/admin/questions",
           icon: HelpCircle,
           show: true,
           color: "bg-purple-50 text-purple-600"
         },
         {
-          title: "Profile",
+          title: t.nav.profile,
           href: "/profile",
           icon: User,
           show: true,
@@ -111,56 +112,56 @@ export function MainNav() {
       // Manager menu - can schedule appointments and manage them
       return [
         {
-          title: "Aqlesia",
+          title: t.appName,
           href: "/dashboard",
           icon: Church,
           show: true,
           color: "bg-blue-50 text-blue-600"
         },
         {
-          title: "Appointments",
+          title: t.nav.appointments,
           href: "/appointments",
           icon: Calendar,
           show: true,
           color: "bg-purple-50 text-purple-600"
         },
         {
-          title: "Manage Appointments",
+          title: t.nav.manageAppointments,
           href: "/admin/appointments",
           icon: CalendarClock,
           show: true,
           color: "bg-green-50 text-green-600"
         },
         {
-          title: "Available Dates",
+          title: t.nav.availableDates,
           href: "/admin/available-dates",
           icon: CalendarPlus,
           show: true,
           color: "bg-blue-50 text-blue-600"
         },
         {
-          title: "Communion",
+          title: t.nav.communion,
           href: "/communion",
           icon: Church,
           show: true,
           color: "bg-indigo-50 text-indigo-600"
         },
         {
-          title: "Manage Users",
+          title: t.nav.manageUsers,
           href: "/users",
           icon: Users,
           show: true,
           color: "bg-red-50 text-red-600"
         },
         {
-          title: "Questions",
+          title: t.nav.questions,
           href: "/questions",
           icon: HelpCircle,
           show: true,
           color: "bg-amber-50 text-amber-600"
         },
         {
-          title: "Profile",
+          title: t.nav.profile,
           href: "/profile",
           icon: User,
           show: true,
@@ -171,35 +172,35 @@ export function MainNav() {
       // Regular user menu
       return [
         {
-          title: "Aqlesia",
+          title: t.appName,
           href: "/dashboard",
           icon: Church,
           show: true,
           color: "bg-blue-50 text-blue-600"
         },
         {
-          title: "Appointments",
+          title: t.nav.appointments,
           href: "/appointments",
           icon: Calendar,
           show: true,
           color: "bg-purple-50 text-purple-600"
         },
         {
-          title: "Communion",
+          title: t.nav.communion,
           href: "/communion",
           icon: Church,
           show: true,
           color: "bg-indigo-50 text-indigo-600"
         },
         {
-          title: "Profile",
+          title: t.nav.profile,
           href: "/profile",
           icon: User,
           show: true,
           color: "bg-gray-50 text-gray-600"
         },
         {
-          title: "Questions",
+          title: t.nav.questions,
           href: "/questions",
           icon: HelpCircle,
           show: true,
@@ -233,7 +234,7 @@ export function MainNav() {
                         <Church className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <div className="text-xl font-bold text-slate-900">Aqlesia</div>
+                        <div className="text-xl font-bold text-slate-900">{t.appName}</div>
                       </div>
                     </div>
                   </Link>
@@ -349,7 +350,7 @@ export function MainNav() {
           className="bg-blue-600 hover:bg-blue-700 text-white border-0 shadow-sm"
         >
           <LogOut className="h-4 w-4 mr-1" />
-          <span className="hidden lg:block">Logout</span>
+          <span className="hidden lg:block">{t.nav.logout}</span>
         </Button>
       </div>
 

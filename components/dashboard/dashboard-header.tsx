@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, X } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
+import { translations as t } from "@/lib/translations"
 
 export function DashboardHeader() {
   const { user, logout } = useAuth()
@@ -39,25 +40,25 @@ export function DashboardHeader() {
   const getNavigationItems = () => {
     if (user.role === "admin") {
       return [
-        { href: "/users", label: "Users", icon: Users },
-        { href: "/admin/appointments", label: "Appointments", icon: Calendar },
-        { href: "/admin/communion", label: "Communion", icon: MessageSquare },
-        { href: "/admin/available-dates", label: "Dates", icon: CalendarCheck },
-        { href: "/admin/questions", label: "Questions", icon: HelpCircle },
+        { href: "/users", label: t.users.title, icon: Users },
+        { href: "/admin/appointments", label: t.appointments.title, icon: Calendar },
+        { href: "/admin/communion", label: t.communion.title, icon: MessageSquare },
+        { href: "/admin/available-dates", label: t.nav.availableDates, icon: CalendarCheck },
+        { href: "/admin/questions", label: t.questions.title, icon: HelpCircle },
       ]
     } else if (user.role === "manager") {
       return [
-        { href: "/appointments", label: "Appointments", icon: Calendar },
-        { href: "/admin/appointments", label: "Manage Appointments", icon: CalendarCheck },
-        { href: "/communion", label: "Communion", icon: MessageSquare },
-        { href: "/users", label: "Users", icon: Users },
-        { href: "/questions", label: "Questions", icon: HelpCircle },
+        { href: "/appointments", label: t.appointments.title, icon: Calendar },
+        { href: "/admin/appointments", label: t.nav.manageAppointments, icon: CalendarCheck },
+        { href: "/communion", label: t.communion.title, icon: MessageSquare },
+        { href: "/users", label: t.users.title, icon: Users },
+        { href: "/questions", label: t.questions.title, icon: HelpCircle },
       ]
     } else {
       return [
-        { href: "/appointments", label: "Appointments", icon: Calendar },
-        { href: "/communion", label: "Communion", icon: MessageSquare },
-        { href: "/questions", label: "Questions", icon: HelpCircle },
+        { href: "/appointments", label: t.appointments.title, icon: Calendar },
+        { href: "/communion", label: t.communion.title, icon: MessageSquare },
+        { href: "/questions", label: t.questions.title, icon: HelpCircle },
       ]
     }
   }
@@ -88,7 +89,7 @@ export function DashboardHeader() {
                           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                             <Church className="h-6 w-6 text-white" />
                           </div>
-                          <span className="text-xl font-bold text-gray-900">Aqlesia</span>
+                          <span className="text-xl font-bold text-gray-900">{t.appName}</span>
                         </div>
                       </Link>
                     </SheetTitle>
@@ -121,7 +122,7 @@ export function DashboardHeader() {
                   <Link href="/profile" onClick={() => setMobileMenuOpen(false)}>
                     <div className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors">
                       <User className="h-5 w-5 text-gray-600" />
-                      <span className="text-gray-900">Profile</span>
+                      <span className="text-gray-900">{t.nav.profile}</span>
                     </div>
                   </Link>
                   
@@ -134,7 +135,7 @@ export function DashboardHeader() {
                     className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-red-600"
                   >
                     <LogOut className="h-5 w-5" />
-                    <span>Logout</span>
+                    <span>{t.nav.logout}</span>
                   </button>
                 </nav>
               </SheetContent>
@@ -145,7 +146,7 @@ export function DashboardHeader() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
                 <Church className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-semibold text-gray-900">Aqlesia</span>
+              <span className="text-xl font-semibold text-gray-900">{t.appName}</span>
             </Link>
           </div>
 
@@ -220,7 +221,7 @@ export function DashboardHeader() {
                       onClick={() => setUserDropdownOpen(false)}
                     >
                       <User className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm">Profile Settings</span>
+                      <span className="text-sm">{t.nav.profile}</span>
                     </Link>
                     
                     <div className="border-t border-gray-100 my-1"></div>
@@ -233,7 +234,7 @@ export function DashboardHeader() {
                       className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span className="text-sm">Logout</span>
+                      <span className="text-sm">{t.nav.logout}</span>
                     </button>
                   </div>
                   </div>

@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge"
 import { appointmentService } from "@/lib/appointments"
 import type { CreateAppointmentRequest } from "@/lib/appointments"
 import { Calendar, Clock, AlertCircle, CheckCircle, Info } from "lucide-react"
+import { formatEthiopianDate, formatEthiopianDateCustom } from "@/lib/utils"
+import { translations } from "@/lib/translations"
 
 interface AppointmentFormProps {
   onSuccess?: () => void
@@ -128,17 +130,11 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
       return []
     }
 
-    // Convert the available dates from API into display format
+    // Convert the available dates from API into display format with Ethiopian calendar
     return availableDates.map(dateStr => {
-      const date = new Date(dateStr)
       return {
         date: dateStr,
-        display: date.toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
+        display: formatEthiopianDate(dateStr, 'long'),
         available: true, // All dates from API are available
       }
     }).sort((a, b) => a.date.localeCompare(b.date)) // Sort by date
@@ -151,20 +147,15 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
           <div className="text-center space-y-4">
             <CheckCircle className="h-12 w-12 text-green-600 mx-auto" />
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Appointment Booked!</h3>
-              <p className="text-sm text-gray-600 mb-4">Your appointment has been successfully scheduled.</p>
+              <h3 className="text-lg font-semibold text-gray-900">{translations.appointments.appointmentBooked}</h3>
+              <p className="text-sm text-gray-600 mb-4">{translations.appointments.appointmentBookedSuccess}</p>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-900">Date: {new Date(formData.appointment_date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}</p>
+                <p className="text-sm font-medium text-gray-900">{translations.appointments.appointmentDate}: {formatEthiopianDate(formData.appointment_date, 'long')}</p>
                 {formData.notes && (
-                  <p className="text-sm text-gray-600">Notes: {formData.notes}</p>
+                  <p className="text-sm text-gray-600">{translations.appointments.notes}: {formData.notes}</p>
                 )}
               </div>
-              <p className="text-xs text-gray-500 mt-4">Redirecting to your appointments...</p>
+              <p className="text-xs text-gray-500 mt-4">{translations.appointments.redirecting}</p>
             </div>
           </div>
         </CardContent>
@@ -177,10 +168,10 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
       <CardHeader className="bg-white p-4 sm:p-6">
         <CardTitle className="flex items-center space-x-2 text-gray-900 text-lg sm:text-xl">
           <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-          <span>Book New Appointment</span>
+          <span>{translations.appointments.bookNewAppointment}</span>
         </CardTitle>
         <CardDescription className="text-gray-600 text-sm sm:text-base">
-          Schedule your appointment. Available on Monday, Wednesday, and Friday only.
+          {translations.appointments.scheduleInfo}
         </CardDescription>
       </CardHeader>
       <CardContent className="bg-white p-4 sm:p-6">
@@ -205,19 +196,19 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
           <Alert className="border-blue-200 bg-blue-50">
             <Info className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-blue-800">
-              Appointments are available on Monday, Wednesday, and Friday. Maximum 10 appointments per day. You can only have one active appointment at a time.
+              {translations.appointments.maxAppointments}
             </AlertDescription>
           </Alert>
 
           {/* Date Selection */}
           <div className="space-y-4">
-            <Label className="text-gray-900 font-medium text-sm sm:text-base">Select Appointment Date</Label>
+            <Label className="text-gray-900 font-medium text-sm sm:text-base">{translations.appointments.selectAppointmentDate}</Label>
 
             {loadingDates ? (
               <div className="flex items-center justify-center py-8">
                 <div className="flex items-center space-x-2">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                  <span className="text-gray-700">Loading dates...</span>
+                  <span className="text-gray-700">{translations.appointments.loadingDates}</span>
                 </div>
               </div>
             ) : (
@@ -225,7 +216,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                 {getDisplayDates().length === 0 ? (
                   <div className="text-center py-6 sm:py-8 text-gray-600">
                     <Calendar className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-gray-700 text-sm sm:text-base">No available dates found.</p>
+                    <p className="text-gray-700 text-sm sm:text-base">{translations.appointments.noAvailableDates}</p>
                     <Button 
                       type="button" 
                       variant="outline" 
@@ -233,7 +224,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                       className="mt-2 border-gray-300 text-gray-700 hover:bg-gray-50 text-xs sm:text-sm"
                       onClick={loadAvailableDates}
                     >
-                      Refresh
+                      {translations.actions.refresh}
                     </Button>
                   </div>
                 ) : (
@@ -254,16 +245,16 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                     <div className="flex items-center justify-between">
                       <div className="min-w-0 flex-1">
                         <p className="font-medium text-sm sm:text-base truncate">{display}</p>
-                        <p className="text-xs text-gray-500">{date}</p>
+                        <p className="text-xs text-gray-500">{formatEthiopianDateCustom(date, { shortMonth: true, includeYear: false })}</p>
                       </div>
                       <div>
                         {available ? (
                           <Badge className="text-xs bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
-                            Available
+                            {translations.appointments.available}
                           </Badge>
                         ) : (
                           <Badge variant="destructive" className="text-xs bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
-                            Full
+                            {translations.appointments.full}
                           </Badge>
                         )}
                       </div>
@@ -277,10 +268,10 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label htmlFor="notes" className="text-gray-900 font-medium text-sm sm:text-base">Notes (Optional)</Label>
+            <Label htmlFor="notes" className="text-gray-900 font-medium text-sm sm:text-base">{translations.appointments.notesOptional}</Label>
             <Textarea
               id="notes"
-              placeholder="Add any additional notes about your appointment..."
+              placeholder={translations.appointments.addNotes}
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
               rows={3}
@@ -296,7 +287,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
               disabled={loading || !formData.appointment_date}
             >
               <Clock className="h-4 w-4 mr-2" />
-              {loading ? "Booking..." : "Book Appointment"}
+              {loading ? translations.appointments.booking : translations.appointments.bookAppointment}
             </Button>
             {onCancel && (
               <Button 
@@ -305,7 +296,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                 onClick={onCancel}
                 className="border-gray-300 text-gray-700 hover:bg-gray-50 py-2.5 sm:py-2 text-sm sm:text-base sm:min-w-[100px]"
               >
-                Cancel
+                {translations.actions.cancel}
               </Button>
             )}
           </div>

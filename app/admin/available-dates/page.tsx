@@ -54,6 +54,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Alert, AlertDescription } from "../../../components/ui/alert"
 import { availableDatesService, type AvailableDate, type CreateAvailableDate, type UpdateAvailableDate } from "../../../lib/available-dates"
 import { format, addDays, startOfWeek, endOfWeek } from "date-fns"
+import { formatEthiopianDate, formatEthiopianDateCustom } from "../../../lib/utils"
 
 export default function AdminAvailableDatesPage() {
   const { user, loading } = useAuth()
@@ -346,6 +347,9 @@ export default function AdminAvailableDatesPage() {
                       color: 'black'
                     }}
                   />
+                  <p className="mt-1 text-xs text-blue-600">
+                    {formatEthiopianDateCustom(startDate, { shortMonth: true })}
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="end_date" className="text-sm font-medium text-blue-700">End Date</Label>
@@ -362,6 +366,9 @@ export default function AdminAvailableDatesPage() {
                       color: 'black'
                     }}
                   />
+                  <p className="mt-1 text-xs text-blue-600">
+                    {formatEthiopianDateCustom(endDate, { shortMonth: true })}
+                  </p>
                 </div>
               </div>
               
@@ -401,7 +408,7 @@ export default function AdminAvailableDatesPage() {
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="create_date" className="text-sm font-medium text-blue-700">Date</Label>
+                        <Label htmlFor="create_date" className="text-sm font-medium text-blue-700">Date (Gregorian)</Label>
                         <Input
                           id="create_date"
                           type="date"
@@ -416,6 +423,11 @@ export default function AdminAvailableDatesPage() {
                           }}
                           min={format(new Date(), 'yyyy-MM-dd')}
                         />
+                        {createForm.slot_date && (
+                          <p className="mt-2 text-sm text-blue-700 font-medium">
+                            📅 Ethiopian: {formatEthiopianDate(createForm.slot_date, 'long')}
+                          </p>
+                        )}
                       </div>
                       <div>
                         <Label htmlFor="create_capacity" className="text-sm font-medium text-blue-700">Max Capacity</Label>
@@ -507,7 +519,7 @@ export default function AdminAvailableDatesPage() {
                       availableDates.map((date) => (
                         <TableRow key={date.id} className="hover:bg-blue-50 transition-colors border-b border-blue-100">
                           <TableCell className="font-medium text-slate-800">
-                            {format(new Date(date.slot_date), 'MMM d, yyyy (EEEE)')}
+                            {formatEthiopianDate(date.slot_date, 'long')}
                           </TableCell>
                           <TableCell className="text-slate-700">{date.max_capacity}</TableCell>
                           <TableCell className="text-slate-700">{date.current_bookings}</TableCell>
@@ -579,7 +591,7 @@ export default function AdminAvailableDatesPage() {
             <DialogHeader>
               <DialogTitle className="text-slate-800">Edit Available Date</DialogTitle>
               <DialogDescription className="text-blue-600">
-                Update the capacity or status for {selectedDate && format(new Date(selectedDate.slot_date), 'MMM d, yyyy')}.
+                Update the capacity or status for {selectedDate && formatEthiopianDate(selectedDate.slot_date, 'short')}.
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">

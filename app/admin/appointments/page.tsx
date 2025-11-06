@@ -46,6 +46,7 @@ import { useToast } from "../../../components/ui/use-toast"
 import { appointmentService } from "../../../lib/appointments"
 import type { Appointment } from "../../../lib/appointments"
 import { format } from "date-fns"
+import { formatEthiopianDate, formatEthiopianDateCustom } from "../../../lib/utils"
 
 export default function AdminAppointmentsPage() {
   const { user, loading } = useAuth()
@@ -311,7 +312,7 @@ export default function AdminAppointmentsPage() {
                   <div className="flex items-center space-x-1 sm:space-x-2">
                     <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-purple-600 flex-shrink-0" />
                     <span className="truncate">
-                      {format(new Date(appointment.appointment_date), 'MMM d, yy')}
+                      {formatEthiopianDateCustom(appointment.appointment_date, { shortMonth: true })}
                     </span>
                   </div>
                 </TableCell>
@@ -342,7 +343,7 @@ export default function AdminAppointmentsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-gray-600 text-xs hidden sm:table-cell">
-                  {format(new Date(appointment.created_at), 'MMM d, yy')}
+                  {formatEthiopianDateCustom(appointment.created_at, { shortMonth: true })}
                 </TableCell>
                 {showActions && (
                   <TableCell>

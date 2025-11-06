@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { appointmentService } from "@/lib/appointments"
 import type { Appointment } from "@/lib/appointments"
 import { Calendar, User, Phone, Clock, CheckCircle, X, AlertCircle } from "lucide-react"
+import { formatEthiopianDateCustom } from "@/lib/utils"
 
 export function RecentAppointments() {
   const [appointments, setAppointments] = useState<Appointment[]>([])
@@ -110,11 +111,7 @@ export function RecentAppointments() {
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-primary" />
                     <span className="font-medium text-sm">
-                      {new Date(appointment.appointment_date).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
+                      {formatEthiopianDateCustom(appointment.appointment_date, { shortMonth: true })}
                     </span>
                     <Badge variant={getStatusBadgeVariant(appointment.status)} className="text-xs">
                       <span className="flex items-center space-x-1">

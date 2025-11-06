@@ -64,6 +64,7 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { format } from "date-fns";
+import { translations } from "@/lib/translations";
 
 export default function QuestionsPage() {
 	const { user, loading } = useAuth();
@@ -203,34 +204,34 @@ export default function QuestionsPage() {
 
 	const getStatusBadge = (status: QuestionStatus) => {
 		switch (status) {
-			case QuestionStatus.PENDING:
-				return (
-					<Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-amber-300">
-						<Clock className="h-3 w-3 mr-1" />
-						Pending
-					</Badge>
-				);
-			case QuestionStatus.ANSWERED:
-				return (
-					<Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
-						<CheckCircle className="h-3 w-3 mr-1" />
-						Answered
-					</Badge>
-				);
-			case QuestionStatus.CLOSED:
-				return (
-					<Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300">
-						<XCircle className="h-3 w-3 mr-1" />
-						Closed
-					</Badge>
-				);
-			case QuestionStatus.CANCELLED:
-				return (
-					<Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
-						<XCircle className="h-3 w-3 mr-1" />
-						Cancelled
-					</Badge>
-				);
+		case QuestionStatus.PENDING:
+			return (
+				<Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-amber-300">
+					<Clock className="h-3 w-3 mr-1" />
+					{translations.appointments.pending}
+				</Badge>
+			);
+		case QuestionStatus.ANSWERED:
+			return (
+				<Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
+					<CheckCircle className="h-3 w-3 mr-1" />
+					{translations.questions.answered}
+				</Badge>
+			);
+		case QuestionStatus.CLOSED:
+			return (
+				<Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300">
+					<XCircle className="h-3 w-3 mr-1" />
+					{translations.questions.closed}
+				</Badge>
+			);
+		case QuestionStatus.CANCELLED:
+			return (
+				<Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
+					<XCircle className="h-3 w-3 mr-1" />
+					{translations.appointments.cancelled}
+				</Badge>
+			);
 			default:
 				return (
 					<Badge className="bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-300">
@@ -261,10 +262,10 @@ export default function QuestionsPage() {
 						<HelpCircle className="h-8 w-8 text-white" />
 					</div>
 					<h2 className="text-3xl font-bold mb-2 text-slate-800">
-						My Questions
+						{translations.questions.myQuestions}
 					</h2>
 					<p className="text-blue-600 max-w-2xl mx-auto">
-						Ask questions and get answers from the church administration
+						{translations.questions.getAnswers}
 					</p>
 				</div>
 
@@ -293,9 +294,9 @@ export default function QuestionsPage() {
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 						<Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-blue-900">
-									Total Questions
-								</CardTitle>
+							<CardTitle className="text-base font-semibold text-blue-900">
+								{translations.questions.totalQuestions}
+							</CardTitle>
 								<div className="p-2 bg-blue-200 rounded-lg">
 									<HelpCircle className="h-5 w-5 text-blue-700" />
 								</div>
@@ -305,16 +306,16 @@ export default function QuestionsPage() {
 									{stats.total}
 								</div>
 								<p className="text-sm text-blue-700 mt-1">
-									Questions submitted
+									{translations.questions.questionsSubmitted}
 								</p>
 							</CardContent>
 						</Card>
 
 						<Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-amber-900">
-									Pending
-								</CardTitle>
+							<CardTitle className="text-base font-semibold text-amber-900">
+								{translations.appointments.pending}
+							</CardTitle>
 								<div className="p-2 bg-amber-200 rounded-lg">
 									<Clock className="h-5 w-5 text-amber-700" />
 								</div>
@@ -323,15 +324,15 @@ export default function QuestionsPage() {
 								<div className="text-3xl font-bold text-amber-900">
 									{stats.pending}
 								</div>
-								<p className="text-sm text-amber-700 mt-1">Awaiting response</p>
+								<p className="text-sm text-amber-700 mt-1">{translations.questions.awaitingResponse}</p>
 							</CardContent>
 						</Card>
 
 						<Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-green-900">
-									Answered
-								</CardTitle>
+							<CardTitle className="text-base font-semibold text-green-900">
+								{translations.questions.answered}
+							</CardTitle>
 								<div className="p-2 bg-green-200 rounded-lg">
 									<CheckCircle className="h-5 w-5 text-green-700" />
 								</div>
@@ -341,16 +342,16 @@ export default function QuestionsPage() {
 									{stats.answered}
 								</div>
 								<p className="text-sm text-green-700 mt-1">
-									Received responses
+									{translations.questions.receivedResponses}
 								</p>
 							</CardContent>
 						</Card>
 
 						<Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-purple-900">
-									Closed
-								</CardTitle>
+							<CardTitle className="text-base font-semibold text-purple-900">
+								{translations.questions.closed}
+							</CardTitle>
 								<div className="p-2 bg-purple-200 rounded-lg">
 									<XCircle className="h-5 w-5 text-purple-700" />
 								</div>
@@ -360,7 +361,7 @@ export default function QuestionsPage() {
 									{stats.closed}
 								</div>
 								<p className="text-sm text-purple-700 mt-1">
-									Completed questions
+									{translations.questions.completedQuestions}
 								</p>
 							</CardContent>
 						</Card>
@@ -370,7 +371,7 @@ export default function QuestionsPage() {
 				{/* Actions */}
 				<div className="flex justify-between items-center mb-6">
 					<h3 className="text-xl font-semibold text-slate-800">
-						Your Questions
+						{translations.questions.yourQuestions}
 					</h3>
 					<div className="flex gap-3">
 						<Button
@@ -382,25 +383,24 @@ export default function QuestionsPage() {
 									loadingQuestions ? "animate-spin" : ""
 								}`}
 							/>
-							Refresh
+							{translations.actions.refresh}
 						</Button>
 
 						<Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
 							<DialogTrigger asChild>
 								<Button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium shadow-lg">
 									<Plus className="h-4 w-4 mr-2" />
-									Ask Question
+									{translations.questions.askQuestion}
 								</Button>
 							</DialogTrigger>
 							<DialogContent className="bg-white">
 								<DialogHeader>
-									<DialogTitle className="text-slate-800">
-										Ask a Question
-									</DialogTitle>
-									<DialogDescription className="text-blue-600">
-										Submit your question and get an answer from the church
-										administration.
-									</DialogDescription>
+								<DialogTitle className="text-slate-800">
+									{translations.questions.askQuestion}
+								</DialogTitle>
+								<DialogDescription className="text-blue-600">
+									{translations.questions.submitQuestionDesc}
+								</DialogDescription>
 								</DialogHeader>
 								<div className="space-y-4">
 									<div>
@@ -408,7 +408,7 @@ export default function QuestionsPage() {
 											htmlFor="create_question"
 											className="text-sm font-medium text-blue-700"
 										>
-											Your Question
+											{translations.questions.yourQuestion}
 										</Label>
 										<Textarea
 											id="create_question"
@@ -417,12 +417,12 @@ export default function QuestionsPage() {
 												setCreateForm({ question: e.target.value })
 											}
 											className="mt-1 bg-transparent border-2 border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-blue-900 placeholder:text-blue-500 rounded-lg"
-											placeholder="Type your question here..."
+											placeholder={translations.questions.typeQuestion}
 											rows={4}
 											maxLength={1000}
 										/>
 										<p className="text-xs text-blue-500 mt-1">
-											{createForm.question.length}/1000 characters
+											{createForm.question.length}/1000 {translations.questions.characters}
 										</p>
 									</div>
 								</div>
@@ -431,13 +431,13 @@ export default function QuestionsPage() {
 										onClick={() => setCreateDialogOpen(false)}
 										className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 border-0 font-medium shadow-sm"
 									>
-										Cancel
+										{translations.actions.cancel}
 									</Button>
 									<Button
 										onClick={handleCreateQuestion}
 										className="bg-amber-600 hover:bg-amber-700 text-white"
 									>
-										Submit Question
+										{translations.questions.submitQuestion}
 									</Button>
 								</DialogFooter>
 							</DialogContent>
@@ -456,17 +456,17 @@ export default function QuestionsPage() {
 							<CardContent className="flex flex-col items-center justify-center py-16">
 								<HelpCircle className="h-16 w-16 text-blue-400 mb-4" />
 								<h3 className="text-xl font-semibold text-slate-700 mb-2">
-									No questions yet
+									{translations.questions.noQuestionsYet}
 								</h3>
 								<p className="text-blue-600 text-center mb-6">
-									you can ask any question for ቀሲስ, so ቀሲስ will answer it.
+									{translations.questions.answerQuestion}
 								</p>
 								<Button
 									onClick={() => setCreateDialogOpen(true)}
 									className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white"
 								>
 									<Plus className="h-4 w-4 mr-2" />
-									Ask Your First Question
+									{translations.questions.askFirstQuestion}
 								</Button>
 							</CardContent>
 						</Card>
@@ -517,24 +517,23 @@ export default function QuestionsPage() {
 													</AlertDialogTrigger>
 													<AlertDialogContent className="bg-white">
 														<AlertDialogHeader>
-															<AlertDialogTitle className="text-red-600">
-																Delete Question
-															</AlertDialogTitle>
-															<AlertDialogDescription className="text-slate-600">
-																Are you sure you want to delete this question?
-																This action cannot be undone.
-															</AlertDialogDescription>
+														<AlertDialogTitle className="text-red-600">
+															{translations.questions.deleteQuestion}
+														</AlertDialogTitle>
+														<AlertDialogDescription className="text-slate-600">
+															{translations.questions.confirmDeleteQuestion}
+														</AlertDialogDescription>
 														</AlertDialogHeader>
 														<AlertDialogFooter>
-															<AlertDialogCancel className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 border-0 font-medium shadow-sm">
-																Cancel
-															</AlertDialogCancel>
-															<AlertDialogAction
-																onClick={() => handleDeleteQuestion(question)}
-																className="bg-red-600 hover:bg-red-700"
-															>
-																Delete
-															</AlertDialogAction>
+														<AlertDialogCancel className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 border-0 font-medium shadow-sm">
+															{translations.actions.cancel}
+														</AlertDialogCancel>
+														<AlertDialogAction
+															onClick={() => handleDeleteQuestion(question)}
+															className="bg-red-600 hover:bg-red-700"
+														>
+															{translations.actions.delete}
+														</AlertDialogAction>
 														</AlertDialogFooter>
 													</AlertDialogContent>
 												</AlertDialog>
@@ -547,7 +546,7 @@ export default function QuestionsPage() {
 										<div>
 											<h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
 												<MessageCircle className="h-4 w-4 text-amber-600" />
-												Your Question:
+												{translations.questions.yourQuestion}:
 											</h4>
 											<div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border-2 border-blue-200 shadow-sm">
 												<p className="text-blue-900 leading-relaxed">
@@ -560,7 +559,7 @@ export default function QuestionsPage() {
 											<div>
 												<h4 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
 													<CheckCircle className="h-4 w-4 text-green-600" />
-													Response:
+													{translations.questions.response}:
 												</h4>
 												<div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border-2 border-green-200 shadow-sm">
 													<p className="text-green-900 leading-relaxed">
@@ -641,12 +640,12 @@ export default function QuestionsPage() {
 				<Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
 					<DialogContent className="bg-white">
 						<DialogHeader>
-							<DialogTitle className="text-slate-800">
-								Edit Question
-							</DialogTitle>
-							<DialogDescription className="text-blue-600">
-								Update your question. You can only edit pending questions.
-							</DialogDescription>
+								<DialogTitle className="text-slate-800">
+									{translations.questions.editQuestion}
+								</DialogTitle>
+								<DialogDescription className="text-blue-600">
+									{translations.questions.updateQuestionDesc}
+								</DialogDescription>
 						</DialogHeader>
 						<div className="space-y-4">
 							<div>
@@ -654,19 +653,19 @@ export default function QuestionsPage() {
 									htmlFor="edit_question"
 									className="text-sm font-medium text-blue-700"
 								>
-									Your Question
+									{translations.questions.yourQuestion}
 								</Label>
 								<Textarea
 									id="edit_question"
 									value={editForm.question}
 									onChange={(e) => setEditForm({ question: e.target.value })}
 									className="mt-1 bg-transparent border-2 border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-blue-900 placeholder:text-blue-500 rounded-lg"
-									placeholder="Type your question here..."
+									placeholder={translations.questions.typeQuestion}
 									rows={4}
 									maxLength={1000}
 								/>
 								<p className="text-xs text-blue-500 mt-1">
-									{editForm.question.length}/1000 characters
+									{editForm.question.length}/1000 {translations.questions.characters}
 								</p>
 							</div>
 						</div>
@@ -675,13 +674,13 @@ export default function QuestionsPage() {
 								onClick={() => setEditDialogOpen(false)}
 								className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 border-0 font-medium shadow-sm"
 							>
-								Cancel
+								{translations.actions.cancel}
 							</Button>
 							<Button
 								onClick={handleEditQuestion}
 								className="bg-blue-600 hover:bg-blue-700 text-white"
 							>
-								Update Question
+								{translations.questions.updateQuestion}
 							</Button>
 						</DialogFooter>
 					</DialogContent>

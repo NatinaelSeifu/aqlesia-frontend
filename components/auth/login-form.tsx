@@ -48,11 +48,11 @@ export function LoginForm({
 	return (
 		<Card className="w-full max-w-md mx-auto border-none shadow-none bg-transparent overflow-hidden">
 			<CardHeader className="text-center bg-transparent border-b-0">
-				<CardTitle className="text-2xl font-bold text-gray-900">
-					{"Welcome Back"}
+			<CardTitle className="text-2xl font-bold text-gray-900">
+					እንኳን ደህና መጡ
 				</CardTitle>
 				<CardDescription className="text-gray-600">
-					{"Sign in to your Aqlesia account"}
+					ወደ አቅሌሲያ መለያዎ ይግቡ
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="p-8">
@@ -119,19 +119,19 @@ export function LoginForm({
 						disabled={loading}
 					>
 						<Key className="h-4 w-4 mr-2" />
-						{loading ? "Signing in..." : "Sign In"}
+						{loading ? "በመግባት ላይ..." : "ግባ"}
 					</Button>
 				</form>
 
 				<div className="mt-8 text-center">
 					<p className="text-sm text-gray-600">
-						{"Don't have an account? "}
+						መለያ የለዎትም? 
 						<button
 							type="button"
 							onClick={onSwitchToRegister}
 							className="text-blue-600 hover:text-blue-700 hover:underline font-medium transition-colors"
 						>
-							{"Sign up"}
+							ተመዝገብ
 						</button>
 					</p>
 				</div>

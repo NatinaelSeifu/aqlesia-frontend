@@ -59,8 +59,8 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
               </div>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">{"Registration Successful!"}</h3>
-              <p className="text-gray-600 mt-2">{"Your account has been created. You can now sign in."}</p>
+              <h3 className="text-xl font-semibold text-gray-900">ምዝገባ ተሳክቷል!</h3>
+              <p className="text-gray-600 mt-2">መለያዎ ተፈጥሯል። አሁን መግባት ይችላሉ።</p>
             </div>
           </div>
         </CardContent>
@@ -76,8 +76,8 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
             <UserPlus className="h-6 w-6 text-white" />
           </div>
         </div>
-        <CardTitle className="text-2xl font-bold text-gray-900">{"Create Account"}</CardTitle>
-        <CardDescription className="text-gray-600">{"Join Aqlesia church management system"}</CardDescription>
+        <CardTitle className="text-2xl font-bold text-gray-900">መለያ ፍጠር</CardTitle>
+        <CardDescription className="text-gray-600">በአቅሌሲያ ቤተክርስቲያን አስተዳደር ስርዓት ይቀላቀሉ</CardDescription>
       </CardHeader>
       <CardContent className="p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -156,15 +156,15 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
             disabled={loading}
           >
             <UserPlus className="h-4 w-4 mr-2" />
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading ? "መለያ በመፍጠር ላይ..." : "መለያ ፍጠር"}
           </Button>
         </form>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            {"Already have an account? "}
+            መለያ አለዎት? 
             <button type="button" onClick={onSwitchToLogin} className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors">
-              {"Sign in"}
+              ግባ
             </button>
           </p>
         </div>

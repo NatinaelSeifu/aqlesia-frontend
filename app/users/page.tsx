@@ -8,6 +8,7 @@ import { UsersList } from "@/components/users/users-list"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { PERMISSIONS } from "@/lib/permissions"
 import { Users, Settings } from "lucide-react"
+import { translations } from "@/lib/translations"
 
 export default function UsersPage() {
   const { user, loading } = useAuth()
@@ -42,8 +43,8 @@ export default function UsersPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full mb-4">
               <Users className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold mb-2 text-gray-900">User Management</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Manage and monitor all registered users in the system</p>
+            <h2 className="text-3xl font-bold mb-2 text-gray-900">{translations.users.userManagement}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">{translations.users.manageMonitor}</p>
           </div>
           <UsersList />
         </main>

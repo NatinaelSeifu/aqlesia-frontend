@@ -12,7 +12,7 @@ import {
 	CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { EthiopianCalendar } from "@/components/ui/ethiopian-calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -38,6 +38,8 @@ import {
 	communionService,
 } from "@/lib/communion";
 import { format } from "date-fns";
+import { formatEthiopianDate, formatEthiopianDateCustom } from "@/lib/utils";
+import { translations } from "@/lib/translations";
 
 export default function CommunionPage() {
 	const { user, loading } = useAuth();
@@ -174,10 +176,10 @@ export default function CommunionPage() {
 						<Church className="h-10 w-10 text-white" />
 					</div>
 					<h1 className="text-4xl font-light mb-4 text-gray-900">
-						Holy Communion
+						{translations.communion.holyCommunion}
 					</h1>
 					<p className="text-gray-600 text-lg max-w-xl mx-auto leading-relaxed">
-						Submit your communion date request and track your spiritual journey
+						{translations.communion.spiritualJourney}
 					</p>
 				</div>
 
@@ -189,43 +191,35 @@ export default function CommunionPage() {
 								<div className="p-2 bg-blue-100 rounded-lg">
 									<CalendarIcon className="h-5 w-5 text-blue-600" />
 								</div>
-								<span>Submit Request</span>
+								<span>{translations.communion.submitRequest}</span>
 							</CardTitle>
 							<CardDescription className="text-gray-600">
-								Select your communion date
+								{translations.communion.selectCommunionDate}
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="p-6">
 							<div className="space-y-6">
 								<div className="text-center">
 									<Label className="text-sm font-medium text-gray-700 mb-4 block">
-										When did you last take communion?
+										መጨረሻ ቅዱስ ቁርባን የተቀበሉበት ቀን?
 									</Label>
 									<div className="border border-gray-300 rounded-xl p-4 bg-gray-50 inline-block">
-										<Calendar
-											mode="single"
+										<EthiopianCalendar
 											selected={communionDate}
 											onSelect={setCommunionDate}
 											disabled={(date) => {
 												// Disable future dates
 												return date > new Date();
 											}}
-											className="mx-auto scale-90 text-gray-900 [&_button]:text-gray-900 [&_button:hover]:bg-blue-100 [&_button[aria-selected='true']]:bg-blue-600 [&_button[aria-selected='true']]:text-white"
+											className="mx-auto"
 										/>
 									</div>
-									{communionDate && (
-										<div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200 inline-block">
-											<p className="text-sm text-blue-800 font-medium">
-												✓ Selected: {format(communionDate, "MMMM d, yyyy")}
-											</p>
-										</div>
-									)}
 								</div>
 								<div className="text-center">
 									<div className="inline-flex items-center gap-2 p-3 bg-amber-50 rounded-lg border border-amber-200 text-left max-w-sm">
 										<Info className="h-4 w-4 text-amber-600 flex-shrink-0" />
 										<p className="text-xs text-amber-700">
-											Only past communion dates allowed
+											እባኮት የሚያስገቡት የቁርባን ቀኑ ከዛሬ ቀን በፊት መሆን እንዳለበት ያረጋግጡ።
 										</p>
 									</div>
 								</div>
@@ -238,28 +232,28 @@ export default function CommunionPage() {
 									disabled={!communionDate || isSubmitting}
 									className="bg-blue-600 hover:bg-blue-700 text-white w-full py-2.5 font-medium"
 								>
-									{isSubmitting ? (
-										<>
-											<div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-											Submitting...
-										</>
-									) : (
-										<>
-											<Heart className="h-4 w-4 mr-2" />
-											Submit Request
-										</>
-									)}
+											{isSubmitting ? (
+												<>
+													<div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+													{translations.communion.submitting}
+												</>
+											) : (
+												<>
+													<Heart className="h-4 w-4 mr-2" />
+													{translations.communion.submitRequest}
+												</>
+											)}
 								</Button>
 								{communionDate && (
-									<Button
-										variant="outline"
-										onClick={() => setCommunionDate(undefined)}
-										disabled={isSubmitting}
-										className="border-gray-300 text-gray-600 hover:bg-gray-50 text-sm"
-										size="sm"
-									>
-										Clear Selection
-									</Button>
+										<Button
+											variant="outline"
+											onClick={() => setCommunionDate(undefined)}
+											disabled={isSubmitting}
+											className="border-gray-300 text-gray-600 hover:bg-gray-50 text-sm"
+											size="sm"
+										>
+											{translations.communion.clearSelection}
+										</Button>
 								)}
 							</div>
 						</CardFooter>
@@ -272,26 +266,26 @@ export default function CommunionPage() {
 								<div className="p-2 bg-gray-100 rounded-lg">
 									<MessageSquare className="h-5 w-5 text-gray-600" />
 								</div>
-								<span>Request History</span>
+								<span>{translations.communion.requestHistory}</span>
 							</CardTitle>
 							<CardDescription className="text-gray-600">
-								Track your submissions
+								{translations.communion.trackSubmissions}
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="p-6">
 							{loadingCommunions ? (
 								<div className="py-8 flex flex-col items-center justify-center">
 									<div className="animate-spin h-6 w-6 border-2 border-gray-300 border-t-blue-600 rounded-full mb-3"></div>
-									<p className="text-gray-500 text-sm">Loading history...</p>
+									<p className="text-gray-500 text-sm">{translations.communion.loadingHistory}</p>
 								</div>
 							) : userCommunions.length === 0 ? (
 								<div className="text-center py-8">
 									<div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
 										<MessageSquare className="h-6 w-6 text-gray-400" />
 									</div>
-									<p className="text-gray-600 mb-1 text-sm">No requests yet</p>
+									<p className="text-gray-600 mb-1 text-sm">{translations.communion.noRequests}</p>
 									<p className="text-xs text-gray-500">
-										Your submissions will appear here
+										{translations.communion.submissionsAppear}
 									</p>
 								</div>
 							) : (
@@ -300,12 +294,12 @@ export default function CommunionPage() {
 									{userCommunions.length > itemsPerPage && (
 										<div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-100">
 											<p className="text-sm text-gray-600">
-												Showing {startIndex + 1}-
-												{Math.min(endIndex, userCommunions.length)} of{" "}
-												{userCommunions.length} requests
+												{translations.communion.showing} {startIndex + 1}-
+												{Math.min(endIndex, userCommunions.length)} {translations.communion.of}{" "}
+												{userCommunions.length} {translations.communion.requests}
 											</p>
 											<div className="text-xs text-gray-500">
-												Page {currentPage} of {totalPages}
+												{translations.communion.page} {currentPage} {translations.communion.of} {totalPages}
 											</div>
 										</div>
 									)}
@@ -327,23 +321,18 @@ export default function CommunionPage() {
 															<div className="flex items-center gap-2 mb-1">
 																<CalendarIcon className="h-3 w-3 text-gray-500" />
 																<p className="font-medium text-gray-900 text-sm">
-																	{new Date(
-																		communion.communion_date
-																	).toLocaleDateString("en-US", {
-																		year: "numeric",
-																		month: "long",
-																		day: "numeric",
-																	})}
+																	{formatEthiopianDate(
+																		communion.communion_date,
+																		"short"
+																	)}
 																</p>
 															</div>
 															<p className="text-xs text-gray-500">
-																Requested{" "}
-																{new Date(
-																	communion.requested_at
-																).toLocaleDateString("en-US", {
-																	month: "short",
-																	day: "numeric",
-																})}
+																ተያዘ{" "}
+																{formatEthiopianDateCustom(
+																	communion.requested_at,
+																	{ shortMonth: true }
+																)}
 															</p>
 														</div>
 														<div
@@ -365,12 +354,12 @@ export default function CommunionPage() {
 													{communion.status !== "pending" &&
 														communion.approved_by && (
 															<div className="pt-2 border-t border-gray-100">
-																<p className="text-xs text-gray-500">
-																	{communion.status === "approved"
-																		? "Approved"
-																		: "Rejected"}{" "}
-																	by {communion.approved_by.name}
-																</p>
+														<p className="text-xs text-gray-500">
+															{communion.status === "approved"
+																? translations.communion.approved
+																: translations.communion.rejected}{" "}
+															{translations.communion.approvedBy} {communion.approved_by.name}
+														</p>
 															</div>
 														)}
 												</div>
@@ -479,7 +468,7 @@ export default function CommunionPage() {
 										loadingCommunions ? "animate-spin" : ""
 									}`}
 								/>
-								{loadingCommunions ? "Refreshing..." : "Refresh"}
+								{loadingCommunions ? translations.communion.refreshing : translations.actions.refresh}
 							</Button>
 						</CardFooter>
 					</Card>

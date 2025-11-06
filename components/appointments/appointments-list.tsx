@@ -28,6 +28,8 @@ import type { Appointment } from "@/lib/appointments"
 import type { UserRole } from "@/lib/permissions"
 import { useAuth } from "@/hooks/use-auth"
 import { Calendar, Clock, FileText, X, CheckCircle, AlertCircle, User, Phone, Eye, RefreshCw } from "lucide-react"
+import { formatEthiopianDate, formatEthiopianDateCustom } from "@/lib/utils"
+import { translations as t } from "@/lib/translations"
 
 interface AppointmentsListProps {
   showAllAppointments?: boolean
@@ -122,13 +124,8 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
       )
       
       // Show success message
-      const appointmentDate = new Date(appointmentToCancel.appointment_date).toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-      setSuccess(`Appointment on ${appointmentDate} has been cancelled successfully.`)
+      const appointmentDate = formatEthiopianDate(appointmentToCancel.appointment_date, 'long')
+      setSuccess(`መርሃግብር በ${appointmentDate} በተሳካ ሁኔታ ተሰርዟል።`)
       
       setCancelDialogOpen(false)
       setAppointmentToCancel(null)
@@ -268,15 +265,15 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
       )}
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-900">{showAllAppointments ? "All Appointments" : "My Appointments"}</h3>
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900">{showAllAppointments ? t.appointments.allAppointments : t.appointments.myAppointments}</h3>
         <Button 
           onClick={loadAppointments} 
           className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium shadow-lg self-start sm:self-auto"
           size="sm"
         >
           <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-          <span className="hidden sm:inline">Refresh</span>
-          <span className="sm:hidden">Reload</span>
+          <span className="hidden sm:inline">{t.actions.refresh}</span>
+          <span className="sm:hidden">{t.actions.refresh}</span>
         </Button>
       </div>
 
@@ -287,11 +284,11 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full mb-6">
                 <Calendar className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">No Appointments Found</h3>
+              <h3 className="text-xl font-semibold mb-3 text-gray-900">{t.appointments.noAppointments}</h3>
               <p className="text-gray-600 mb-4 max-w-sm mx-auto">
                 {showAllAppointments
-                  ? "No appointments have been scheduled yet. When patients book appointments, they'll appear here."
-                  : "You haven't scheduled any appointments yet. Click the 'Book New' tab to schedule your first appointment."}
+                  ? "ገና ምንም ቀጠሮዎች አልተያዙም። ሰዎች ቀጠሮ ሲያስይዙ እዚህ ይታያሉ።"
+                  : "ገና ቀጠሮ አላስይዘዎም። የመጀመሪያዎን ቀጠሮ ለማስይዝ 'አዲስ ቀጠሮ ይያዙ' የሚለውን ይንኩ።"}
               </p>
             </div>
           </CardContent>
@@ -315,18 +312,14 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-gray-900 text-base sm:text-lg">
-                            {new Date(appointment.appointment_date).toLocaleDateString("en-US", {
-                              weekday: "short",
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
+                            {formatEthiopianDateCustom(appointment.appointment_date, {
+                              includeWeekday: true,
+                              shortMonth: true
                             })}
                           </div>
                           <div className="text-xs sm:text-sm text-gray-500">
-                            Booked on {new Date(appointment.created_at).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
+                            በተያዘ {formatEthiopianDateCustom(appointment.created_at, {
+                              shortMonth: true
                             })}
                           </div>
                         </div>
@@ -386,27 +379,22 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                             className="rounded-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-sm hover:shadow ring-1 ring-blue-400/30 text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                           >
                             <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                            View
+                            {t.actions.view}
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="bg-white max-w-md [&>button]:opacity-100 [&>button]:text-gray-500 [&>button:hover]:text-gray-700 [&>button]:bg-gray-100 [&>button:hover]:bg-gray-200 [&>button]:rounded-full [&>button]:p-1">
                           <DialogHeader>
                             <DialogTitle className="text-gray-900 flex items-center space-x-2">
                               <Calendar className="h-5 w-5 text-purple-600" />
-                              <span>Appointment Details</span>
+                              <span>{t.appointments.appointmentDetails}</span>
                             </DialogTitle>
                           </DialogHeader>
                           {selectedAppointment && (
                             <div className="space-y-4">
                               <div className="bg-gray-50 p-4 rounded-lg">
-                                <label className="text-sm font-medium text-gray-700">Date & Time</label>
+                                <label className="text-sm font-medium text-gray-700">ቀን</label>
                                 <p className="text-gray-900 font-semibold">
-                                  {new Date(selectedAppointment.appointment_date).toLocaleDateString("en-US", {
-                                    weekday: "long",
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                  })}
+                                  {formatEthiopianDate(selectedAppointment.appointment_date, 'long')}
                                 </p>
                               </div>
                               <div>
@@ -462,8 +450,8 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                           className="rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-sm hover:shadow ring-1 ring-green-400/30 text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                         >
                           <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                          <span className="hidden sm:inline">Complete</span>
-                          <span className="sm:hidden">Done</span>
+                            <span className="hidden sm:inline">{t.appointments.completeAppointment}</span>
+                            <span className="sm:hidden">{t.appointments.completed}</span>
                         </Button>
                       )}
 
@@ -478,8 +466,8 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                           className="rounded-full bg-gradient-to-r from-rose-500 to-red-600 text-white hover:from-rose-600 hover:to-red-700 shadow-sm hover:shadow ring-1 ring-red-400/30 text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                         >
                           <X className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                          Cancel
-                        </Button>
+                            {t.actions.cancel}
+                          </Button>
                       )}
                     </div>
                   </div>
@@ -583,14 +571,9 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">Date:</span>
+                  <span className="text-sm font-medium text-gray-700">ቀን:</span>
                   <span className="text-sm text-gray-900 font-semibold">
-                    {new Date(appointmentToCancel.appointment_date).toLocaleDateString("en-US", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
+                    {formatEthiopianDate(appointmentToCancel.appointment_date, 'long')}
                   </span>
                 </div>
                 {appointmentToCancel.notes && (

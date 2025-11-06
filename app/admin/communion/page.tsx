@@ -44,6 +44,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useToast } from "@/components/ui/use-toast"
 import { Communion, UpdateCommunionStatusRequest, communionService } from "@/lib/communion"
 import { format } from "date-fns"
+import { formatEthiopianDateCustom } from "@/lib/utils"
 
 export default function AdminCommunionPage() {
   const { user, loading } = useAuth()
@@ -285,12 +286,12 @@ export default function AdminCommunionPage() {
                 </TableCell>
                 <TableCell className="text-gray-700 text-xs sm:text-sm">
                   <span className="whitespace-nowrap">
-                    {format(new Date(communion.communion_date), 'MMM d, yy')}
+                    {formatEthiopianDateCustom(communion.communion_date, { shortMonth: true })}
                   </span>
                 </TableCell>
                 <TableCell>{getStatusBadge(communion.status)}</TableCell>
                 <TableCell className="text-gray-700 text-xs hidden sm:table-cell">
-                  {format(new Date(communion.requested_at), 'MMM d, yy')}
+                  {formatEthiopianDateCustom(communion.requested_at, { shortMonth: true })}
                 </TableCell>
                 {showActions && (
                   <TableCell className="text-right">
