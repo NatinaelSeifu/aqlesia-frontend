@@ -1,0 +1,256 @@
+{
+  "common": {
+    "appName": "Aqlesia",
+    "logout": "Logout",
+    "toggleMenu": "Toggle Menu",
+    "closeMenu": "Close menu",
+    "backToDashboard": "Back to Dashboard",
+    "adminPanel": "Admin Panel"
+  },
+  "nav": {
+    "aqlesia": "Aqlesia",
+    "manageUsers": "Manage Users",
+    "manageAppointments": "Manage Appointments",
+    "manageCommunion": "Manage Communion",
+    "availableDates": "Available Dates",
+    "questions": "Questions",
+    "profile": "Profile",
+    "appointments": "Appointments",
+    "communion": "Communion",
+    "users": "Users"
+  },
+  "admin": {
+    "tabs": {
+      "overview": "Overview",
+      "appointments": "Appointments",
+      "users": "Users",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "settings": {
+      "title": "System Settings",
+      "desc": "System configuration options will be available here."
+    }
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back",
+    "signInToAccount": "Sign in to your Aqlesia account",
+    "phone": "Phone",
+    "phonePlaceholder": "+251912345678 or 0912345678",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPasswordQ": "Forgot password?",
+    "signingIn": "Signing in...",
+    "signIn": "Sign In",
+    "dontHaveAccount": "Don't have an account? ",
+    "signUp": "Sign up",
+    "createAccount": "Create Account",
+    "joinSystem": "Join Aqlesia church management system",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account? ",
+    "registrationSuccessTitle": "Registration Successful!",
+    "registrationSuccessBody": "Your account has been created. You can now sign in.",
+    "forgot": {
+      "title": "Forgot Password",
+      "desc": "Enter your phone number to reset your password",
+      "phonePlaceholder": "+251912345678 or 0912345678",
+      "telegramRequiredTitle": "Telegram connection required",
+      "telegramInfo": "The reset link is sent via Telegram. If you haven't connected your Telegram account, use the Telegram Link button below to connect.",
+      "telegramLink": "Telegram Link",
+      "sendOtp": "Send OTP Code",
+      "sendingOtp": "Sending OTP...",
+      "backToLogin": "Back to Login"
+    }
+  },
+  "dashboard": {
+    "welcomeBackName": "Welcome back, {name}",
+    "adminMessage": "Manage your church operations and community engagement",
+    "managerMessage": "Coordinate appointments and support church community",
+    "userMessage": "Manage your appointments and communion requests",
+    "stats": {
+      "admin": {
+        "totalUsers": "Total Users",
+        "registeredUsers": "Registered users",
+        "pendingAppointments": "Pending Appointments",
+        "awaitingReview": "Awaiting review",
+        "communionRequests": "Communion Requests",
+        "pendingApproval": "Pending approval",
+        "totalAppointments": "Total Appointments",
+        "allTime": "All time"
+      },
+      "manager": {
+        "myAppointments": "My Appointments",
+        "totalBookings": "Total bookings",
+        "pendingReviews": "Pending Reviews",
+        "awaitingAction": "Awaiting action",
+        "managedUsers": "Managed Users",
+        "underManagement": "Under management",
+        "completed": "Completed",
+        "finishedSessions": "Finished sessions"
+      },
+      "user": {
+        "myAppointments": "My Appointments",
+        "pendingCount": "{count} pending",
+        "communionRequests": "Communion Requests",
+        "approvedCount": "{count} approved",
+        "completedSessions": "Completed Sessions",
+        "finishedAppointments": "Finished appointments",
+        "profileStatus": "Profile Status",
+        "active": "Active",
+        "accountVerified": "Account verified"
+      }
+    }
+  },
+  "home": {
+    "maryAlt": "Virgin Mary - Ethiopian Orthodox"
+  },
+  "common": {
+    "refresh": "Refresh",
+    "reload": "Reload",
+    "cancel": "Cancel"
+  },
+  "appointments": {
+    "title": "Appointments",
+    "subtitle": "Book new appointments and manage your scheduled ones",
+    "tabs": {
+      "bookNew": "Book New",
+      "book": "Book",
+      "myAppointments": "My Appointments",
+      "myApps": "My Apps"
+    },
+    "schedule": {
+      "title": "Schedule New Appointment",
+      "desc": "Choose an available date and book your appointment"
+    },
+    "list": {
+      "title": "Your Scheduled Appointments",
+      "desc": "View and track the status of your appointments",
+      "allTitle": "All Appointments",
+      "myTitle": "My Appointments",
+      "loading": "Loading appointments...",
+      "bookedOn": "Booked on",
+      "view": "View",
+      "detailsTitle": "Appointment Details",
+      "empty": {
+        "title": "No Appointments Found",
+        "descAll": "No appointments have been scheduled yet. When patients book appointments, they'll appear here.",
+        "descMine": "You haven't scheduled any appointments yet. Click the 'Book New' tab to schedule your first appointment."
+      },
+      "errors": {
+        "loadFailed": "Failed to load appointments",
+        "cancelFailed": "Failed to cancel appointment",
+        "completeFailed": "Failed to complete appointment",
+        "noPermissionAll": "You don't have permission to view all appointments."
+      }
+    },
+    "form": {
+      "header": {
+        "title": "Book New Appointment",
+        "desc": "Schedule your appointment. Available on Monday, Wednesday, and Friday only."
+      },
+      "info": "Appointments are available on Monday, Wednesday, and Friday. Maximum 10 appointments per day. You can only have one active appointment at a time.",
+      "selectDateLabel": "Select Appointment Date",
+      "loadingDates": "Loading dates...",
+      "noDates": "No available dates found.",
+      "available": "Available",
+      "full": "Full",
+      "notesLabel": "Notes (Optional)",
+      "notesPlaceholder": "Add any additional notes about your appointment...",
+      "booking": "Booking...",
+      "bookAppointment": "Book Appointment",
+      "success": {
+        "title": "Appointment Booked!",
+        "body": "Your appointment has been successfully scheduled.",
+        "date": "Date",
+        "notes": "Notes",
+        "redirect": "Redirecting to your appointments..."
+      },
+      "errors": {
+        "loadDates": "Failed to load available dates. Please try again.",
+        "selectDate": "Please select an appointment date",
+        "createFailed": "Failed to create appointment",
+        "alreadyActive": "You already have an active appointment. Please cancel your existing appointment before booking a new one.",
+        "dateFull": "This date is no longer available. Please select a different date.",
+        "invalidDate": "Please select a valid appointment date."
+      }
+    }
+  },
+  "adminAppointments": {
+    "header": {
+      "title": "Appointment Management",
+      "subtitle": "Review, manage, and track all appointment requests from church members"
+    },
+    "stats": {
+      "totalTitle": "Total Appointments",
+      "totalSub": "All appointments",
+      "pendingTitle": "Pending & Overdue",
+      "pendingLine": "{overdue} overdue, {pending} pending",
+      "completedTodayTitle": "Completed Today",
+      "completedTodaySub": "Completed today"
+    },
+    "searchPlaceholder": "Search appointments...",
+    "tabs": {
+      "pendingFull": "Pending Appointments ({count})",
+      "pendingShort": "Pending ({count})",
+      "allFull": "All Appointments ({count})",
+      "allShort": "All ({count})"
+    },
+    "sections": {
+      "pendingTitle": "Pending Appointments",
+      "allTitle": "All Appointments"
+    },
+    "table": {
+      "user": "User",
+      "phone": "Phone",
+      "date": "Date",
+      "status": "Status",
+      "bookedAt": "Booked At",
+      "actions": "Actions",
+      "loading": "Loading...",
+      "emptyTitle": "No appointments found",
+      "emptyDesc": "Try refreshing or check back later",
+      "unknownUser": "Unknown User",
+      "na": "N/A"
+    },
+    "status": {
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "overdue": "Overdue",
+      "pending": "Pending"
+    },
+    "tooltips": {
+      "complete": "Mark as Complete",
+      "cancel": "Cancel Appointment"
+    },
+    "dialog": {
+      "complete": {
+        "title": "Complete Appointment",
+        "desc": "Are you sure you want to mark this appointment as completed for {name}?",
+        "confirm": "Complete"
+      },
+      "cancel": {
+        "title": "Cancel Appointment",
+        "desc": "Are you sure you want to cancel this appointment for {name}?",
+        "confirm": "Cancel Appointment"
+      }
+    },
+    "toasts": {
+      "completeSuccessTitle": "Appointment completed",
+      "completeSuccessDesc": "The appointment has been marked as completed successfully.",
+      "completeErrorTitle": "Failed to complete appointment",
+      "cancelSuccessTitle": "Appointment cancelled",
+      "cancelSuccessDesc": "The appointment has been cancelled successfully.",
+      "cancelErrorTitle": "Failed to cancel appointment",
+      "loadAllErrorTitle": "Failed to load appointments",
+      "loadPendingErrorTitle": "Failed to load pending appointments"
+    },
+    "errors": {
+      "tryAgain": "Please try again later",
+      "accessDenied": "Access denied: You don't have permission to view appointments. Role: {role}",
+      "loadAll": "Failed to load appointments: {message}",
+      "pageTitle": "Page Error",
+      "userRole": "User Role: {role}",
+      "reloadPage": "Reload Page"
+    }
+  }
+}

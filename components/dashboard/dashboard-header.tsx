@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, X } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
+import { useTranslations } from "next-intl"
 
 export function DashboardHeader() {
   const { user, logout } = useAuth()
@@ -17,6 +18,7 @@ export function DashboardHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const t = useTranslations()
 
   const handleLogout = () => {
     logout()
@@ -39,25 +41,25 @@ export function DashboardHeader() {
   const getNavigationItems = () => {
     if (user.role === "admin") {
       return [
-        { href: "/users", label: "Users", icon: Users },
-        { href: "/admin/appointments", label: "Appointments", icon: Calendar },
-        { href: "/admin/communion", label: "Communion", icon: MessageSquare },
-        { href: "/admin/available-dates", label: "Dates", icon: CalendarCheck },
-        { href: "/admin/questions", label: "Questions", icon: HelpCircle },
+        { href: "/users", label: t("nav.users", {default: "Users"} as any) as unknown as string, icon: Users },
+        { href: "/admin/appointments", label: t("admin.tabs.appointments"), icon: Calendar },
+        { href: "/admin/communion", label: t("nav.communion"), icon: MessageSquare },
+        { href: "/admin/available-dates", label: t("nav.availableDates"), icon: CalendarCheck },
+        { href: "/admin/questions", label: t("nav.questions"), icon: HelpCircle },
       ]
     } else if (user.role === "manager") {
       return [
-        { href: "/appointments", label: "Appointments", icon: Calendar },
-        { href: "/admin/appointments", label: "Manage Appointments", icon: CalendarCheck },
-        { href: "/communion", label: "Communion", icon: MessageSquare },
-        { href: "/users", label: "Users", icon: Users },
-        { href: "/questions", label: "Questions", icon: HelpCircle },
+        { href: "/appointments", label: t("nav.appointments"), icon: Calendar },
+        { href: "/admin/appointments", label: t("nav.manageAppointments"), icon: CalendarCheck },
+        { href: "/communion", label: t("nav.communion"), icon: MessageSquare },
+        { href: "/users", label: t("nav.users", {default: "Users"} as any) as unknown as string, icon: Users },
+        { href: "/questions", label: t("nav.questions"), icon: HelpCircle },
       ]
     } else {
       return [
-        { href: "/appointments", label: "Appointments", icon: Calendar },
-        { href: "/communion", label: "Communion", icon: MessageSquare },
-        { href: "/questions", label: "Questions", icon: HelpCircle },
+        { href: "/appointments", label: t("nav.appointments"), icon: Calendar },
+        { href: "/communion", label: t("nav.communion"), icon: MessageSquare },
+        { href: "/questions", label: t("nav.questions"), icon: HelpCircle },
       ]
     }
   }
@@ -121,7 +123,7 @@ export function DashboardHeader() {
                   <Link href="/profile" onClick={() => setMobileMenuOpen(false)}>
                     <div className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors">
                       <User className="h-5 w-5 text-gray-600" />
-                      <span className="text-gray-900">Profile</span>
+                      <span className="text-gray-900">{t("nav.profile")}</span>
                     </div>
                   </Link>
                   
@@ -134,7 +136,7 @@ export function DashboardHeader() {
                     className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-red-600"
                   >
                     <LogOut className="h-5 w-5" />
-                    <span>Logout</span>
+                    <span>{t("common.logout")}</span>
                   </button>
                 </nav>
               </SheetContent>
@@ -233,7 +235,7 @@ export function DashboardHeader() {
                       className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span className="text-sm">Logout</span>
+                      <span className="text-sm">{t("common.logout")}</span>
                     </button>
                   </div>
                   </div>

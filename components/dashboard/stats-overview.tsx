@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Users, Calendar, MessageSquare, TrendingUp, Clock, CheckCircle, User as UserIcon } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import { dashboardStatsService, type DashboardStats } from "@/lib/dashboard-stats"
+import { useTranslations } from "next-intl"
 
 interface StatItem {
   label: string
@@ -19,6 +20,7 @@ export function StatsOverview() {
   const { user } = useAuth()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const t = useTranslations()
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -75,33 +77,33 @@ export function StatsOverview() {
     if (user.role === "admin") {
       return [
         {
-          label: "Total Users",
+          label: t("dashboard.stats.admin.totalUsers"),
           value: (stats.totalUsers || 0).toLocaleString(),
-          change: "Registered users",
+          change: t("dashboard.stats.admin.registeredUsers"),
           icon: Users,
           bgColor: "bg-red-50",
           iconColor: "text-red-600",
         },
         {
-          label: "Pending Appointments",
+          label: t("dashboard.stats.admin.pendingAppointments"),
           value: (stats.pendingAppointments || 0).toString(),
-          change: "Awaiting review",
+          change: t("dashboard.stats.admin.awaitingReview"),
           icon: Calendar,
           bgColor: "bg-purple-50",
           iconColor: "text-purple-600",
         },
         {
-          label: "Communion Requests",
+          label: t("dashboard.stats.admin.communionRequests"),
           value: (stats.communionRequests || 0).toString(),
-          change: "Pending approval",
+          change: t("dashboard.stats.admin.pendingApproval"),
           icon: MessageSquare,
           bgColor: "bg-orange-50",
           iconColor: "text-orange-600",
         },
         {
-          label: "Total Appointments",
+          label: t("dashboard.stats.admin.totalAppointments"),
           value: (stats.totalAppointments || 0).toLocaleString(),
-          change: "All time",
+          change: t("dashboard.stats.admin.allTime"),
           icon: TrendingUp,
           bgColor: "bg-blue-50",
           iconColor: "text-blue-600",
@@ -110,33 +112,33 @@ export function StatsOverview() {
     } else if (user.role === "manager") {
       return [
         {
-          label: "My Appointments",
+          label: t("dashboard.stats.manager.myAppointments"),
           value: (stats.userAppointments || 0).toString(),
-          change: "Total bookings",
+          change: t("dashboard.stats.manager.totalBookings"),
           icon: Calendar,
           bgColor: "bg-purple-50",
           iconColor: "text-purple-600",
         },
         {
-          label: "Pending Reviews",
+          label: t("dashboard.stats.manager.pendingReviews"),
           value: (stats.pendingAppointments || 0).toString(),
-          change: "Awaiting action",
+          change: t("dashboard.stats.manager.awaitingAction"),
           icon: Clock,
           bgColor: "bg-orange-50",
           iconColor: "text-orange-600",
         },
         {
-          label: "Managed Users",
+          label: t("dashboard.stats.manager.managedUsers"),
           value: (stats.managedUsers || 0).toString(),
-          change: "Under management",
+          change: t("dashboard.stats.manager.underManagement"),
           icon: Users,
           bgColor: "bg-red-50",
           iconColor: "text-red-600",
         },
         {
-          label: "Completed",
+          label: t("dashboard.stats.manager.completed"),
           value: (stats.completedAppointments || 0).toString(),
-          change: "Finished sessions",
+          change: t("dashboard.stats.manager.finishedSessions"),
           icon: CheckCircle,
           bgColor: "bg-green-50",
           iconColor: "text-green-600",
@@ -145,33 +147,33 @@ export function StatsOverview() {
     } else {
       return [
         {
-          label: "My Appointments",
+          label: t("dashboard.stats.user.myAppointments"),
           value: (stats.userAppointments || 0).toString(),
-          change: `${stats.pendingAppointments || 0} pending`,
+          change: t("dashboard.stats.user.pendingCount", {count: stats.pendingAppointments || 0}),
           icon: Calendar,
           bgColor: "bg-purple-50",
           iconColor: "text-purple-600",
         },
         {
-          label: "Communion Requests",
+          label: t("dashboard.stats.user.communionRequests"),
           value: (stats.userCommunions || 0).toString(),
-          change: `${stats.communionRequests || 0} approved`,
+          change: t("dashboard.stats.user.approvedCount", {count: stats.communionRequests || 0}),
           icon: MessageSquare,
           bgColor: "bg-indigo-50",
           iconColor: "text-indigo-600",
         },
         {
-          label: "Completed Sessions",
+          label: t("dashboard.stats.user.completedSessions"),
           value: (stats.completedAppointments || 0).toString(),
-          change: "Finished appointments",
+          change: t("dashboard.stats.user.finishedAppointments"),
           icon: CheckCircle,
           bgColor: "bg-green-50",
           iconColor: "text-green-600",
         },
         {
-          label: "Profile Status",
-          value: "Active",
-          change: "Account verified",
+          label: t("dashboard.stats.user.profileStatus"),
+          value: t("dashboard.stats.user.active"),
+          change: t("dashboard.stats.user.accountVerified"),
           icon: UserIcon,
           bgColor: "bg-blue-50",
           iconColor: "text-blue-600",

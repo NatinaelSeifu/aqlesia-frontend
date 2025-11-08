@@ -1,0 +1,256 @@
+{
+  "common": {
+    "appName": "አቅሌሲያ",
+    "logout": "መውጫ",
+    "toggleMenu": "ምናሌ ክፈት/ዝጋ",
+    "closeMenu": "ምናሌ ዝጋ",
+    "backToDashboard": "ወደ ዳሽቦርድ ተመለስ",
+    "adminPanel": "አስተዳዳሪ ፓነል"
+  },
+  "nav": {
+    "aqlesia": "አቅሌሲያ",
+    "manageUsers": "ተጠቃሚዎችን አስተዳድር",
+    "manageAppointments": "ቀጠሮዎችን አስተዳድር",
+    "manageCommunion": "ቁርባን አስተዳድር",
+    "availableDates": "የሚገኙ ቀናት",
+    "questions": "ጥያቄዎች",
+    "profile": "መገለጫ",
+    "appointments": "ቀጠሮዎች",
+    "communion": "ቁርባን",
+    "users": "ተጠቃሚዎች"
+  },
+  "admin": {
+    "tabs": {
+      "overview": "አጠቃላይ",
+      "appointments": "ቀጠሮዎች",
+      "users": "ተጠቃሚዎች",
+      "reports": "ሪፖርቶች",
+      "settings": "ሰንተናዎች"
+    },
+    "settings": {
+      "title": "የስርዓት ሰንተናዎች",
+      "desc": "የስርዓቱ ማቀናበሪያ ምርጫዎች እዚህ ይገኛሉ።"
+    }
+  },
+  "auth": {
+    "welcomeBack": "እንኳን ደህና መለሱ",
+    "signInToAccount": "ወደ አቅሌሲያ መለያዎ ይግቡ",
+    "phone": "ስልክ",
+    "phonePlaceholder": "+251912345678 ወይም 0912345678",
+    "password": "ፓስወርድ",
+    "passwordPlaceholder": "ፓስወርድዎን ያስገቡ",
+    "forgotPasswordQ": "ፓስወርድ ረሱ?",
+    "signingIn": "በመግባት ላይ...",
+    "signIn": "ግባ",
+    "dontHaveAccount": "መለያ አልዎትም? ",
+    "signUp": "ይመዝገቡ",
+    "createAccount": "መለያ ፍጠር",
+    "joinSystem": "ወደ አቅሌሲያ ስርዓት ይቀላቀሉ",
+    "creatingAccount": "መለያ በመፍጠር ላይ...",
+    "alreadyHaveAccount": "መለያ አለዎት? ",
+    "registrationSuccessTitle": "ምዝገባ ሳክሰስ፡",
+    "registrationSuccessBody": "መለያዎ ተፈጥሯል። አሁን መግባት ትችላለህ/ሽ.",
+    "forgot": {
+      "title": "ፓስወርድ ረሱ",
+      "desc": "ፓስወርድ ለመቀየር ስልክ ቁጥርዎን ያስገቡ",
+      "phonePlaceholder": "+251912345678 ወይም 0912345678",
+      "telegramRequiredTitle": "ቴሌግራም ማገናኘት ያስፈልጋል",
+      "telegramInfo": "የመጀመሪያ ሊንክ በቴሌግራም ይላካል። ካልተገናኙ ከታች ያለውን ቴሌግራም አገናኝ ይጫኑ እና ያገናኙ።",
+      "telegramLink": "ቴሌግራም አገናኝ",
+      "sendOtp": "OTP ኮድ ላክ",
+      "sendingOtp": "OTP በመላክ ላይ...",
+      "backToLogin": "ወደ መግቢያ ተመለስ"
+    }
+  },
+  "dashboard": {
+    "welcomeBackName": "እንኳን ደህና መለሱ፣ {name}",
+    "adminMessage": "የቤተክርስቲያን ስራዎችን እና ማህበረሰብ ተሳትፎን ያስተዳድሩ",
+    "managerMessage": "ቀጠሮዎችን ያስተካክሉ እና ማህበረሰቡን ይርዱ",
+    "userMessage": "የእርስዎን ቀጠሮ እና የቁርባን ጥያቄዎች ያስተዳድሩ",
+    "stats": {
+      "admin": {
+        "totalUsers": "ጠቅላላ ተጠቃሚዎች",
+        "registeredUsers": "የተመዘገቡ ተጠቃሚዎች",
+        "pendingAppointments": "በመጠባበቅ ያሉ ቀጠሮዎች",
+        "awaitingReview": "ግምገማ በመጠባበቅ ላይ",
+        "communionRequests": "የቁርባን ጥያቄዎች",
+        "pendingApproval": "ማፅደቅ በመጠባበቅ ላይ",
+        "totalAppointments": "ጠቅላላ ቀጠሮዎች",
+        "allTime": "ሁሉም ጊዜ"
+      },
+      "manager": {
+        "myAppointments": "የእኔ ቀጠሮዎች",
+        "totalBookings": "ጠቅላላ ቀጠሮዎች",
+        "pendingReviews": "በመጠባበቅ ያሉ ግምገማዎች",
+        "awaitingAction": "እርምጃ በመጠባበቅ ላይ",
+        "managedUsers": "የማቀናበር ተጠቃሚዎች",
+        "underManagement": "በአስተዳደር ስር",
+        "completed": "ተጠናቀቁ",
+        "finishedSessions": "የተጠናቀቁ ስብሰባዎች"
+      },
+      "user": {
+        "myAppointments": "የእኔ ቀጠሮዎች",
+        "pendingCount": "{count} በመጠባበቅ ላይ",
+        "communionRequests": "የቁርባን ጥያቄዎች",
+        "approvedCount": "{count} ተፀድቀ",
+        "completedSessions": "የተጠናቀቁ ስብሰባዎች",
+        "finishedAppointments": "የተጠናቀቁ ቀጠሮዎች",
+        "profileStatus": "የመገለጫ ሁኔታ",
+        "active": "ንቁ",
+        "accountVerified": "መለያ ተረጋግጧል"
+      }
+    }
+  },
+  "home": {
+    "maryAlt": "እመቤታችን ድንግል ማርያም - የኢትዮጵያ ኦርቶዶክስ"
+  },
+  "common": {
+    "refresh": "አድስ",
+    "reload": "እንደገና",
+    "cancel": "ሰርዝ"
+  },
+  "appointments": {
+    "title": "ቀጠሮዎች",
+    "subtitle": "አዲስ ቀጠሮ ይመዝግቡ እና ያቀዱትን ይቆጥቡ",
+    "tabs": {
+      "bookNew": "አዲስ ይመዝግቡ",
+      "book": "መዝግብ",
+      "myAppointments": "የእኔ ቀጠሮዎች",
+      "myApps": "የእኔ"
+    },
+    "schedule": {
+      "title": "አዲስ ቀጠሮ ያቀዱ",
+      "desc": "ዝርዝር ቀናት ውስጥ አንዱን ይምረጡ እና ቀጠሮ ይያዙ"
+    },
+    "list": {
+      "title": "የታቀዱ ቀጠሮዎችዎ",
+      "desc": "የቀጠሮዎች ሁኔታ ይመልከቱ እና ይከታተሉ",
+      "allTitle": "ሁሉም ቀጠሮዎች",
+      "myTitle": "የእኔ ቀጠሮዎች",
+      "loading": "ቀጠሮዎች በመጫን ላይ...",
+      "bookedOn": "የተመዘገበበት",
+      "view": "ይመልከቱ",
+      "detailsTitle": "የቀጠሮ ዝርዝሮች",
+      "empty": {
+        "title": "ቀጠሮ አልተገኘም",
+        "descAll": "እስካሁን ቀጠሮ አልተመዘገበም። አባል ቀጠሮ ሲያዝ እዚህ ይታያል።",
+        "descMine": "ምንም ቀጠሮ አልመዘገቡም። 'አዲስ ይመዝግቡ' ትር ይጫኑ እና ቀጠሮ ይያዙ።"
+      },
+      "errors": {
+        "loadFailed": "ቀጠሮዎችን መጫን አልተቻለም",
+        "cancelFailed": "ቀጠሮ መሰረዝ አልተቻለም",
+        "completeFailed": "ቀጠሮ መጨረስ አልተቻለም",
+        "noPermissionAll": "ሁሉንም ቀጠሮዎች ለመመልከት ፍቃድ የለዎትም።"
+      }
+    },
+    "form": {
+      "header": {
+        "title": "አዲስ ቀጠሮ መዝግብ",
+        "desc": "ቀጠሮዎን ያቀዱ። ሰኞ፣ ረቡዕ እና አርብ ብቻ ይገኛል።"
+      },
+      "info": "ቀጠሮዎች ሰኞ፣ ረቡዕ እና አርብ ብቻ ይገኛሉ። በቀን ከፍተኛ 10 ቀጠሮ ይሆናል። አንድ ንቁ ቀጠሮ ብቻ ሊኖር ይችላል።",
+      "selectDateLabel": "የቀጠሮ ቀን ይምረጡ",
+      "loadingDates": "ቀናት በመጫን ላይ...",
+      "noDates": "የሚገኙ ቀናት አልተገኙም።",
+      "available": "ይገኛል",
+      "full": "ሞልቷል",
+      "notesLabel": "ማስታወሻ (አማራጭ)",
+      "notesPlaceholder": "ስለ ቀጠሮዎ ተጨማሪ ማስታወሻ ያክሉ...",
+      "booking": "በመመዝገብ ላይ...",
+      "bookAppointment": "ቀጠሮ መዝግብ",
+      "success": {
+        "title": "ቀጠሮ ተመዝግቧል!",
+        "body": "ቀጠሮዎ በተሳካ ሁኔታ ታቅዷል።",
+        "date": "ቀን",
+        "notes": "ማስታወሻ",
+        "redirect": "ወደ ቀጠሮዎችዎ በመሄድ ላይ..."
+      },
+      "errors": {
+        "loadDates": "የሚገኙ ቀናትን መጫን አልተቻለም። እንደገና ይሞክሩ።",
+        "selectDate": "እባክዎ የቀጠሮ ቀን ይምረጡ",
+        "createFailed": "ቀጠሮ መፍጠር አልተቻለም",
+        "alreadyActive": "አሁን ንቁ ቀጠሮ አለዎት። አዲስ ሳትጀምሩ ነበር ያለውን ይሰርዙ።",
+        "dateFull": "ይህ ቀን አልተገኘም። ሌላ ቀን ይምረጡ።",
+        "invalidDate": "እባክዎ ትክክለኛ የቀጠሮ ቀን ይምረጡ"
+      }
+    }
+  },
+  "adminAppointments": {
+    "header": {
+      "title": "የቀጠሮ አስተዳደር",
+      "subtitle": "ከማኅበረሰብ አባላት የመጣ የቀጠሮ ጥያቄዎችን ይግምጹ እና ያስተዳድሩ"
+    },
+    "stats": {
+      "totalTitle": "ጠቅላላ ቀጠሮዎች",
+      "totalSub": "ሁሉም ቀጠሮዎች",
+      "pendingTitle": "በመጠባበቅ እና ተራሽ",
+      "pendingLine": "{overdue} ተራሽ, {pending} በመጠባበቅ",
+      "completedTodayTitle": "ዛሬ የተጠናቀቁ",
+      "completedTodaySub": "ዛሬ የተጠናቀቁ"
+    },
+    "searchPlaceholder": "ቀጠሮዎች ፈልግ...",
+    "tabs": {
+      "pendingFull": "በመጠባበቅ ያሉ ቀጠሮዎች ({count})",
+      "pendingShort": "በመጠባበቅ ({count})",
+      "allFull": "ሁሉም ቀጠሮዎች ({count})",
+      "allShort": "ሁሉም ({count})"
+    },
+    "sections": {
+      "pendingTitle": "በመጠባበቅ ያሉ ቀጠሮዎች",
+      "allTitle": "ሁሉም ቀጠሮዎች"
+    },
+    "table": {
+      "user": "ተጠቃሚ",
+      "phone": "ስልክ",
+      "date": "ቀን",
+      "status": "ሁኔታ",
+      "bookedAt": "የተመዘገበበት",
+      "actions": "እርምጃዎች",
+      "loading": "በመጫን ላይ...",
+      "emptyTitle": "ቀጠሮ አልተገኘም",
+      "emptyDesc": "እባክዎ ያድሱ ወይም በኋላ ይመለሱ",
+      "unknownUser": "ያልታወቀ ተጠቃሚ",
+      "na": "-"
+    },
+    "status": {
+      "completed": "ተጠናቀቀ",
+      "cancelled": "ተሰርዘ",
+      "overdue": "ተራሽ",
+      "pending": "በመጠባበቅ"
+    },
+    "tooltips": {
+      "complete": "ጨርስ",
+      "cancel": "ቀጠሮ ሰርዝ"
+    },
+    "dialog": {
+      "complete": {
+        "title": "ቀጠሮ ጨርስ",
+        "desc": "ይህን ቀጠሮ ለ {name} ተጠናቅቷል ማለት ይፈልጋሉ?",
+        "confirm": "ጨርስ"
+      },
+      "cancel": {
+        "title": "ቀጠሮ ሰርዝ",
+        "desc": "ይህን ቀጠሮ ለ {name} መሰረዝ ትፈልጋሉ?",
+        "confirm": "ቀጠሮ ሰርዝ"
+      }
+    },
+    "toasts": {
+      "completeSuccessTitle": "ቀጠሮ ተጠናቀቀ",
+      "completeSuccessDesc": "ቀጠሮው በተሳካ ሁኔታ ተጠናቅቷል።",
+      "completeErrorTitle": "ቀጠሮ መጨረስ አልተቻለም",
+      "cancelSuccessTitle": "ቀጠሮ ተሰርዘ",
+      "cancelSuccessDesc": "ቀጠሮው በተሳካ ሁኔታ ተሰርዟል።",
+      "cancelErrorTitle": "ቀጠሮ መሰረዝ አልተቻለም",
+      "loadAllErrorTitle": "ቀጠሮዎችን መጫን አልተቻለም",
+      "loadPendingErrorTitle": "በመጠባበቅ ያሉ ቀጠሮዎችን መጫን አልተቻለም"
+    },
+    "errors": {
+      "tryAgain": "እባክዎ በኋላ ይሞክሩ",
+      "accessDenied": "መዳረሻ ተከልክሏል፡ ቀጠሮዎችን ለማየት ፍቃድ የለዎትም። ሚና፡ {role}",
+      "loadAll": "ቀጠሮዎችን መጫን አልተቻለም፡ {message}",
+      "pageTitle": "የገጽ ስህተት",
+      "userRole": "የተጠቃሚ ሚና፡ {role}",
+      "reloadPage": "ገጹን አድስ"
+    }
+  }
+}

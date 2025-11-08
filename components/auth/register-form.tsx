@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth } from "@/hooks/use-auth"
 import { User, Phone, Lock, AlertCircle, CheckCircle, UserPlus } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface RegisterFormProps {
   onSuccess?: () => void
@@ -27,6 +28,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const { register, loading } = useAuth()
+  const t = useTranslations()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,8 +61,8 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
               </div>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">{"Registration Successful!"}</h3>
-              <p className="text-gray-600 mt-2">{"Your account has been created. You can now sign in."}</p>
+              <h3 className="text-xl font-semibold text-gray-900">{t("auth.registrationSuccessTitle")}</h3>
+              <p className="text-gray-600 mt-2">{t("auth.registrationSuccessBody")}</p>
             </div>
           </div>
         </CardContent>
@@ -76,8 +78,8 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
             <UserPlus className="h-6 w-6 text-white" />
           </div>
         </div>
-        <CardTitle className="text-2xl font-bold text-gray-900">{"Create Account"}</CardTitle>
-        <CardDescription className="text-gray-600">{"Join Aqlesia church management system"}</CardDescription>
+        <CardTitle className="text-2xl font-bold text-gray-900">{t("auth.createAccount")}</CardTitle>
+        <CardDescription className="text-gray-600">{t("auth.joinSystem")}</CardDescription>
       </CardHeader>
       <CardContent className="p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -118,13 +120,13 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-gray-700 font-medium">{"ስልክ"}</Label>
+            <Label htmlFor="phone" className="text-gray-700 font-medium">{t("auth.phone")}</Label>
             <div className="relative">
               <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
               <Input
                 id="phone"
                 type="tel"
-                placeholder="+251912345678 or 0912345678"
+                placeholder={t("auth.phonePlaceholder")}
                 value={formData.phone_number}
                 onChange={(e) => handleChange("phone_number", e.target.value)}
                 className="pl-10 bg-transparent border-gray-300 focus:border-green-500 focus:ring-green-500"
@@ -134,7 +136,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700 font-medium">{"ፓስወርድ"}</Label>
+            <Label htmlFor="password" className="text-gray-700 font-medium">{t("auth.password")}</Label>
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
               <Input
@@ -156,15 +158,15 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
             disabled={loading}
           >
             <UserPlus className="h-4 w-4 mr-2" />
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading ? t("auth.creatingAccount") : t("auth.createAccount")}
           </Button>
         </form>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            {"Already have an account? "}
+            {t("auth.alreadyHaveAccount")}
             <button type="button" onClick={onSwitchToLogin} className="text-green-600 hover:text-green-700 hover:underline font-medium transition-colors">
-              {"Sign in"}
+              {t("auth.signIn")}
             </button>
           </p>
         </div>

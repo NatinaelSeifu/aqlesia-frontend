@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { appointmentService } from "@/lib/appointments"
 import type { CreateAppointmentRequest } from "@/lib/appointments"
 import { Calendar, Clock, AlertCircle, CheckCircle, Info } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface AppointmentFormProps {
   onSuccess?: () => void
@@ -28,6 +29,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
   const [loadingDates, setLoadingDates] = useState(true)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
+  const t = useTranslations()
 
   useEffect(() => {
     loadAvailableDates()
@@ -63,7 +65,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
       setAvailableDates(Array.isArray(dates) ? dates : [])
     } catch (err) {
       console.error('Error loading available dates:', err)
-      setError("Failed to load available dates. Please try again.")
+      setError(t("appointments.form.errors.loadDates"))
       setAvailableDates([]) // Set to empty array on error
     } finally {
       setLoadingDates(false)
@@ -76,7 +78,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
     setSuccess(false)
 
     if (!formData.appointment_date) {
-      setError("Please select an appointment date")
+      setError(t("appointments.form.errors.selectDate"))
       return
     }
 
@@ -93,18 +95,18 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
     } catch (err) {
       console.error('Appointment creation error:', err)
       
-      let errorMessage = "Failed to create appointment"
+      let errorMessage = t("appointments.form.errors.createFailed")
       
       if (err instanceof Error) {
         errorMessage = err.message
         
         // Handle specific backend error messages
         if (err.message.toLowerCase().includes('already has')) {
-          errorMessage = "You already have an active appointment. Please cancel your existing appointment before booking a new one."
+          errorMessage = t("appointments.form.errors.alreadyActive")
         } else if (err.message.toLowerCase().includes('date is full')) {
-          errorMessage = "This date is no longer available. Please select a different date."
+          errorMessage = t("appointments.form.errors.dateFull")
         } else if (err.message.toLowerCase().includes('invalid date')) {
-          errorMessage = "Please select a valid appointment date."
+          errorMessage = t("appointments.form.errors.invalidDate")
         }
       }
       
@@ -151,20 +153,20 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
           <div className="text-center space-y-4">
             <CheckCircle className="h-12 w-12 text-green-600 mx-auto" />
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Appointment Booked!</h3>
-              <p className="text-sm text-gray-600 mb-4">Your appointment has been successfully scheduled.</p>
+              <h3 className="text-lg font-semibold text-gray-900">{t("appointments.form.success.title")}</h3>
+              <p className="text-sm text-gray-600 mb-4">{t("appointments.form.success.body")}</p>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-900">Date: {new Date(formData.appointment_date).toLocaleDateString("en-US", {
+                <p className="text-sm font-medium text-gray-900">{t("appointments.form.success.date")}: {new Date(formData.appointment_date).toLocaleDateString("en-US", {
                   weekday: "long",
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}</p>
                 {formData.notes && (
-                  <p className="text-sm text-gray-600">Notes: {formData.notes}</p>
+                  <p className="text-sm text-gray-600">{t("appointments.form.success.notes")}: {formData.notes}</p>
                 )}
               </div>
-              <p className="text-xs text-gray-500 mt-4">Redirecting to your appointments...</p>
+              <p className="text-xs text-gray-500 mt-4">{t("appointments.form.success.redirect")}</p>
             </div>
           </div>
         </CardContent>
@@ -177,10 +179,10 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
       <CardHeader className="bg-white p-4 sm:p-6">
         <CardTitle className="flex items-center space-x-2 text-gray-900 text-lg sm:text-xl">
           <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-          <span>Book New Appointment</span>
+          <span>{t("appointments.form.header.title")}</span>
         </CardTitle>
         <CardDescription className="text-gray-600 text-sm sm:text-base">
-          Schedule your appointment. Available on Monday, Wednesday, and Friday only.
+          {t("appointments.form.header.desc")}
         </CardDescription>
       </CardHeader>
       <CardContent className="bg-white p-4 sm:p-6">
@@ -205,19 +207,19 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
           <Alert className="border-blue-200 bg-blue-50">
             <Info className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-blue-800">
-              Appointments are available on Monday, Wednesday, and Friday. Maximum 10 appointments per day. You can only have one active appointment at a time.
+              {t("appointments.form.info")}
             </AlertDescription>
           </Alert>
 
           {/* Date Selection */}
           <div className="space-y-4">
-            <Label className="text-gray-900 font-medium text-sm sm:text-base">Select Appointment Date</Label>
+            <Label className="text-gray-900 font-medium text-sm sm:text-base">{t("appointments.form.selectDateLabel")}</Label>
 
             {loadingDates ? (
               <div className="flex items-center justify-center py-8">
                 <div className="flex items-center space-x-2">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                  <span className="text-gray-700">Loading dates...</span>
+                  <span className="text-gray-700">{t("appointments.form.loadingDates")}</span>
                 </div>
               </div>
             ) : (
@@ -225,7 +227,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                 {getDisplayDates().length === 0 ? (
                   <div className="text-center py-6 sm:py-8 text-gray-600">
                     <Calendar className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-gray-700 text-sm sm:text-base">No available dates found.</p>
+                    <p className="text-gray-700 text-sm sm:text-base">{t("appointments.form.noDates")}</p>
                     <Button 
                       type="button" 
                       variant="outline" 
@@ -233,7 +235,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                       className="mt-2 border-gray-300 text-gray-700 hover:bg-gray-50 text-xs sm:text-sm"
                       onClick={loadAvailableDates}
                     >
-                      Refresh
+                      {t("common.refresh")}
                     </Button>
                   </div>
                 ) : (
@@ -259,11 +261,11 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                       <div>
                         {available ? (
                           <Badge className="text-xs bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
-                            Available
+{t("appointments.form.available")}
                           </Badge>
                         ) : (
                           <Badge variant="destructive" className="text-xs bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
-                            Full
+                            {t("appointments.form.full")}
                           </Badge>
                         )}
                       </div>
@@ -277,10 +279,10 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label htmlFor="notes" className="text-gray-900 font-medium text-sm sm:text-base">Notes (Optional)</Label>
+            <Label htmlFor="notes" className="text-gray-900 font-medium text-sm sm:text-base">{t("appointments.form.notesLabel")}</Label>
             <Textarea
               id="notes"
-              placeholder="Add any additional notes about your appointment..."
+              placeholder={t("appointments.form.notesPlaceholder")}
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
               rows={3}
@@ -296,7 +298,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
               disabled={loading || !formData.appointment_date}
             >
               <Clock className="h-4 w-4 mr-2" />
-              {loading ? "Booking..." : "Book Appointment"}
+              {loading ? t("appointments.form.booking") : t("appointments.form.bookAppointment")}
             </Button>
             {onCancel && (
               <Button 
@@ -305,7 +307,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
                 onClick={onCancel}
                 className="border-gray-300 text-gray-700 hover:bg-gray-50 py-2.5 sm:py-2 text-sm sm:text-base sm:min-w-[100px]"
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             )}
           </div>

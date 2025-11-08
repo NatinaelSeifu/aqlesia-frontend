@@ -25,6 +25,7 @@ import {
 	ArrowLeft,
 	MessageCircle,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ForgotPasswordProps {
 	onBack?: () => void;
@@ -48,6 +49,7 @@ export function ForgotPassword({
 	const [success, setSuccess] = useState(false);
 	const [message, setMessage] = useState("");
 	const [loading, setLoading] = useState(false);
+	const t = useTranslations();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -172,10 +174,10 @@ export function ForgotPassword({
 					</div>
 				</div>
 				<CardTitle className="text-2xl font-bold text-gray-900">
-					{"Forgot Password"}
+					{t("auth.forgot.title")}
 				</CardTitle>
 				<CardDescription className="text-gray-600">
-					{"Enter your phone number to reset your password"}
+					{t("auth.forgot.desc")}
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="p-8">
@@ -191,14 +193,14 @@ export function ForgotPassword({
 
 					<div className="space-y-2">
 						<Label htmlFor="phone" className="text-gray-700 font-medium">
-							{"ስልክ"}
+							{t("auth.phone")}
 						</Label>
 						<div className="relative">
 							<Phone className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
 							<Input
 								id="phone"
 								type="tel"
-								placeholder="+251912345678 ወይም 0912345678"
+								placeholder={t("auth.forgot.phonePlaceholder")}
 								value={formData.phone_number}
 								onChange={(e) => handleChange("phone_number", e.target.value)}
 								className="pl-10 bg-transparent border-gray-300 focus:border-blue-500 focus:ring-blue-500"
@@ -213,11 +215,10 @@ export function ForgotPassword({
 							<MessageCircle className="h-5 w-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" />
 							<div>
 								<h4 className="font-medium text-yellow-900 mb-1">
-									{"ቴሌግራም ማገናኘት ያስፈልጋል"}
+									{t("auth.forgot.telegramRequiredTitle")}
 								</h4>
 								<p className="text-yellow-800 text-sm mb-2">
-									የይለፍ ቃል ዳግም ማስጀመሪያ ሊንክ በቴሌግራም በኩል የሚላኩ ሲሆን፤ የተገናኘ ቴሌግራም መለያ
-									ከሌሎት መጀመሪያ ከታች <b>ቴሌግራም አገናኝ</b> የሚለውን በመጫን ማገናኘት ይኖርቦታል።
+									{t("auth.forgot.telegramInfo")}
 								</p>
 								{onShowTelegramLink && (
 									<button
@@ -225,7 +226,7 @@ export function ForgotPassword({
 										onClick={() => onShowTelegramLink(formData.phone_number)}
 										className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium transition-colors"
 									>
-										{"ቴሌግራም አገናኝ"}
+										{t("auth.forgot.telegramLink")}
 									</button>
 								)}
 							</div>
@@ -238,7 +239,7 @@ export function ForgotPassword({
 						disabled={loading}
 					>
 						<KeyRound className="h-4 w-4 mr-2" />
-						{loading ? "Sending OTP..." : "Send OTP Code"}
+						{loading ? t("auth.forgot.sendingOtp") : t("auth.forgot.sendOtp")}
 					</Button>
 				</form>
 
@@ -250,7 +251,7 @@ export function ForgotPassword({
 							className="text-blue-600 hover:text-blue-700 hover:underline font-medium transition-colors"
 						>
 							<ArrowLeft className="h-4 w-4 mr-1 inline" />
-							{"Back to Login"}
+							{t("auth.forgot.backToLogin")}
 						</button>
 					</div>
 				)}
