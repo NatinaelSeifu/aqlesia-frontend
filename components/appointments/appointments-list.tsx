@@ -28,7 +28,8 @@ import type { Appointment } from "@/lib/appointments"
 import type { UserRole } from "@/lib/permissions"
 import { useAuth } from "@/hooks/use-auth"
 import { Calendar, Clock, FileText, X, CheckCircle, AlertCircle, User, Phone, Eye, RefreshCw } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
+import { formatEthiopianDate, formatEthiopianWeekday } from "@/lib/date"
 
 interface AppointmentsListProps {
   showAllAppointments?: boolean
@@ -47,6 +48,7 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(6)
   const t = useTranslations()
+  const locale = useLocale()
 
   useEffect(() => {
     loadAppointments()
@@ -317,19 +319,10 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-gray-900 text-base sm:text-lg">
-                            {new Date(appointment.appointment_date).toLocaleDateString("en-US", {
-                              weekday: "short",
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
+                            {`${formatEthiopianDate(new Date(appointment.appointment_date), locale)} (${formatEthiopianWeekday(new Date(appointment.appointment_date), locale)})`}
                           </div>
                           <div className="text-xs sm:text-sm text-gray-500">
-                            {t("appointments.list.bookedOn")} {new Date(appointment.created_at).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
+                            {t("appointments.list.bookedOn")} {formatEthiopianDate(new Date(appointment.created_at), locale)}
                           </div>
                         </div>
                       </div>

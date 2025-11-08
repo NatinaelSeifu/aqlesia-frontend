@@ -38,12 +38,14 @@ import {
 	communionService,
 } from "@/lib/communion";
 import { format } from "date-fns";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { formatEthiopianDate } from "@/lib/date";
 
 export default function CommunionPage() {
 	const { user, loading } = useAuth();
 	const { toast } = useToast();
-	const t = useTranslations();
+const t = useTranslations();
+const locale = useLocale();
 
 	// State for communion request
 	const [communionDate, setCommunionDate] = useState<Date | undefined>(
@@ -209,13 +211,15 @@ export default function CommunionPage() {
 												// Disable future dates
 												return date > new Date();
 											}}
+											useEthiopian
+											ethiopicLocale={locale}
 											className="mx-auto scale-90 text-gray-900 [&_button]:text-gray-900 [&_button:hover]:bg-blue-100 [&_button[aria-selected='true']]:bg-blue-600 [&_button[aria-selected='true']]:text-white"
 										/>
 									</div>
 									{communionDate && (
 										<div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200 inline-block">
 											<p className="text-sm text-blue-800 font-medium">
-												✓ {t("communion.request.selectedPrefix")} {format(communionDate, "MMMM d, yyyy")}
+✓ {t("communion.request.selectedPrefix")} {formatEthiopianDate(communionDate, locale)}
 											</p>
 										</div>
 									)}
@@ -326,23 +330,12 @@ export default function CommunionPage() {
 															<div className="flex items-center gap-2 mb-1">
 																<CalendarIcon className="h-3 w-3 text-gray-500" />
 																<p className="font-medium text-gray-900 text-sm">
-																	{new Date(
-																		communion.communion_date
-																	).toLocaleDateString("en-US", {
-																		year: "numeric",
-																		month: "long",
-																		day: "numeric",
-																	})}
+{formatEthiopianDate(new Date(communion.communion_date), locale)}
 																</p>
 															</div>
 															<p className="text-xs text-gray-500">
 																{t("communion.history.requested")}{" "}
-																{new Date(
-																	communion.requested_at
-																).toLocaleDateString("en-US", {
-																	month: "short",
-																	day: "numeric",
-																})}
+{formatEthiopianDate(new Date(communion.requested_at), locale)}
 															</p>
 														</div>
 														<div

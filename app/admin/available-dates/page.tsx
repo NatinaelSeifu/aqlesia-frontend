@@ -9,6 +9,8 @@ import { Badge } from "../../../components/ui/badge"
 import { Input } from "../../../components/ui/input"
 import { Label } from "../../../components/ui/label"
 import { Switch } from "../../../components/ui/switch"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar as DateCalendar } from "@/components/ui/calendar"
 import { 
   Table, 
   TableBody, 
@@ -54,11 +56,13 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Alert, AlertDescription } from "../../../components/ui/alert"
 import { availableDatesService, type AvailableDate, type CreateAvailableDate, type UpdateAvailableDate } from "../../../lib/available-dates"
 import { format, addDays, startOfWeek, endOfWeek } from "date-fns"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
+import { formatEthiopianDate, formatEthiopianWeekday } from "@/lib/date"
 
 export default function AdminAvailableDatesPage() {
   const { user, loading } = useAuth()
   const t = useTranslations()
+  const locale = useLocale()
   
   // State management
   const [availableDates, setAvailableDates] = useState<AvailableDate[]>([])
@@ -71,6 +75,11 @@ export default function AdminAvailableDatesPage() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<AvailableDate | null>(null)
+
+  // Calendar popover open states
+  const [startCalOpen, setStartCalOpen] = useState(false)
+  const [endCalOpen, setEndCalOpen] = useState(false)
+  const [createCalOpen, setCreateCalOpen] = useState(false)
   
   // Form states
   const [createForm, setCreateForm] = useState<CreateAvailableDate>({
@@ -335,35 +344,81 @@ export default function AdminAvailableDatesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
                 <div>
                   <Label htmlFor="start_date" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.filters.startDate")}</Label>
-                  <Input
-                    id="start_date"
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="mt-1 bg-white border-2 border-blue-400 focus:border-blue-600 focus:ring-blue-500 text-black placeholder:text-blue-500 rounded-lg px-3 py-2 shadow-sm"
-                    style={{
-                      colorScheme: 'none',
-                      accentColor: '#3b82f6',
-                      backgroundColor: 'white',
-                      color: 'black'
-                    }}
-                  />
+                  <div className="mt-1 flex items-stretch gap-2">
+                    <div className="flex-1 rounded-md border-2 border-blue-400 bg-white px-3 py-2 text-slate-800 shadow-sm">
+                      {startDate ? formatEthiopianDate(new Date(startDate), locale) : t("adminAvailableDates.filters.startDate")}
+                    </div>
+                    <Popover open={startCalOpen} onOpenChange={setStartCalOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          aria-label={t("adminAvailableDates.filters.startDate")}
+                          variant="outline"
+                          size="icon"
+                          type="button"
+                          onClick={() => setStartCalOpen(true)}
+                          className="border-2 border-blue-400 text-blue-700 hover:bg-blue-50"
+                        >
+                          <Calendar className="h-4 w-4" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="p-2 bg-white border-2 border-blue-300 rounded-lg w-auto shadow-xl">
+                        <DateCalendar
+                          mode="single"
+                          selected={startDate ? new Date(startDate) : undefined}
+                          onSelect={(d) => {
+                            if (d) {
+                              setStartDate(format(d, 'yyyy-MM-dd'))
+                              setStartCalOpen(false)
+                            }
+                          }}
+                          useEthiopian
+                          ethiopicLocale={locale}
+                          captionLayout="label"
+                          buttonVariant="ghost"
+                          className="text-gray-900 [&_button]:text-slate-800 [&_button:hover]:bg-blue-100 [&_button[aria-selected='true']]:bg-blue-600 [&_button[aria-selected='true']]:text-white [&_.rdp-day_today>button]:ring-2 [&_.rdp-day_today>button]:ring-blue-400 [&_.rdp-day_today>button]:ring-offset-1"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
                 <div>
                   <Label htmlFor="end_date" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.filters.endDate")}</Label>
-                  <Input
-                    id="end_date"
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="mt-1 bg-white border-2 border-blue-400 focus:border-blue-600 focus:ring-blue-500 text-black placeholder:text-blue-500 rounded-lg px-3 py-2 shadow-sm"
-                    style={{
-                      colorScheme: 'none',
-                      accentColor: '#3b82f6',
-                      backgroundColor: 'white',
-                      color: 'black'
-                    }}
-                  />
+                  <div className="mt-1 flex items-stretch gap-2">
+                    <div className="flex-1 rounded-md border-2 border-blue-400 bg-white px-3 py-2 text-slate-800 shadow-sm">
+                      {endDate ? formatEthiopianDate(new Date(endDate), locale) : t("adminAvailableDates.filters.endDate")}
+                    </div>
+                    <Popover open={endCalOpen} onOpenChange={setEndCalOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          aria-label={t("adminAvailableDates.filters.endDate")}
+                          variant="outline"
+                          size="icon"
+                          type="button"
+                          onClick={() => setEndCalOpen(true)}
+                          className="border-2 border-blue-400 text-blue-700 hover:bg-blue-50"
+                        >
+                          <Calendar className="h-4 w-4" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="p-2 bg-white border-2 border-blue-300 rounded-lg w-auto shadow-xl">
+                        <DateCalendar
+                          mode="single"
+                          selected={endDate ? new Date(endDate) : undefined}
+                          onSelect={(d) => {
+                            if (d) {
+                              setEndDate(format(d, 'yyyy-MM-dd'))
+                              setEndCalOpen(false)
+                            }
+                          }}
+                          useEthiopian
+                          ethiopicLocale={locale}
+                          captionLayout="label"
+                          buttonVariant="ghost"
+                          className="text-gray-900 [&_button]:text-slate-800 [&_button:hover]:bg-blue-100 [&_button[aria-selected='true']]:bg-blue-600 [&_button[aria-selected='true']]:text-white [&_.rdp-day_today>button]:ring-2 [&_.rdp-day_today>button]:ring-blue-400 [&_.rdp-day_today>button]:ring-offset-1"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
               </div>
               
@@ -404,20 +459,43 @@ export default function AdminAvailableDatesPage() {
                     <div className="space-y-4">
                       <div>
                         <Label htmlFor="create_date" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.form.date")}</Label>
-                        <Input
-                          id="create_date"
-                          type="date"
-                          value={createForm.slot_date}
-                          onChange={(e) => setCreateForm(prev => ({ ...prev, slot_date: e.target.value }))}
-                          className="mt-1 bg-white border-2 border-blue-400 focus:border-blue-600 focus:ring-blue-500 text-black placeholder:text-blue-500 rounded-lg px-3 py-2 shadow-sm"
-                          style={{
-                            colorScheme: 'none',
-                            accentColor: '#3b82f6',
-                            backgroundColor: 'white',
-                            color: 'black'
-                          }}
-                          min={format(new Date(), 'yyyy-MM-dd')}
-                        />
+                        <div className="mt-1 flex items-stretch gap-2">
+                          <div className="flex-1 rounded-md border-2 border-blue-400 bg-white px-3 py-2 text-slate-800 shadow-sm">
+                            {createForm.slot_date ? formatEthiopianDate(new Date(createForm.slot_date), locale) : t("adminAvailableDates.form.date")}
+                          </div>
+                          <Popover open={createCalOpen} onOpenChange={setCreateCalOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                aria-label={t("adminAvailableDates.form.date")}
+                                variant="outline"
+                                size="icon"
+                                type="button"
+                                onClick={() => setCreateCalOpen(true)}
+                                className="border-2 border-blue-400 text-blue-700 hover:bg-blue-50"
+                              >
+                                <Calendar className="h-4 w-4" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent align="start" className="p-2 bg-white border-2 border-blue-300 rounded-lg w-auto shadow-xl">
+                              <DateCalendar
+                                mode="single"
+                                selected={createForm.slot_date ? new Date(createForm.slot_date) : undefined}
+                                onSelect={(d) => {
+                                  if (d) {
+                                    setCreateForm(prev => ({ ...prev, slot_date: format(d, 'yyyy-MM-dd') }))
+                                    setCreateCalOpen(false)
+                                  }
+                                }}
+                                useEthiopian
+                                ethiopicLocale={locale}
+                                captionLayout="label"
+                                buttonVariant="ghost"
+                                className="text-gray-900 [&_button]:text-slate-800 [&_button:hover]:bg-blue-100 [&_button[aria-selected='true']]:bg-blue-600 [&_button[aria-selected='true']]:text-white [&_.rdp-day_today>button]:ring-2 [&_.rdp-day_today>button]:ring-blue-400 [&_.rdp-day_today>button]:ring-offset-1"
+                                disabled={(d) => d < new Date(format(new Date(), 'yyyy-MM-dd'))}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
                       </div>
                       <div>
                         <Label htmlFor="create_capacity" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.form.maxCapacity")}</Label>
@@ -509,7 +587,7 @@ export default function AdminAvailableDatesPage() {
                       availableDates.map((date) => (
                         <TableRow key={date.id} className="hover:bg-blue-50 transition-colors border-b border-blue-100">
                           <TableCell className="font-medium text-slate-800">
-                            {format(new Date(date.slot_date), 'MMM d, yyyy (EEEE)')}
+                            {`${formatEthiopianDate(new Date(date.slot_date), locale)} (${formatEthiopianWeekday(new Date(date.slot_date), locale)})`}
                           </TableCell>
                           <TableCell className="text-slate-700">{date.max_capacity}</TableCell>
                           <TableCell className="text-slate-700">{date.current_bookings}</TableCell>

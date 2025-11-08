@@ -27,6 +27,8 @@ import {
 import { useToast } from "@/components/ui/use-toast"
 import { Communion, UpdateCommunionStatusRequest, communionService } from "@/lib/communion"
 import { format } from "date-fns"
+import { useLocale } from "next-intl"
+import { formatEthiopianDate } from "@/lib/date"
 
 interface CommunionRequestCardProps {
   communion: Communion
@@ -41,6 +43,7 @@ export function CommunionRequestCard({
 }: CommunionRequestCardProps) {
   const { toast } = useToast()
   const [actionLoading, setActionLoading] = useState(false)
+  const locale = useLocale()
 
   const handleStatusUpdate = async (status: 'approved' | 'rejected') => {
     try {
@@ -136,14 +139,14 @@ export function CommunionRequestCard({
           <div className="flex items-center space-x-2">
             <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
             <span className="truncate">
-              Communion: {format(new Date(communion.communion_date), 'MMM d, yyyy')}
+              Communion: {formatEthiopianDate(new Date(communion.communion_date), locale)}
             </span>
           </div>
           
           <div className="flex items-center space-x-2">
             <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
             <span className="truncate">
-              Requested: {format(new Date(communion.requested_at), 'MMM d, yy')}
+              Requested: {formatEthiopianDate(new Date(communion.requested_at), locale)}
             </span>
           </div>
           
@@ -154,7 +157,7 @@ export function CommunionRequestCard({
                 {communion.status === 'approved' ? 'Approved' : 'Rejected'} by: {communion.approved_by.name}
                 {communion.approved_at && (
                   <span className="block sm:inline">
-                    {" "}{format(new Date(communion.approved_at), 'MMM d, yyyy')}
+                    {" "}{formatEthiopianDate(new Date(communion.approved_at), locale)}
                   </span>
                 )}
               </span>

@@ -12,7 +12,8 @@ import { Badge } from "@/components/ui/badge"
 import { appointmentService } from "@/lib/appointments"
 import type { CreateAppointmentRequest } from "@/lib/appointments"
 import { Calendar, Clock, AlertCircle, CheckCircle, Info } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
+import { formatEthiopianDate, formatEthiopianWeekday } from "@/lib/date"
 
 interface AppointmentFormProps {
   onSuccess?: () => void
@@ -30,6 +31,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const t = useTranslations()
+  const locale = useLocale()
 
   useEffect(() => {
     loadAvailableDates()
@@ -135,12 +137,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
       const date = new Date(dateStr)
       return {
         date: dateStr,
-        display: date.toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
+        display: `${formatEthiopianDate(date, locale)} (${formatEthiopianWeekday(date, locale)})`,
         available: true, // All dates from API are available
       }
     }).sort((a, b) => a.date.localeCompare(b.date)) // Sort by date
@@ -156,12 +153,7 @@ export function AppointmentForm({ onSuccess, onCancel }: AppointmentFormProps) {
               <h3 className="text-lg font-semibold text-gray-900">{t("appointments.form.success.title")}</h3>
               <p className="text-sm text-gray-600 mb-4">{t("appointments.form.success.body")}</p>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-900">{t("appointments.form.success.date")}: {new Date(formData.appointment_date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}</p>
+                <p className="text-sm font-medium text-gray-900">{t("appointments.form.success.date")}: {formatEthiopianDate(new Date(formData.appointment_date), locale)} ({formatEthiopianWeekday(new Date(formData.appointment_date), locale)})</p>
                 {formData.notes && (
                   <p className="text-sm text-gray-600">{t("appointments.form.success.notes")}: {formData.notes}</p>
                 )}

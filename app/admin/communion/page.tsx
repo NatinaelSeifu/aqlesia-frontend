@@ -44,12 +44,14 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useToast } from "@/components/ui/use-toast"
 import { Communion, UpdateCommunionStatusRequest, communionService } from "@/lib/communion"
 import { format } from "date-fns"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
+import { formatEthiopianDate } from "@/lib/date"
 
 export default function AdminCommunionPage() {
   const { user, loading } = useAuth()
   const { toast } = useToast()
   const t = useTranslations()
+  const locale = useLocale()
   
   // State management
   const [allCommunions, setAllCommunions] = useState<Communion[]>([])
@@ -287,12 +289,12 @@ export default function AdminCommunionPage() {
                 </TableCell>
                 <TableCell className="text-gray-700 text-xs sm:text-sm">
                   <span className="whitespace-nowrap">
-                    {format(new Date(communion.communion_date), 'MMM d, yy')}
+                    {formatEthiopianDate(new Date(communion.communion_date), locale)}
                   </span>
                 </TableCell>
                 <TableCell>{getStatusBadge(communion.status)}</TableCell>
                 <TableCell className="text-gray-700 text-xs hidden sm:table-cell">
-                  {format(new Date(communion.requested_at), 'MMM d, yy')}
+                  {formatEthiopianDate(new Date(communion.requested_at), locale)}
                 </TableCell>
                 {showActions && (
                   <TableCell className="text-right">
