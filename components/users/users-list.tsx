@@ -31,6 +31,7 @@ import { PermissionService } from "@/lib/permissions"
 import type { User } from "@/lib/auth"
 import type { UserRole } from "@/lib/permissions"
 import { Users, Search, Trash2, Eye, Phone, Calendar, AlertCircle, Shield, UserCircle, Briefcase, GraduationCap, Heart, RefreshCw, Settings, CheckCircle, Clock, XCircle, Check, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface UserListResponse {
   users: User[]
@@ -41,6 +42,7 @@ interface UserListResponse {
 
 export function UsersList() {
   const { user: currentUser } = useAuth()
+  const t = useTranslations()
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
@@ -101,7 +103,7 @@ export function UsersList() {
       setTotalPages(Math.ceil(response.total / response.page_size))
     } catch (err) {
       console.error('Error loading users:', err)
-      setError(err instanceof Error ? err.message : "Failed to load users")
+      setError(err instanceof Error ? err.message : t("adminUsers.errors.loadUsers"))
       setUsers([]) // Set to empty array on error
       setTotalUsers(0)
       setTotalPages(0)
@@ -120,7 +122,7 @@ export function UsersList() {
       setDeleteDialogOpen(false)
       setUserToDelete(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete user")
+      setError(err instanceof Error ? err.message : t("adminUsers.errors.deleteUser"))
     }
   }
 
@@ -133,7 +135,7 @@ export function UsersList() {
       await loadUsers()
       setUpdatingUserId(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update user status")
+      setError(err instanceof Error ? err.message : t("adminUsers.errors.updateStatus"))
       setUpdatingUserId(null)
     }
   }
@@ -183,21 +185,21 @@ export function UsersList() {
         return (
           <Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
             <Shield className="h-3 w-3 mr-1" />
-            Admin
+            {t("adminUsers.roles.admin")}
           </Badge>
         )
       case "manager":
         return (
           <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300">
             <Settings className="h-3 w-3 mr-1" />
-            Manager
+            {t("adminUsers.roles.manager")}
           </Badge>
         )
       default:
         return (
           <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300">
             <UserCircle className="h-3 w-3 mr-1" />
-            User
+            {t("adminUsers.roles.user")}
           </Badge>
         )
     }
@@ -209,28 +211,28 @@ export function UsersList() {
         return (
           <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Active
+            {t("adminUsers.status.active")}
           </Badge>
         )
       case "PENDING":
         return (
           <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-300">
             <Clock className="h-3 w-3 mr-1" />
-            Pending
+            {t("adminUsers.status.pending")}
           </Badge>
         )
       case "INACTIVE":
         return (
           <Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
             <XCircle className="h-3 w-3 mr-1" />
-            Inactive
+            {t("adminUsers.status.inactive")}
           </Badge>
         )
       default:
         return (
           <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300">
             <Clock className="h-3 w-3 mr-1" />
-            Unknown
+            {t("adminUsers.status.unknown")}
           </Badge>
         )
     }
@@ -240,7 +242,7 @@ export function UsersList() {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{"You don't have permission to view this page."}</AlertDescription>
+        <AlertDescription>{t("adminUsers.errors.noPermission")}</AlertDescription>
       </Alert>
     )
   }
@@ -251,40 +253,40 @@ export function UsersList() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-base font-semibold text-blue-900">Total Users</CardTitle>
+            <CardTitle className="text-base font-semibold text-blue-900">{t("adminUsers.stats.totalTitle")}</CardTitle>
             <div className="p-2 bg-blue-200 rounded-lg">
               <Users className="h-5 w-5 text-blue-700" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-blue-900">{totalUsers}</div>
-            <p className="text-sm text-blue-700 mt-1">Total registered users</p>
+            <p className="text-sm text-blue-700 mt-1">{t("adminUsers.stats.totalSub")}</p>
           </CardContent>
         </Card>
         
         <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-base font-semibold text-green-900">Current Page</CardTitle>
+            <CardTitle className="text-base font-semibold text-green-900">{t("adminUsers.stats.currentPageTitle")}</CardTitle>
             <div className="p-2 bg-green-200 rounded-lg">
               <Shield className="h-5 w-5 text-green-700" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-green-900">{(users || []).filter(u => u.role === 'admin').length}</div>
-            <p className="text-sm text-green-700 mt-1">Admins on this page</p>
+            <p className="text-sm text-green-700 mt-1">{t("adminUsers.stats.adminsOnPage")}</p>
           </CardContent>
         </Card>
         
         <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-base font-semibold text-purple-900">Page {currentPage} of {totalPages}</CardTitle>
+            <CardTitle className="text-base font-semibold text-purple-900">{t("adminUsers.stats.pageOfTitle", {current: currentPage, total: totalPages})}</CardTitle>
             <div className="p-2 bg-purple-200 rounded-lg">
               <UserCircle className="h-5 w-5 text-purple-700" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-purple-900">{(users || []).length}</div>
-            <p className="text-sm text-purple-700 mt-1">Users on this page</p>
+            <p className="text-sm text-purple-700 mt-1">{t("adminUsers.stats.usersOnPage")}</p>
           </CardContent>
         </Card>
       </div>
@@ -296,8 +298,8 @@ export function UsersList() {
               <Users className="h-5 w-5 text-indigo-600" />
             </div>
             <div>
-              <CardTitle className="text-gray-900 text-xl">All Users</CardTitle>
-              <CardDescription className="text-gray-600">Complete list of system users with management actions</CardDescription>
+              <CardTitle className="text-gray-900 text-xl">{t("adminUsers.card.title")}</CardTitle>
+              <CardDescription className="text-gray-600">{t("adminUsers.card.desc")}</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -314,7 +316,7 @@ export function UsersList() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
               <Input
-                placeholder="Search users by name, phone, or role..."
+                placeholder={t("adminUsers.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 bg-white border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
@@ -325,7 +327,7 @@ export function UsersList() {
               className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-medium shadow-lg"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
+              {t("common.refresh")}
             </Button>
           </div>
 
@@ -338,14 +340,14 @@ export function UsersList() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50 border-b border-gray-200">
-                    <TableHead className="font-semibold text-gray-900">ስም</TableHead>
-                    <TableHead className="font-semibold text-gray-900">ክ/ስም</TableHead>
-                    <TableHead className="font-semibold text-gray-900">ስልክ</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Role</TableHead>
-                    <TableHead className="font-semibold text-gray-900">የስራ አይነት</TableHead>
-                    <TableHead className="font-semibold text-gray-900">የአጋር ስም</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Status</TableHead>
-                    <TableHead className="text-right font-semibold text-gray-900">Actions</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("adminUsers.table.name")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("adminUsers.table.lastName")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("adminUsers.table.phone")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("adminUsers.table.role")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("adminUsers.table.jobTitle")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("adminUsers.table.partnerName")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("adminUsers.table.status")}</TableHead>
+                    <TableHead className="text-right font-semibold text-gray-900">{t("adminUsers.table.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -377,15 +379,15 @@ export function UsersList() {
                                   size="sm" 
                                   onClick={() => setSelectedUser(user)}
                                   className="h-8 w-8 p-0 text-blue-600 hover:bg-blue-100 hover:text-blue-700 rounded-md"
-                                  title="View Details"
+                                  title={t("adminUsers.actions.viewDetails")}
                                 >
                                   <Eye className="h-4 w-4" />
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="max-w-md bg-white">
                                 <DialogHeader>
-                                  <DialogTitle className="text-gray-900">User Details</DialogTitle>
-                                  <DialogDescription className="text-gray-600">Detailed information about the user</DialogDescription>
+                                  <DialogTitle className="text-gray-900">{t("adminUsers.view.title")}</DialogTitle>
+                                  <DialogDescription className="text-gray-600">{t("adminUsers.view.desc")}</DialogDescription>
                                 </DialogHeader>
                                 {selectedUser && (
                                   <div className="space-y-4">
@@ -402,11 +404,11 @@ export function UsersList() {
                                       <p className="text-gray-900">{selectedUser.phone_number}</p>
                                     </div>
                                     <div>
-                                      <label className="text-sm font-medium text-gray-700">Role</label>
+                                      <label className="text-sm font-medium text-gray-700">{t("adminUsers.table.role")}</label>
                                       <p className="capitalize text-gray-900">{selectedUser.role}</p>
                                     </div>
                                     <div>
-                                      <label className="text-sm font-medium text-gray-700">Status</label>
+                                      <label className="text-sm font-medium text-gray-700">{t("adminUsers.table.status")}</label>
                                       <div className="mt-1">{getStatusBadge(selectedUser.status)}</div>
                                     </div>
                                     {selectedUser.job_title && (
@@ -444,7 +446,7 @@ export function UsersList() {
                                     {selectedUser.telegram_id && (
                                       <div>
                                         <label className="text-sm font-medium text-gray-700">
-                                          Telegram
+                                          {t("adminUsers.view.telegram")}
                                         </label>
                                         <p className="text-gray-900">{selectedUser.telegram_id}</p>
                                       </div>
@@ -464,7 +466,7 @@ export function UsersList() {
                                 onClick={() => handleStatusUpdate(user.id, "ACTIVE")}
                                 disabled={updatingUserId === user.id}
                                 className="h-8 w-8 p-0 text-green-600 hover:bg-green-100 hover:text-green-700 rounded-md"
-                                title="Approve User"
+                                title={t("adminUsers.actions.approveUser")}
                               >
                                 {updatingUserId === user.id ? (
                                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-green-600 border-t-transparent" />
@@ -478,7 +480,7 @@ export function UsersList() {
                                 onClick={() => handleStatusUpdate(user.id, "INACTIVE")}
                                 disabled={updatingUserId === user.id}
                                 className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
-                                title="Reject User"
+                                title={t("adminUsers.actions.rejectUser")}
                               >
                                 {updatingUserId === user.id ? (
                                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-600 border-t-transparent" />
@@ -499,7 +501,7 @@ export function UsersList() {
                                   setDeleteDialogOpen(true)
                                 }}
                                 className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
-                                title="Delete User"
+                                title={t("adminUsers.actions.deleteUser")}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -514,8 +516,8 @@ export function UsersList() {
               {filteredUsers.length === 0 && (
                 <div className="text-center py-12">
                   <UserCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <div className="text-gray-500 text-lg font-medium mb-2">No users found</div>
-                  <div className="text-gray-400">Try adjusting your search criteria</div>
+                  <div className="text-gray-500 text-lg font-medium mb-2">{t("adminUsers.empty.title")}</div>
+                  <div className="text-gray-400">{t("adminUsers.empty.desc")}</div>
                 </div>
               )}
             </div>
@@ -525,7 +527,7 @@ export function UsersList() {
           {!loading && totalPages > 1 && (
             <div className="mt-6 flex items-center justify-between bg-white">
               <div className="text-sm text-gray-700 font-medium">
-                Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, totalUsers)} of {totalUsers} users
+                {t("adminUsers.pagination.showing", {from: ((currentPage - 1) * pageSize) + 1, to: Math.min(currentPage * pageSize, totalUsers), total: totalUsers})}
               </div>
               <div className="flex items-center space-x-2">
                 <button
@@ -541,7 +543,7 @@ export function UsersList() {
                       : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
-                  Previous
+                  {t("adminUsers.pagination.previous")}
                 </button>
                 
                 {getVisiblePageNumbers().map((page, index) => (
@@ -580,7 +582,7 @@ export function UsersList() {
                       : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
-                  Next
+                  {t("adminUsers.pagination.next")}
                 </button>
               </div>
             </div>
@@ -592,19 +594,19 @@ export function UsersList() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent className="bg-white">
           <DialogHeader>
-            <DialogTitle className="text-red-600">Delete User</DialogTitle>
+            <DialogTitle className="text-red-600">{t("adminUsers.delete.title")}</DialogTitle>
             <DialogDescription className="text-gray-600">
-              Are you sure you want to delete this user? This action cannot be undone.
+              {t("adminUsers.delete.desc")}
             </DialogDescription>
           </DialogHeader>
           {userToDelete && (
             <div className="py-4">
               <p className="text-sm text-gray-900">
-                <strong>User: </strong>
+                <strong>{t("adminUsers.delete.userLabel")} </strong>
                 {`${userToDelete.name} ${userToDelete.lastname}`}
               </p>
               <p className="text-sm text-gray-900 mt-1">
-                <strong>Phone: </strong>
+                <strong>{t("adminUsers.delete.phoneLabel")} </strong>
                 {userToDelete.phone_number}
               </p>
             </div>
@@ -615,14 +617,14 @@ export function UsersList() {
               onClick={() => setDeleteDialogOpen(false)}
               className="border-gray-300 text-gray-700 hover:bg-gray-50"
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button 
               onClick={handleDeleteUser}
               className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium shadow-lg"
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Delete User
+              {t("adminUsers.delete.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

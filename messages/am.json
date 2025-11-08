@@ -5,11 +5,15 @@
     "toggleMenu": "ምናሌ ክፈት/ዝጋ",
     "closeMenu": "ምናሌ ዝጋ",
     "backToDashboard": "ወደ ዳሽቦርድ ተመለስ",
-    "adminPanel": "አስተዳዳሪ ፓነል"
+    "adminPanel": "አስተዳዳሪ ፓነል",
+    "refresh": "አድስ",
+    "refreshing": "በመነቃት ላይ...",
+    "reload": "እንደገና",
+    "cancel": "ሰርዝ"
   },
   "nav": {
     "aqlesia": "አቅሌሲያ",
-    "manageUsers": "ተጠቃሚዎችን አስተዳድር",
+    "manageUsers": "የክርስትና ልጆችን አስተዳድር",
     "manageAppointments": "ቀጠሮዎችን አስተዳድር",
     "manageCommunion": "ቁርባን አስተዳድር",
     "availableDates": "የሚገኙ ቀናት",
@@ -17,13 +21,13 @@
     "profile": "መገለጫ",
     "appointments": "ቀጠሮዎች",
     "communion": "ቁርባን",
-    "users": "ተጠቃሚዎች"
+    "users": "የክርስትና ልጆች"
   },
   "admin": {
     "tabs": {
       "overview": "አጠቃላይ",
       "appointments": "ቀጠሮዎች",
-      "users": "ተጠቃሚዎች",
+      "users": "የክርስትና ልጆች",
       "reports": "ሪፖርቶች",
       "settings": "ሰንተናዎች"
     },
@@ -33,7 +37,7 @@
     }
   },
   "auth": {
-    "welcomeBack": "እንኳን ደህና መለሱ",
+    "welcomeBack": "እንኳን ደህና መጡ",
     "signInToAccount": "ወደ አቅሌሲያ መለያዎ ይግቡ",
     "phone": "ስልክ",
     "phonePlaceholder": "+251912345678 ወይም 0912345678",
@@ -63,14 +67,14 @@
     }
   },
   "dashboard": {
-    "welcomeBackName": "እንኳን ደህና መለሱ፣ {name}",
+    "welcomeBackName": "እንኳን ደህና መጡ {name}",
     "adminMessage": "የቤተክርስቲያን ስራዎችን እና ማህበረሰብ ተሳትፎን ያስተዳድሩ",
     "managerMessage": "ቀጠሮዎችን ያስተካክሉ እና ማህበረሰቡን ይርዱ",
-    "userMessage": "የእርስዎን ቀጠሮ እና የቁርባን ጥያቄዎች ያስተዳድሩ",
+    "userMessage": "የእርስዎን ቀጠሮ እና የቁርባን ጥያቄዎች ይከታተሉ",
     "stats": {
       "admin": {
-        "totalUsers": "ጠቅላላ ተጠቃሚዎች",
-        "registeredUsers": "የተመዘገቡ ተጠቃሚዎች",
+        "totalUsers": "ጠቅላላ የክርስትና ልጆች",
+        "registeredUsers": "የተመዘገቡ የክርስትና ልጆች",
         "pendingAppointments": "በመጠባበቅ ያሉ ቀጠሮዎች",
         "awaitingReview": "ግምገማ በመጠባበቅ ላይ",
         "communionRequests": "የቁርባን ጥያቄዎች",
@@ -83,7 +87,7 @@
         "totalBookings": "ጠቅላላ ቀጠሮዎች",
         "pendingReviews": "በመጠባበቅ ያሉ ግምገማዎች",
         "awaitingAction": "እርምጃ በመጠባበቅ ላይ",
-        "managedUsers": "የማቀናበር ተጠቃሚዎች",
+        "managedUsers": "የማቀናበር የክርስትና ልጆች",
         "underManagement": "በአስተዳደር ስር",
         "completed": "ተጠናቀቁ",
         "finishedSessions": "የተጠናቀቁ ስብሰባዎች"
@@ -103,11 +107,6 @@
   },
   "home": {
     "maryAlt": "እመቤታችን ድንግል ማርያም - የኢትዮጵያ ኦርቶዶክስ"
-  },
-  "common": {
-    "refresh": "አድስ",
-    "reload": "እንደገና",
-    "cancel": "ሰርዝ"
   },
   "appointments": {
     "title": "ቀጠሮዎች",
@@ -175,6 +174,201 @@
       }
     }
   },
+  "communion": {
+    "header": {
+      "title": "ቁርባን",
+      "subtitle": "የቁርባን ቀን ጥያቄዎን ያቅርቡ እና መንፈሳዊ ጉዞዎን ይከታተሉ"
+    },
+    "request": {
+      "title": "ጥያቄ አቅርብ",
+      "desc": "የቁርባን ቀንዎን ይምረጡ",
+      "lastTakenLabel": "ለመጨረሻ ጊዜ ቁርባን የተቀበሉት መቼ ነበር?",
+      "onlyPastInfo": "ያለፉ ቀናትን ብቻ ይምረጡ",
+      "selectedPrefix": "ተመርጧል:",
+      "submitting": "በመላክ ላይ...",
+      "submitButton": "ጥያቄ አቅርብ",
+      "clearSelection": "ምርጫን አጽዳ"
+    },
+    "history": {
+      "title": "የጥያቄ ታሪክ",
+      "desc": "የላኩትን ይከታተሉ",
+      "loading": "ታሪክ በመጫን ላይ...",
+      "emptyTitle": "እስካሁን ጥያቄ የለም",
+      "emptyDesc": "የላኩት እዚህ ይታያል",
+      "requested": "ተጠይቋል",
+      "requests": "ጥያቄዎች",
+      "approved": "ተፀድቋል",
+      "rejected": "ተተውቷል",
+      "byName": "በ {name}"
+    },
+    "status": {
+      "approved": "ተፀድቋል",
+      "rejected": "ተተውቷል",
+      "pending": "በመጠባበቅ"
+    },
+    "toasts": {
+      "loadErrorTitle": "ቁርባን መጫን አልተቻለም",
+      "tryAgain": "እባክዎ በኋላ ይሞክሩ",
+      "dateRequiredTitle": "ቀን ያስፈልጋል",
+      "dateRequiredDesc": "እባክዎ የቁርባን ቀን ይምረጡ",
+      "submitSuccessTitle": "የቁርባን ጥያቄ ተልኳል",
+      "submitSuccessDesc": "የቁርባን ጥያቄዎ በተሳካ ሁኔታ ተልኳል እና ማፅደቅ በመጠባበቅ ላይ ነው።",
+      "submitErrorTitle": "ልክ አልተሳካም"
+    },
+    "pagination": {
+      "pageOf": "ገጽ {current} ከ {total}"
+    }
+  },
+  "adminUsers": {
+    "header": {
+      "title": "የክርስትና ልጆች ዝርዝር",
+      "desc": "በስርዓቱ ውስጥ የተመዘገቡ የክርስትና ልጆችን ያስተዳድሩ እና ይከታተሉ"
+    },
+    "stats": {
+      "totalTitle": "ጠቅላላ የክርስትና ልጆች",
+      "totalSub": "ጠቅላላ የተመዘገቡ የክርስትና ልጆች",
+      "currentPageTitle": "አሁን ገጽ",
+      "adminsOnPage": "አስተዳዳሪዎች በዚህ ገጽ",
+      "pageOfTitle": "ገጽ {current} ከ {total}",
+      "usersOnPage": "የክርስትና ልጆች በዚህ ገጽ"
+    },
+    "card": {
+      "title": "ሁሉም የክርስትና ልጆች",
+      "desc": "የስርዓቱ የክርስትና ልጆች ዝርዝር ከመቆጣጠሪያ እርምጃዎች ጋር"
+    },
+    "searchPlaceholder": "የክርስትና ልጆችን በስም፣ ስልክ ወይም ሚና ፈልግ...",
+    "table": {
+      "name": "ስም",
+      "lastName": "ክ/ስም",
+      "phone": "ስልክ",
+      "role": "ሚና",
+      "jobTitle": "የስራ አይነት",
+      "partnerName": "የአጋር ስም",
+      "status": "ሁኔታ",
+      "actions": "እርምጃዎች"
+    },
+    "roles": {
+      "admin": "አስተዳዳሪ",
+      "manager": "አስተባባሪ",
+      "user": "ተጠቃሚ"
+    },
+    "status": {
+      "active": "ንቁ",
+      "pending": "በመጠባበቅ",
+      "inactive": "እንቅስቃሴ የለሽ",
+      "unknown": "ያልታወቀ"
+    },
+    "actions": {
+      "viewDetails": "ዝርዝር እይታ",
+      "approveUser": "ተጠቃሚ አፅድቅ",
+      "rejectUser": "ተጠቃሚ እምቢ በል",
+      "deleteUser": "ተጠቃሚ አጥፋ"
+    },
+    "view": {
+      "title": "የተጠቃሚ ዝርዝር",
+      "desc": "ስለ ተጠቃሚው ዝርዝር መረጃ",
+      "telegram": "ቴሌግራም"
+    },
+    "empty": {
+      "title": "ተጠቃሚ አልተገኘም",
+      "desc": "እባክዎ የፍለጋ መመሪያዎችዎን ይቀይሩ"
+    },
+    "delete": {
+      "title": "ተጠቃሚ አጥፋ",
+      "desc": "ይህን ተጠቃሚ ማጥፋት ትፈልጋሉ? ይህ ተግባር አይመለስም።",
+      "userLabel": "ተጠቃሚ:",
+      "phoneLabel": "ስልክ:",
+      "confirm": "ተጠቃሚ አጥፋ"
+    },
+    "pagination": {
+      "showing": "ከ {from} እስከ {to} ከ {total} የክርስትና ልጆች",
+      "previous": "የቀድሞ",
+      "next": "ቀጣይ"
+    },
+    "errors": {
+      "noPermission": "ይህን ገጽ ለማየት ፍቃድ የለዎትም።",
+      "managePermission": "የክርስትና ልጆችን ለማስተዳደር የአስተዳዳሪ ወይም የአስተባባሪ ፍቃድ ያስፈልጋል።",
+      "loadUsers": "የክርስትና ልጆችን መጫን አልተቻለም",
+      "deleteUser": "ተጠቃሚ መሰረዝ አልተቻለም",
+      "updateStatus": "የተጠቃሚ ሁኔታ ማዘመን አልተቻለም"
+    }
+  },
+  "questions": {
+    "header": {
+      "title": "ጥያቄዎቼ",
+      "subtitle": "ጥያቄ ያቅርቡ እና ከቀሲስ መልስ ይቀበሉ"
+    },
+    "stats": {
+      "totalTitle": "ጠቅላላ ጥያቄዎች",
+      "totalSub": "የተላኩ ጥያቄዎች",
+      "pendingTitle": "በመጠባበቅ",
+      "pendingSub": "መልስ በመጠባበቅ ላይ",
+      "answeredTitle": "ተመልሷል",
+      "answeredSub": "መልስ የተቀበሉ",
+      "closedTitle": "ተዘግቷል",
+      "closedSub": "የተጠናቀቁ ጥያቄዎች"
+    },
+    "sections": {
+      "yourQuestions": "ጥያቄዎችዎ"
+    },
+    "actions": {
+      "askQuestion": "ጥያቄ ጠይቅ"
+    },
+    "create": {
+      "title": "ጥያቄ ጠይቅ",
+      "desc": "ጥያቄዎን ያቀርቡ እና ከቤተ ክርስቲያን አስተዳደር መልስ ይቀበሉ።",
+      "submit": "ጥያቄ አስገባ"
+    },
+    "edit": {
+      "title": "ጥያቄ አስተካክል",
+      "desc": "ጥያቄዎን ያዘምኑ። በመጠባበቅ ያሉ ጥያቄዎችን ብቻ ማስተካከል ይቻላል።",
+      "update": "ጥያቄ አዘምን"
+    },
+    "form": {
+      "yourQuestion": "ጥያቄዎ",
+      "placeholder": "ጥያቄዎን እዚህ ይጻፉ...",
+      "charCount": "{count}/{max} ቁምፊዎች"
+    },
+    "empty": {
+      "title": "ምንም ጥያቄ የለም",
+      "desc": "ለቀሲስ ማንኛውንም ጥያቄ መጠየቅ ትችላለህ/ሽ እና መልስ የሚሰጡበት ይሆናል።",
+      "askFirst": "የመጀመሪያውን ጥያቄ ጠይቅ"
+    },
+    "view": {
+      "yourQuestion": "ጥያቄዎ:",
+      "response": "መልስ:"
+    },
+    "delete": {
+      "title": "ጥያቄ አጥፋ",
+      "desc": "ይህን ጥያቄ ማጥፋት ትፈልጋሉ? ይህ ተግባር አይመለስም።",
+      "confirm": "አጥፋ"
+    },
+    "status": {
+      "pending": "በመጠባበቅ",
+      "answered": "ተመልሷል",
+      "closed": "ተዘግቷል",
+      "cancelled": "ተሰርዟል"
+    },
+    "errors": {
+      "loadFailed": "ጥያቄዎችን መጫን አልተቻለም",
+      "submitFailed": "ጥያቄ መላክ አልተቻለም",
+      "updateFailed": "ጥያቄ ማዘመን አልተቻለም",
+      "deleteFailed": "ጥያቄ ማጥፋት አልተቻለም"
+    },
+    "validation": {
+      "enterQuestion": "እባክዎ ጥያቄ ያስገቡ"
+    },
+    "toasts": {
+      "createSuccess": "ጥያቄ በተሳካ ሁኔታ ተልኳል!",
+      "updateSuccess": "ጥያቄ በተሳካ ሁኔታ ታዘምኗል!",
+      "deleteSuccess": "ጥያቄ በተሳካ ሁኔታ ተሰርዟል!"
+    },
+    "pagination": {
+      "pageOf": "ገጽ {current} ከ {total}",
+      "totalAvailable": "ጠቅላላ: {total}",
+      "currentCount": "በአሁኑ ገጽ: {count} ነጥቦች"
+    }
+  },
   "adminAppointments": {
     "header": {
       "title": "የቀጠሮ አስተዳደር",
@@ -183,8 +377,8 @@
     "stats": {
       "totalTitle": "ጠቅላላ ቀጠሮዎች",
       "totalSub": "ሁሉም ቀጠሮዎች",
-      "pendingTitle": "በመጠባበቅ እና ተራሽ",
-      "pendingLine": "{overdue} ተራሽ, {pending} በመጠባበቅ",
+      "pendingTitle": "በመጠባበቅ እና ያለፈ",
+      "pendingLine": "{overdue} ያለፈ, {pending} በመጠባበቅ",
       "completedTodayTitle": "ዛሬ የተጠናቀቁ",
       "completedTodaySub": "ዛሬ የተጠናቀቁ"
     },
@@ -215,7 +409,7 @@
     "status": {
       "completed": "ተጠናቀቀ",
       "cancelled": "ተሰርዘ",
-      "overdue": "ተራሽ",
+      "overdue": "ያለፈ",
       "pending": "በመጠባበቅ"
     },
     "tooltips": {
@@ -251,6 +445,374 @@
       "pageTitle": "የገጽ ስህተት",
       "userRole": "የተጠቃሚ ሚና፡ {role}",
       "reloadPage": "ገጹን አድስ"
+    }
+  }
+,
+  "adminCommunion": {
+    "header": {
+      "title": "የቁርባን አስተዳደር",
+      "subtitle": "ከቤተክርስቲያን አባላት የመጡ የቁርባን ጥያቄዎችን ያስተዳድሩ",
+      "titleCard": "የቁርባን አስተዳደር - የካርድ እይታ",
+      "subtitleCard": "የቁርባን ጥያቄዎችን በካርድ እይታ ያስተዳድሩ"
+    },
+    "stats": {
+      "totalTitle": "ጠቅላላ ጥያቄዎች",
+      "totalSub": "ሁሉም የቁርባን ጥያቄዎች",
+      "pendingTitle": "ማፅደቅ በመጠባበቅ",
+      "pendingSub": "ማፅደቅ በመጠባበቅ",
+      "approvedTodayTitle": "ዛሬ የተፀደቁ",
+      "approvedTodaySub": "ዛሬ የተፀደቁ"
+    },
+    "searchPlaceholder": "የቁርባን ጥያቄዎች ፈልግ...",
+    "tabs": {
+      "pendingFull": "በመጠባበቅ ያሉ ጥያቄዎች ({count})",
+      "pendingShort": "በመጠባበቅ ({count})",
+      "allFull": "ሁሉም ጥያቄዎች ({count})",
+      "allShort": "ሁሉም ({count})"
+    },
+    "sections": {
+      "pendingTitle": "በመጠባበቅ ያሉ የቁርባን ጥያቄዎች",
+      "allTitle": "ሁሉም የቁርባን ጥያቄዎች"
+    },
+    "table": {
+      "user": "ተጠቃሚ",
+      "phone": "ስልክ",
+      "date": "ቀን",
+      "status": "ሁኔታ",
+      "requestedAt": "የተጠየቀበት",
+      "actions": "እርምጃዎች",
+      "loading": "በመጫን ላይ...",
+      "emptyTitle": "የቁርባን ጥያቄ አልተገኘም",
+      "emptyDesc": "እባክዎ ያድሱ ወይም በኋላ ይመለሱ",
+      "unknownUser": "ያልታወቀ ተጠቃሚ",
+      "na": "-"
+    },
+    "status": {
+      "approved": "ተፀድቋል",
+      "rejected": "ተተውቷል",
+      "pending": "በመጠባበቅ"
+    },
+    "tooltips": {
+      "approve": "ጥያቄ አፅድቅ",
+      "reject": "ጥያቄ እምቢ በል",
+      "delete": "ጥያቄ አጥፋ"
+    },
+    "dialog": {
+      "approve": {
+        "title": "የቁርባን ጥያቄ አፅድቅ",
+        "desc": "ይህን የቁርባን ጥያቄ ከ {name} ማፅደቅ ትፈልጋሉ?",
+        "confirm": "አፅድቅ"
+      },
+      "reject": {
+        "title": "የቁርባን ጥያቄ እምቢ በል",
+        "desc": "ይህን የቁርባን ጥያቄ ከ {name} መተው ትፈልጋሉ?",
+        "confirm": "እምቢ በል"
+      },
+      "delete": {
+        "title": "የቁርባን ጥያቄ አጥፋ",
+        "desc": "ይህን የቁርባን ጥያቄ ማጥፋት ትፈልጋሉ? ይህ ተግባር አይመለስም።",
+        "confirm": "አጥፋ"
+      }
+    },
+    "toasts": {
+      "statusApprovedTitle": "የቁርባን ጥያቄ ተፀድቋል",
+      "statusApprovedDesc": "የቁርባን ጥያቄው በተሳካ ሁኔታ ተፀድቋል።",
+      "statusRejectedTitle": "የቁርባን ጥያቄ ተተውቷል",
+      "statusRejectedDesc": "የቁርባን ጥያቄው በተሳካ ሁኔታ ተተውቷል።",
+      "failedApproveTitle": "ጥያቄ ማፅደቅ አልተቻለም",
+      "failedRejectTitle": "ጥያቄ መተው አልተቻለም",
+      "deleteSuccessTitle": "የቁርባን ጥያቄ ተሰርዟል",
+      "deleteSuccessDesc": "የቁርባን ጥያቄው በተሳካ ሁኔታ ተሰርዟል።",
+      "deleteErrorTitle": "ጥያቄ ማጥፋት አልተቻለም",
+      "loadAllErrorTitle": "የቁርባን ጥያቄዎችን መጫን አልተቻለም",
+      "loadPendingErrorTitle": "በመጠባበቅ ያሉ ጥያቄዎችን መጫን አልተቻለም",
+      "tryAgain": "እባክዎ በኋላ ይሞክሩ"
+    },
+    "pagination": {
+      "showing": "ከ {from} እስከ {to} ከ {total}",
+      "previous": "የቀድሞ",
+      "next": "ቀጣይ",
+      "pageOf": "ገጽ {page} ከ {totalPages}"
+    },
+    "views": {
+      "tableView": "የሰንጠረዥ እይታ",
+      "cardView": "የካርድ እይታ"
+    }
+  },
+  "adminAvailableDates": {
+    "header": {
+      "title": "የሚገኙ ቀናት አስተዳደር",
+      "subtitle": "የቤተክርስቲያን መርሐግብር ስርዓት ውስጥ የቀጠሮ ቀናትን እና ክምችትን ያስተዳድሩ"
+    },
+    "stats": {
+      "totalDatesTitle": "ጠቅላላ ቀናት",
+      "totalDatesSub": "የሚገኙ የቀጠሮ ቀናት",
+      "activeDatesTitle": "ንቁ ቀናት",
+      "activeDatesSub": "አሁን ንቁ",
+      "totalCapacityTitle": "ጠቅላላ ክምችት",
+      "totalCapacitySub": "ጠቅላላ የቀጠሮ ቦታዎች",
+      "bookedTitle": "ተያዙ",
+      "bookedSub": "አሁን የተያዙ ቦታዎች"
+    },
+    "filters": {
+      "startDate": "የመጀመሪያ ቀን",
+      "endDate": "የመጨረሻ ቀን",
+      "includeInactive": "የማይንቀሳቀሱ አካትት"
+    },
+    "actions": {
+      "addDate": "ቀን አክል",
+      "editDate": "ቀን አስተካክል",
+      "deleteDate": "ቀን አጥፋ"
+    },
+    "create": {
+      "title": "የሚገኝ ቀን ፍጠር",
+      "desc": "ለቀጠሮ መመዝገብ አዲስ ቀን አክል።",
+      "confirm": "ቀን ፍጠር"
+    },
+    "edit": {
+      "title": "የሚገኝ ቀን አስተካክል",
+      "desc": "ለ {date} ክምችት ወይም ሁኔታ አዘምን።",
+      "confirm": "ቀን አዘምን",
+      "capacityBelowCurrent": "ክምችትን ከአሁን ያሉ መዝገቦች ({count}) በታች ማድረግ አይቻልም"
+    },
+    "form": {
+      "date": "ቀን",
+      "maxCapacity": "ከፍተኛ ክምችት",
+      "activeImmediately": "ወዲያውኑ ንቁ",
+      "activeForBooking": "ለመመዝገብ ንቁ"
+    },
+    "card": {
+      "title": "የሚገኙ የቀጠሮ ቀናት",
+      "desc": "የቀጠሮ ቀናትን እና ክምችትን አስተዳድር"
+    },
+    "table": {
+      "date": "ቀን",
+      "maxCapacity": "ከፍተኛ ክምችት",
+      "currentBookings": "አሁን የተመዘገቡ",
+      "availableSpots": "የሚገኙ ቦታዎች",
+      "status": "ሁኔታ",
+      "actions": "እርምጃዎች",
+      "emptyTitle": "የሚገኝ ቀን አልተገኘም",
+      "emptyDesc": "የቀን ስፋት ወይም ማጣሪያዎችን ይቀይሩ"
+    },
+    "status": {
+      "inactive": "ንቁ ያልሆነ",
+      "full": "ሞልቷል",
+      "available": "ይገኛል"
+    },
+    "delete": {
+      "title": "የሚገኝ ቀን አጥፋ",
+      "desc": "ይህን የሚገኝ ቀን ማጥፋት ትፈልጋሉ? ይህ ተግባር አይመለስም።",
+      "warningLabel": "ማስጠንቀቂያ:",
+      "warningBody": " በዚህ ቀን {count} ንቁ መዝገብ(ዎች) አሉ።",
+      "confirm": "አጥፋ"
+    },
+    "toasts": {
+      "createSuccess": "የሚገኝ ቀን ተፈጥሯል!",
+      "updateSuccess": "የሚገኝ ቀን ታዘምነዋል!",
+      "deleteSuccess": "የሚገኝ ቀን ተሰርዟል!"
+    },
+    "errors": {
+      "loadFailed": "የሚገኙ ቀናትን መጫን አልተቻለም",
+      "createFailed": "የሚገኝ ቀን መፍጠር አልተቻለም",
+      "updateFailed": "የሚገኝ ቀን ማዘምን አልተቻለም",
+      "deleteFailed": "የሚገኝ ቀን ማጥፋት አልተቻለም",
+      "accessDenied": "መዳረሻ ተከልክሏል፡ የሚገኙ ቀናትን ለማየት ፍቃድ የለዎትም። ሚና፡ {role}",
+      "loadDatesWithMessage": "የሚገኙ ቀናትን መጫን አልተቻለም፡ {message}",
+      "pageTitle": "የገጽ ስህተት",
+      "userRole": "የተጠቃሚ ሚና፡ {role}",
+      "reloadPage": "ገጹን አድስ"
+    }
+  },
+  "adminQuestions": {
+    "header": {
+      "title": "የጥያቄዎች አስተዳደር",
+      "subtitle": "ከማህበረሰብ ተጠቃሚዎች የመጡ ጥያቄዎችን ያስተዳድሩ እና ይመልሱ"
+    },
+    "alerts": {
+      "errorTitle": "ስህተት:",
+      "debugInfo": "የእትም መረጃ",
+      "userRole": "የአሁኑ የተጠቃሚ ሚና፡ {role}",
+      "loadingState": "የመጫን ሁኔታ፡ {state}",
+      "questionsCount": "የጥያቄ ብዛት፡ {count}",
+      "apiUrl": "API አድራሻ፡ {url}"
+    },
+    "stats": {
+      "totalTitle": "ጠቅላላ",
+      "totalSub": "ሁሉም ጥያቄዎች",
+      "pendingTitle": "በመጠባበቅ",
+      "pendingSub": "መልስ በመጠባበቅ ላይ",
+      "answeredTitle": "ተመልሷል",
+      "answeredSub": "መልስ የተሰጠ",
+      "closedTitle": "ተዘግቷል",
+      "closedSub": "ተጠናቀቀ",
+      "cancelledTitle": "ተሰርዟል",
+      "cancelledSub": "ተሰርዟል"
+    },
+    "filters": {
+      "filterByStatus": "በሁኔታ ፈልግ",
+      "allStatuses": "ሁሉም ሁኔታዎች",
+      "searchLabel": "ፈልግ",
+      "searchPlaceholder": "ጥያቄዎች ፈልግ..."
+    },
+    "card": {
+      "title": "የተጠቃሚዎች ጥያቄዎች",
+      "desc": "ከቤተክርስቲያን አባላት ጥያቄዎችን ያስተዳድሩ እና ይመልሱ"
+    },
+    "table": {
+      "loading": "ጥያቄዎች በመጫን ላይ...",
+      "loadingUserLine": "ተጠቃሚ፡ {name} ({role})",
+      "user": "ተጠቃሚ",
+      "question": "ጥያቄ",
+      "status": "ሁኔታ",
+      "date": "ቀን",
+      "actions": "እርምጃዎች",
+      "emptyTitle": "ጥያቄ አልተገኘም",
+      "emptyDesc": "ማጣሪያዎችን ይቀይሩ",
+      "unknownUser": "ያልታወቀ ተጠቃሚ"
+    },
+    "status": {
+      "pending": "በመጠባበቅ",
+      "answered": "ተመልሷል",
+      "closed": "ተዘግቷል",
+      "cancelled": "ተሰርዟል"
+    },
+    "actions": {
+      "viewQuestion": "ጥያቄ እይታ",
+      "respond": "መልስ ስጥ",
+      "close": "ጥያቄ ዝጋ",
+      "delete": "ጥያቄ አጥፋ"
+    },
+    "delete": {
+      "title": "ጥያቄ አጥፋ",
+      "desc": "ይህን ጥያቄ ማጥፋት ትፈልጋሉ? ይህ ተግባር አይመለስም።",
+      "confirm": "አጥፋ"
+    },
+    "pagination": {
+      "showing": "ከ {from} እስከ {to} ከ {total} ጥያቄዎች",
+      "previous": "የቀድሞ",
+      "next": "ቀጣይ",
+      "page": "ገጽ {page}"
+    },
+    "view": {
+      "title": "የጥያቄ ዝርዝር",
+      "desc": "ጥያቄ ከ {name} ይመልከቱ",
+      "questionLabel": "ጥያቄ:",
+      "responseLabel": "መልስ",
+      "close": "ዝጋ"
+    },
+    "respond": {
+      "title": "መልስ ስጥ",
+      "desc": "ለ {name} ጥያቄ መልስ ይስጡ",
+      "theUser": "ተጠቃሚው",
+      "submit": "መልስ አስገባ"
+    },
+    "form": {
+      "yourResponse": "የእርስዎ መልስ",
+      "responsePlaceholder": "መልስዎን እዚህ ይፃፉ...",
+      "charCount": "{count}/{max} ቁምፊዎች"
+    },
+    "toasts": {
+      "responseSuccess": "መልስ በተሳካ ሁኔታ ተልኳል!",
+      "statusUpdateSuccess": "የጥያቄ ሁኔታ ታዘምኗል!",
+      "deleteSuccess": "ጥያቄ ተሰርዟል!"
+    },
+    "errors": {
+      "loadFailed": "ጥያቄዎችን መጫን አልተቻለም",
+      "responseFailed": "መልስ መላክ አልተቻለም",
+      "updateStatusFailed": "ሁኔታ ማዘምን አልተቻለም",
+      "deleteFailed": "ጥያቄ ማጥፋት አልተቻለም"
+    }
+  },
+  "profile": {
+    "header": {
+      "title": "መገለጫዎች",
+      "subtitle": "የግል መረጃዎን እና የመለያ ምርጫዎችን ያዘምኑ"
+    },
+    "nav": {
+      "profileSettings": "መገለጫዎች"
+    },
+    "actions": {
+      "changePassword": "ፓስወርድ ቀይር",
+      "add": "አክል",
+      "updateProfile": "መገለጫ አዘምን",
+      "updating": "በማዘመን ላይ..."
+    },
+    "card": {
+      "title": "የግል መረጃ",
+      "desc": "የመገለጫዎን መረጃ ሁሌ ያዘምኑ እና ደህና ያድርጉት።"
+    },
+    "sections": {
+      "basicInfo": "መሰረታዊ መረጃ",
+      "professionalInfo": "የስራ መረጃ",
+      "personalInfo": "የግል መረጃ"
+    },
+    "form": {
+      "firstName": "ስም",
+      "lastName": "ክ/ስም",
+      "phone": "ስልክ",
+      "jobTitle": "የስራ አይነት",
+      "education": "ትምህርት",
+      "marriageStatus": "የጋብቻ ሁኔታ",
+      "partnerName": "የአጋር ስም",
+      "childrenNames": "የልጆች ስሞች"
+    },
+    "marriage": {
+      "single": "ያላገባ/ች",
+      "married": "ያገባ/ች",
+      "divorced": "የተፋታ",
+      "widowed": "መበለት"
+    },
+    "placeholders": {
+      "firstName": "ስም ያስገቡ",
+      "lastName": "ክ/ስም ያስገቡ",
+      "phone": "የስልክ ቁጥር ያስገቡ",
+      "jobTitle": "ምሳሌ፡ ሶፍትዌር ኢንጅነር፣ አስተማሪ፣ ዶክተር",
+      "education": "ምሳ. የባ.ስ ዲግሪ፣ የማ.ስ ዲግሪ",
+      "currentStatus": "አሁን፡ {status}",
+      "selectMarriageStatus": "የጋብቻ ሁኔታ ይምረጡ",
+      "partnerName": "የአጋር ስም ያስገቡ",
+      "childName": "የልጅ ስም ያስገቡ",
+      "addAnotherChild": "የሌላ ልጅ ስም ያክሉ"
+    },
+    "children": {
+      "current": "አሁን ያሉ ልጆች ({count}):",
+      "clickToRemove": "ለማስወገድ ጠቅ ያድርጉ",
+      "alreadyExists": "ይህ የልጅ ስም አስቀድሞ አለ"
+    },
+    "toasts": {
+      "updateSuccess": "መገለጫ በተሳካ ሁኔታ ታዘምኗል!"
+    },
+    "validation": {
+      "nameRequired": "ስም አስፈላጊ ነው",
+      "lastnameRequired": "ክ/ስም አስፈላጊ ነው",
+      "phoneRequired": "ስልክ አስፈላጊ ነው"
+    },
+    "errors": {
+      "updateFailed": "ማዘመን አልተሳካም"
+    },
+    "changePassword": {
+      "title": "ፓስወርድ ቀይር",
+      "subtitle": "መለያዎ እንዲጠበቅ ፓስወርድዎን ያዘምኑ",
+      "successAlert": "ፓስወርድ ተቀይሯል! መለያዎ አሁን ይበልጥ ደህና ነው።",
+      "successTitle": "ፓስወርድ በተሳካ ሁኔታ ተቀይሯል!",
+      "successDesc": "ፓስወርድዎ በደህና ታዘምኗል።",
+      "current": "የአሁኑ ፓስወርድ",
+      "currentPlaceholder": "የአሁኑ ፓስወርድ ያስገቡ",
+      "new": "አዲስ ፓስወርድ",
+      "newPlaceholder": "አዲስ ፓስወርድ ያስገቡ",
+      "confirm": "አዲስ ፓስወርድ ያረጋግጡ",
+      "confirmPlaceholder": "አዲስ ፓስወርድ ያረጋግጡ",
+      "minLengthHint": "ፓስወርድ ቢያንስ 6 ቁምፊዎች መሆን አለበት",
+      "changing": "በመቀየር ላይ...",
+      "errors": {
+        "currentRequired": "የአሁኑ ፓስወርድ አስፈላጊ ነው",
+        "newRequired": "አዲስ ፓስወርድ አስፈላጊ ነው",
+        "minLength": "አዲስ ፓስወርድ ቢያንስ 6 ቁምፊዎች መሆን አለበት",
+        "mismatch": "አዲሱ ፓስወርድ አይመሳሰልም",
+        "sameAsCurrent": "አዲስ ፓስወርድ ከአሁኑ ፓስወርድ መለየት አለበት",
+        "changeFailed": "ፓስወርድ መቀየር አልተሳካም"
+      }
     }
   }
 }

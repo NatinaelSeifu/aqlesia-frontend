@@ -38,10 +38,12 @@ import {
 	communionService,
 } from "@/lib/communion";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 export default function CommunionPage() {
 	const { user, loading } = useAuth();
 	const { toast } = useToast();
+	const t = useTranslations();
 
 	// State for communion request
 	const [communionDate, setCommunionDate] = useState<Date | undefined>(
@@ -78,9 +80,8 @@ export default function CommunionPage() {
 		} catch (error) {
 			console.error("Failed to load communions:", error);
 			toast({
-				title: "Failed to load communions",
-				description:
-					error instanceof Error ? error.message : "Please try again later",
+				title: t("communion.toasts.loadErrorTitle"),
+				description: error instanceof Error ? error.message : t("communion.toasts.tryAgain"),
 				variant: "destructive",
 			});
 		} finally {
@@ -113,8 +114,8 @@ export default function CommunionPage() {
 	const handleSubmitCommunion = async () => {
 		if (!communionDate) {
 			toast({
-				title: "Date required",
-				description: "Please select a communion date",
+				title: t("communion.toasts.dateRequiredTitle"),
+				description: t("communion.toasts.dateRequiredDesc"),
 				variant: "destructive",
 			});
 			return;
@@ -131,9 +132,8 @@ export default function CommunionPage() {
 
 			await communionService.createCommunion(request);
 			toast({
-				title: "Communion request submitted",
-				description:
-					"Your communion request has been submitted successfully and is pending approval.",
+				title: t("communion.toasts.submitSuccessTitle"),
+				description: t("communion.toasts.submitSuccessDesc"),
 				variant: "default",
 			});
 
@@ -143,9 +143,8 @@ export default function CommunionPage() {
 		} catch (error) {
 			console.error("Failed to submit communion request:", error);
 			toast({
-				title: "Submission failed",
-				description:
-					error instanceof Error ? error.message : "Please try again later",
+				title: t("communion.toasts.submitErrorTitle"),
+				description: error instanceof Error ? error.message : t("communion.toasts.tryAgain"),
 				variant: "destructive",
 			});
 		} finally {
@@ -174,10 +173,10 @@ export default function CommunionPage() {
 						<Church className="h-10 w-10 text-white" />
 					</div>
 					<h1 className="text-4xl font-light mb-4 text-gray-900">
-						Holy Communion
+						{t("communion.header.title")}
 					</h1>
 					<p className="text-gray-600 text-lg max-w-xl mx-auto leading-relaxed">
-						Submit your communion date request and track your spiritual journey
+						{t("communion.header.subtitle")}
 					</p>
 				</div>
 
@@ -189,17 +188,17 @@ export default function CommunionPage() {
 								<div className="p-2 bg-blue-100 rounded-lg">
 									<CalendarIcon className="h-5 w-5 text-blue-600" />
 								</div>
-								<span>Submit Request</span>
+								<span>{t("communion.request.title")}</span>
 							</CardTitle>
-							<CardDescription className="text-gray-600">
-								Select your communion date
-							</CardDescription>
+								<CardDescription className="text-gray-600">
+									{t("communion.request.desc")}
+								</CardDescription>
 						</CardHeader>
 						<CardContent className="p-6">
 							<div className="space-y-6">
 								<div className="text-center">
 									<Label className="text-sm font-medium text-gray-700 mb-4 block">
-										When did you last take communion?
+										{t("communion.request.lastTakenLabel")}
 									</Label>
 									<div className="border border-gray-300 rounded-xl p-4 bg-gray-50 inline-block">
 										<Calendar
@@ -216,7 +215,7 @@ export default function CommunionPage() {
 									{communionDate && (
 										<div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200 inline-block">
 											<p className="text-sm text-blue-800 font-medium">
-												✓ Selected: {format(communionDate, "MMMM d, yyyy")}
+												✓ {t("communion.request.selectedPrefix")} {format(communionDate, "MMMM d, yyyy")}
 											</p>
 										</div>
 									)}
@@ -225,7 +224,7 @@ export default function CommunionPage() {
 									<div className="inline-flex items-center gap-2 p-3 bg-amber-50 rounded-lg border border-amber-200 text-left max-w-sm">
 										<Info className="h-4 w-4 text-amber-600 flex-shrink-0" />
 										<p className="text-xs text-amber-700">
-											Only past communion dates allowed
+											{t("communion.request.onlyPastInfo")}
 										</p>
 									</div>
 								</div>
@@ -241,12 +240,12 @@ export default function CommunionPage() {
 									{isSubmitting ? (
 										<>
 											<div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-											Submitting...
+											{t("communion.request.submitting")}
 										</>
 									) : (
 										<>
 											<Heart className="h-4 w-4 mr-2" />
-											Submit Request
+											{t("communion.request.submitButton")}
 										</>
 									)}
 								</Button>
@@ -258,7 +257,7 @@ export default function CommunionPage() {
 										className="border-gray-300 text-gray-600 hover:bg-gray-50 text-sm"
 										size="sm"
 									>
-										Clear Selection
+										{t("communion.request.clearSelection")}
 									</Button>
 								)}
 							</div>
@@ -272,26 +271,26 @@ export default function CommunionPage() {
 								<div className="p-2 bg-gray-100 rounded-lg">
 									<MessageSquare className="h-5 w-5 text-gray-600" />
 								</div>
-								<span>Request History</span>
+								<span>{t("communion.history.title")}</span>
 							</CardTitle>
-							<CardDescription className="text-gray-600">
-								Track your submissions
-							</CardDescription>
+								<CardDescription className="text-gray-600">
+									{t("communion.history.desc")}
+								</CardDescription>
 						</CardHeader>
 						<CardContent className="p-6">
 							{loadingCommunions ? (
 								<div className="py-8 flex flex-col items-center justify-center">
 									<div className="animate-spin h-6 w-6 border-2 border-gray-300 border-t-blue-600 rounded-full mb-3"></div>
-									<p className="text-gray-500 text-sm">Loading history...</p>
+									<p className="text-gray-500 text-sm">{t("communion.history.loading")}</p>
 								</div>
 							) : userCommunions.length === 0 ? (
 								<div className="text-center py-8">
 									<div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
 										<MessageSquare className="h-6 w-6 text-gray-400" />
 									</div>
-									<p className="text-gray-600 mb-1 text-sm">No requests yet</p>
+									<p className="text-gray-600 mb-1 text-sm">{t("communion.history.emptyTitle")}</p>
 									<p className="text-xs text-gray-500">
-										Your submissions will appear here
+										{t("communion.history.emptyDesc")}
 									</p>
 								</div>
 							) : (
@@ -302,11 +301,11 @@ export default function CommunionPage() {
 											<p className="text-sm text-gray-600">
 												Showing {startIndex + 1}-
 												{Math.min(endIndex, userCommunions.length)} of{" "}
-												{userCommunions.length} requests
+																	{userCommunions.length} {t("communion.history.requests")}
 											</p>
-											<div className="text-xs text-gray-500">
-												Page {currentPage} of {totalPages}
-											</div>
+															<div className="text-xs text-gray-500">
+																{t("communion.pagination.pageOf", {current: currentPage, total: totalPages})}
+															</div>
 										</div>
 									)}
 
@@ -337,7 +336,7 @@ export default function CommunionPage() {
 																</p>
 															</div>
 															<p className="text-xs text-gray-500">
-																Requested{" "}
+																{t("communion.history.requested")}{" "}
 																{new Date(
 																	communion.requested_at
 																).toLocaleDateString("en-US", {
@@ -358,18 +357,14 @@ export default function CommunionPage() {
 															{isApproved && "✓ "}
 															{isRejected && "✗ "}
 															{isPending && "⏳ "}
-															{communion.status.charAt(0).toUpperCase() +
-																communion.status.slice(1)}
+															{t(`communion.status.${communion.status}`)}
 														</div>
 													</div>
 													{communion.status !== "pending" &&
 														communion.approved_by && (
 															<div className="pt-2 border-t border-gray-100">
 																<p className="text-xs text-gray-500">
-																	{communion.status === "approved"
-																		? "Approved"
-																		: "Rejected"}{" "}
-																	by {communion.approved_by.name}
+																{communion.status === "approved" ? t("communion.history.approved") : t("communion.history.rejected")} {t("communion.history.byName", {name: communion.approved_by.name})}
 																</p>
 															</div>
 														)}
@@ -479,7 +474,7 @@ export default function CommunionPage() {
 										loadingCommunions ? "animate-spin" : ""
 									}`}
 								/>
-								{loadingCommunions ? "Refreshing..." : "Refresh"}
+											{loadingCommunions ? t("common.refreshing") : t("common.refresh")}
 							</Button>
 						</CardFooter>
 					</Card>

@@ -64,9 +64,11 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 export default function QuestionsPage() {
 	const { user, loading } = useAuth();
+	const t = useTranslations();
 
 	// State management
 	const [questions, setQuestions] = useState<Question[]>([]);
@@ -126,7 +128,7 @@ export default function QuestionsPage() {
 			});
 		} catch (err) {
 			console.error("Failed to load questions:", err);
-			setError(err instanceof Error ? err.message : "Failed to load questions");
+			setError(err instanceof Error ? err.message : t("questions.errors.loadFailed"));
 			setQuestions([]); // Ensure questions is always an array
 		} finally {
 			setLoadingQuestions(false);
@@ -135,21 +137,21 @@ export default function QuestionsPage() {
 
 	const handleCreateQuestion = async () => {
 		if (!createForm.question.trim()) {
-			setError("Please enter a question");
+			setError(t("questions.validation.enterQuestion"));
 			return;
 		}
 
 		try {
 			setError("");
 			await questionsService.createQuestion({ question: createForm.question });
-			setSuccess("Question submitted successfully!");
+			setSuccess(t("questions.toasts.createSuccess"));
 			setTimeout(() => setSuccess(""), 3000);
 			setCreateDialogOpen(false);
 			setCreateForm({ question: "" });
 			loadData();
 		} catch (err) {
 			setError(
-				err instanceof Error ? err.message : "Failed to submit question"
+				err instanceof Error ? err.message : t("questions.errors.submitFailed")
 			);
 		}
 	};
@@ -162,7 +164,7 @@ export default function QuestionsPage() {
 			await questionsService.updateMyQuestion(selectedQuestion.id, {
 				question: editForm.question,
 			});
-			setSuccess("Question updated successfully!");
+			setSuccess(t("questions.toasts.updateSuccess"));
 			setTimeout(() => setSuccess(""), 3000);
 			setEditDialogOpen(false);
 			setSelectedQuestion(null);
@@ -170,7 +172,7 @@ export default function QuestionsPage() {
 			loadData();
 		} catch (err) {
 			setError(
-				err instanceof Error ? err.message : "Failed to update question"
+				err instanceof Error ? err.message : t("questions.errors.updateFailed")
 			);
 		}
 	};
@@ -179,12 +181,12 @@ export default function QuestionsPage() {
 		try {
 			setError("");
 			await questionsService.deleteMyQuestion(question.id);
-			setSuccess("Question deleted successfully!");
+			setSuccess(t("questions.toasts.deleteSuccess"));
 			setTimeout(() => setSuccess(""), 3000);
 			loadData();
 		} catch (err) {
 			setError(
-				err instanceof Error ? err.message : "Failed to delete question"
+				err instanceof Error ? err.message : t("questions.errors.deleteFailed")
 			);
 		}
 	};
@@ -207,28 +209,28 @@ export default function QuestionsPage() {
 				return (
 					<Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-amber-300">
 						<Clock className="h-3 w-3 mr-1" />
-						Pending
+						{t("questions.status.pending")}
 					</Badge>
 				);
 			case QuestionStatus.ANSWERED:
 				return (
 					<Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
 						<CheckCircle className="h-3 w-3 mr-1" />
-						Answered
+						{t("questions.status.answered")}
 					</Badge>
 				);
 			case QuestionStatus.CLOSED:
 				return (
 					<Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300">
 						<XCircle className="h-3 w-3 mr-1" />
-						Closed
+						{t("questions.status.closed")}
 					</Badge>
 				);
 			case QuestionStatus.CANCELLED:
 				return (
 					<Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
 						<XCircle className="h-3 w-3 mr-1" />
-						Cancelled
+						{t("questions.status.cancelled")}
 					</Badge>
 				);
 			default:
@@ -261,10 +263,10 @@ export default function QuestionsPage() {
 						<HelpCircle className="h-8 w-8 text-white" />
 					</div>
 					<h2 className="text-3xl font-bold mb-2 text-slate-800">
-						My Questions
+						{t("questions.header.title")}
 					</h2>
 					<p className="text-blue-600 max-w-2xl mx-auto">
-						Ask questions and get answers from the church administration
+						{t("questions.header.subtitle")}
 					</p>
 				</div>
 
@@ -293,9 +295,9 @@ export default function QuestionsPage() {
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 						<Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-blue-900">
-									Total Questions
-								</CardTitle>
+									<CardTitle className="text-base font-semibold text-blue-900">
+										{t("questions.stats.totalTitle")}
+									</CardTitle>
 								<div className="p-2 bg-blue-200 rounded-lg">
 									<HelpCircle className="h-5 w-5 text-blue-700" />
 								</div>
@@ -305,16 +307,16 @@ export default function QuestionsPage() {
 									{stats.total}
 								</div>
 								<p className="text-sm text-blue-700 mt-1">
-									Questions submitted
+									{t("questions.stats.totalSub")}
 								</p>
 							</CardContent>
 						</Card>
 
 						<Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-amber-900">
-									Pending
-								</CardTitle>
+									<CardTitle className="text-base font-semibold text-amber-900">
+										{t("questions.stats.pendingTitle")}
+									</CardTitle>
 								<div className="p-2 bg-amber-200 rounded-lg">
 									<Clock className="h-5 w-5 text-amber-700" />
 								</div>
@@ -323,15 +325,15 @@ export default function QuestionsPage() {
 								<div className="text-3xl font-bold text-amber-900">
 									{stats.pending}
 								</div>
-								<p className="text-sm text-amber-700 mt-1">Awaiting response</p>
+								<p className="text-sm text-amber-700 mt-1">{t("questions.stats.pendingSub")}</p>
 							</CardContent>
 						</Card>
 
 						<Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-green-900">
-									Answered
-								</CardTitle>
+									<CardTitle className="text-base font-semibold text-green-900">
+										{t("questions.stats.answeredTitle")}
+									</CardTitle>
 								<div className="p-2 bg-green-200 rounded-lg">
 									<CheckCircle className="h-5 w-5 text-green-700" />
 								</div>
@@ -341,16 +343,16 @@ export default function QuestionsPage() {
 									{stats.answered}
 								</div>
 								<p className="text-sm text-green-700 mt-1">
-									Received responses
+									{t("questions.stats.answeredSub")}
 								</p>
 							</CardContent>
 						</Card>
 
 						<Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-								<CardTitle className="text-base font-semibold text-purple-900">
-									Closed
-								</CardTitle>
+									<CardTitle className="text-base font-semibold text-purple-900">
+										{t("questions.stats.closedTitle")}
+									</CardTitle>
 								<div className="p-2 bg-purple-200 rounded-lg">
 									<XCircle className="h-5 w-5 text-purple-700" />
 								</div>
@@ -360,7 +362,7 @@ export default function QuestionsPage() {
 									{stats.closed}
 								</div>
 								<p className="text-sm text-purple-700 mt-1">
-									Completed questions
+									{t("questions.stats.closedSub")}
 								</p>
 							</CardContent>
 						</Card>
@@ -370,7 +372,7 @@ export default function QuestionsPage() {
 				{/* Actions */}
 				<div className="flex justify-between items-center mb-6">
 					<h3 className="text-xl font-semibold text-slate-800">
-						Your Questions
+						{t("questions.sections.yourQuestions")}
 					</h3>
 					<div className="flex gap-3">
 						<Button
@@ -382,24 +384,23 @@ export default function QuestionsPage() {
 									loadingQuestions ? "animate-spin" : ""
 								}`}
 							/>
-							Refresh
+							{t("common.refresh")}
 						</Button>
 
 						<Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
 							<DialogTrigger asChild>
 								<Button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium shadow-lg">
 									<Plus className="h-4 w-4 mr-2" />
-									Ask Question
+									{t("questions.actions.askQuestion")}
 								</Button>
 							</DialogTrigger>
 							<DialogContent className="bg-white">
 								<DialogHeader>
 									<DialogTitle className="text-slate-800">
-										Ask a Question
+										{t("questions.create.title")}
 									</DialogTitle>
 									<DialogDescription className="text-blue-600">
-										Submit your question and get an answer from the church
-										administration.
+										{t("questions.create.desc")}
 									</DialogDescription>
 								</DialogHeader>
 								<div className="space-y-4">
@@ -408,7 +409,7 @@ export default function QuestionsPage() {
 											htmlFor="create_question"
 											className="text-sm font-medium text-blue-700"
 										>
-											Your Question
+											{t("questions.form.yourQuestion")}
 										</Label>
 										<Textarea
 											id="create_question"
@@ -417,12 +418,12 @@ export default function QuestionsPage() {
 												setCreateForm({ question: e.target.value })
 											}
 											className="mt-1 bg-transparent border-2 border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-blue-900 placeholder:text-blue-500 rounded-lg"
-											placeholder="Type your question here..."
+											placeholder={t("questions.form.placeholder")}
 											rows={4}
 											maxLength={1000}
 										/>
 										<p className="text-xs text-blue-500 mt-1">
-											{createForm.question.length}/1000 characters
+											{t("questions.form.charCount", {count: createForm.question.length, max: 1000})}
 										</p>
 									</div>
 								</div>
@@ -431,13 +432,13 @@ export default function QuestionsPage() {
 										onClick={() => setCreateDialogOpen(false)}
 										className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 border-0 font-medium shadow-sm"
 									>
-										Cancel
+										{t("common.cancel")}
 									</Button>
 									<Button
 										onClick={handleCreateQuestion}
 										className="bg-amber-600 hover:bg-amber-700 text-white"
 									>
-										Submit Question
+										{t("questions.create.submit")}
 									</Button>
 								</DialogFooter>
 							</DialogContent>
@@ -456,17 +457,17 @@ export default function QuestionsPage() {
 							<CardContent className="flex flex-col items-center justify-center py-16">
 								<HelpCircle className="h-16 w-16 text-blue-400 mb-4" />
 								<h3 className="text-xl font-semibold text-slate-700 mb-2">
-									No questions yet
+									{t("questions.empty.title")}
 								</h3>
 								<p className="text-blue-600 text-center mb-6">
-									you can ask any question for ቀሲስ, so ቀሲስ will answer it.
+									{t("questions.empty.desc")}
 								</p>
 								<Button
 									onClick={() => setCreateDialogOpen(true)}
 									className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white"
 								>
 									<Plus className="h-4 w-4 mr-2" />
-									Ask Your First Question
+									{t("questions.empty.askFirst")}
 								</Button>
 							</CardContent>
 						</Card>
@@ -518,22 +519,21 @@ export default function QuestionsPage() {
 													<AlertDialogContent className="bg-white">
 														<AlertDialogHeader>
 															<AlertDialogTitle className="text-red-600">
-																Delete Question
+																{t("questions.delete.title")}
 															</AlertDialogTitle>
 															<AlertDialogDescription className="text-slate-600">
-																Are you sure you want to delete this question?
-																This action cannot be undone.
+																{t("questions.delete.desc")}
 															</AlertDialogDescription>
 														</AlertDialogHeader>
 														<AlertDialogFooter>
 															<AlertDialogCancel className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 border-0 font-medium shadow-sm">
-																Cancel
+																{t("common.cancel")}
 															</AlertDialogCancel>
 															<AlertDialogAction
 																onClick={() => handleDeleteQuestion(question)}
 																className="bg-red-600 hover:bg-red-700"
 															>
-																Delete
+																{t("questions.delete.confirm")}
 															</AlertDialogAction>
 														</AlertDialogFooter>
 													</AlertDialogContent>
@@ -547,7 +547,7 @@ export default function QuestionsPage() {
 										<div>
 											<h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
 												<MessageCircle className="h-4 w-4 text-amber-600" />
-												Your Question:
+												{t("questions.view.yourQuestion")}
 											</h4>
 											<div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border-2 border-blue-200 shadow-sm">
 												<p className="text-blue-900 leading-relaxed">
@@ -560,7 +560,7 @@ export default function QuestionsPage() {
 											<div>
 												<h4 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
 													<CheckCircle className="h-4 w-4 text-green-600" />
-													Response:
+												{t("questions.view.response")}
 												</h4>
 												<div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border-2 border-green-200 shadow-sm">
 													<p className="text-green-900 leading-relaxed">
@@ -588,8 +588,7 @@ export default function QuestionsPage() {
 				{questions && questions.length > 0 && (
 					<div className="mt-4 text-center">
 						<p className="text-sm text-slate-600 mb-2">
-							Page {currentPage} of {totalPages} | Total Questions Available:{" "}
-							{totalPages * pageSize} | Current Page: {questions.length} items
+							{t("questions.pagination.pageOf", {current: currentPage, total: totalPages})} | {t("questions.pagination.totalAvailable", {total: totalPages * pageSize})} | {t("questions.pagination.currentCount", {count: questions.length})}
 						</p>
 					</div>
 				)}
@@ -641,11 +640,11 @@ export default function QuestionsPage() {
 				<Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
 					<DialogContent className="bg-white">
 						<DialogHeader>
-							<DialogTitle className="text-slate-800">
-								Edit Question
-							</DialogTitle>
+								<DialogTitle className="text-slate-800">
+									{t("questions.edit.title")}
+								</DialogTitle>
 							<DialogDescription className="text-blue-600">
-								Update your question. You can only edit pending questions.
+								{t("questions.edit.desc")}
 							</DialogDescription>
 						</DialogHeader>
 						<div className="space-y-4">
@@ -654,19 +653,19 @@ export default function QuestionsPage() {
 									htmlFor="edit_question"
 									className="text-sm font-medium text-blue-700"
 								>
-									Your Question
+									{t("questions.form.yourQuestion")}
 								</Label>
 								<Textarea
 									id="edit_question"
 									value={editForm.question}
 									onChange={(e) => setEditForm({ question: e.target.value })}
 									className="mt-1 bg-transparent border-2 border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-blue-900 placeholder:text-blue-500 rounded-lg"
-									placeholder="Type your question here..."
+									placeholder={t("questions.form.placeholder")}
 									rows={4}
 									maxLength={1000}
 								/>
 								<p className="text-xs text-blue-500 mt-1">
-									{editForm.question.length}/1000 characters
+									{t("questions.form.charCount", {count: editForm.question.length, max: 1000})}
 								</p>
 							</div>
 						</div>
@@ -675,13 +674,13 @@ export default function QuestionsPage() {
 								onClick={() => setEditDialogOpen(false)}
 								className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 border-0 font-medium shadow-sm"
 							>
-								Cancel
+								{t("common.cancel")}
 							</Button>
 							<Button
 								onClick={handleEditQuestion}
 								className="bg-blue-600 hover:bg-blue-700 text-white"
 							>
-								Update Question
+								{t("questions.edit.update")}
 							</Button>
 						</DialogFooter>
 					</DialogContent>

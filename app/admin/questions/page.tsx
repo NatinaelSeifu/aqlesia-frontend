@@ -58,9 +58,11 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { questionsService, type Question, type QuestionStats, QuestionStatus, type QuestionsListResponse } from "@/lib/questions"
 import { format } from "date-fns"
+import { useTranslations } from "next-intl"
 
 export default function AdminQuestionsPage() {
   const { user, loading } = useAuth()
+  const t = useTranslations()
   
   // State management
   const [questions, setQuestions] = useState<Question[]>([])
@@ -133,7 +135,7 @@ export default function AdminQuestionsPage() {
       }
     } catch (err) {
       console.error('Failed to load questions:', err)
-      setError(err instanceof Error ? err.message : "Failed to load questions")
+      setError(err instanceof Error ? err.message : t("adminQuestions.errors.loadFailed"))
     } finally {
       setLoadingQuestions(false)
     }
@@ -159,7 +161,7 @@ export default function AdminQuestionsPage() {
       await questionsService.respondToQuestion(selectedQuestion.id, { 
         admin_response: responseForm.admin_response 
       })
-      setSuccess("Response submitted successfully!")
+      setSuccess(t("adminQuestions.toasts.responseSuccess"))
       setTimeout(() => setSuccess(""), 3000)
       setResponseDialogOpen(false)
       setSelectedQuestion(null)
@@ -167,7 +169,7 @@ export default function AdminQuestionsPage() {
       loadData()
       loadStats()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to submit response")
+      setError(err instanceof Error ? err.message : t("adminQuestions.errors.responseFailed"))
     }
   }
 
@@ -175,12 +177,12 @@ export default function AdminQuestionsPage() {
     try {
       setError("")
       await questionsService.updateQuestionStatus(questionId, status)
-      setSuccess("Question status updated successfully!")
+      setSuccess(t("adminQuestions.toasts.statusUpdateSuccess"))
       setTimeout(() => setSuccess(""), 3000)
       loadData()
       loadStats()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update status")
+      setError(err instanceof Error ? err.message : t("adminQuestions.errors.updateStatusFailed"))
     }
   }
 
@@ -188,12 +190,12 @@ export default function AdminQuestionsPage() {
     try {
       setError("")
       await questionsService.deleteQuestion(question.id)
-      setSuccess("Question deleted successfully!")
+      setSuccess(t("adminQuestions.toasts.deleteSuccess"))
       setTimeout(() => setSuccess(""), 3000)
       loadData()
       loadStats()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete question")
+      setError(err instanceof Error ? err.message : t("adminQuestions.errors.deleteFailed"))
     }
   }
 
@@ -214,28 +216,28 @@ export default function AdminQuestionsPage() {
         return (
           <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-amber-300">
             <Clock className="h-3 w-3 mr-1" />
-            Pending
+            {t("adminQuestions.status.pending")}
           </Badge>
         )
       case QuestionStatus.ANSWERED:
         return (
           <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Answered
+            {t("adminQuestions.status.answered")}
           </Badge>
         )
       case QuestionStatus.CLOSED:
         return (
           <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-300">
             <XCircle className="h-3 w-3 mr-1" />
-            Closed
+            {t("adminQuestions.status.closed")}
           </Badge>
         )
       case QuestionStatus.CANCELLED:
         return (
           <Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
             <XCircle className="h-3 w-3 mr-1" />
-            Cancelled
+            {t("adminQuestions.status.cancelled")}
           </Badge>
         )
       default:
@@ -267,22 +269,22 @@ export default function AdminQuestionsPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full mb-4">
             <HelpCircle className="h-8 w-8 text-white" />
           </div>
-          <h2 className="text-3xl font-bold mb-2 text-slate-800">Questions Management</h2>
-          <p className="text-blue-600 max-w-2xl mx-auto">Manage and respond to user questions from the church community</p>
+          <h2 className="text-3xl font-bold mb-2 text-slate-800">{t("adminQuestions.header.title")}</h2>
+          <p className="text-blue-600 max-w-2xl mx-auto">{t("adminQuestions.header.subtitle")}</p>
         </div>
 
         {/* Alerts */}
         {error && (
           <Alert variant="destructive" className="mb-6 border-red-200 bg-red-50">
             <AlertDescription className="text-red-700">
-              <strong>Error:</strong> {error}
+              <strong>{t("adminQuestions.alerts.errorTitle")} </strong> {error}
               <details className="mt-2 text-sm">
-                <summary className="cursor-pointer">Debug Info</summary>
+                <summary className="cursor-pointer">{t("adminQuestions.alerts.debugInfo")}</summary>
                 <div className="mt-1 p-2 bg-red-100 rounded text-xs font-mono">
-                  Current User Role: {user?.role || 'undefined'}<br/>
-                  Loading State: {loadingQuestions ? 'true' : 'false'}<br/>
-                  Questions Count: {questions.length}<br/>
-                  API URL: {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/v1'}
+                  {t("adminQuestions.alerts.userRole", { role: user?.role || 'undefined' })}<br/>
+                  {t("adminQuestions.alerts.loadingState", { state: loadingQuestions ? 'true' : 'false' })}<br/>
+                  {t("adminQuestions.alerts.questionsCount", { count: questions.length })}<br/>
+                  {t("adminQuestions.alerts.apiUrl", { url: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/v1' })}
                 </div>
               </details>
             </AlertDescription>
@@ -300,66 +302,66 @@ export default function AdminQuestionsPage() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
             <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-base font-semibold text-blue-900">Total</CardTitle>
+                <CardTitle className="text-base font-semibold text-blue-900">{t("adminQuestions.stats.totalTitle")}</CardTitle>
                 <div className="p-2 bg-blue-200 rounded-lg">
                   <HelpCircle className="h-5 w-5 text-blue-700" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-blue-900">{stats.total}</div>
-                <p className="text-sm text-blue-700 mt-1">All questions</p>
+                <p className="text-sm text-blue-700 mt-1">{t("adminQuestions.stats.totalSub")}</p>
               </CardContent>
             </Card>
             
             <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-base font-semibold text-amber-900">Pending</CardTitle>
+                <CardTitle className="text-base font-semibold text-amber-900">{t("adminQuestions.stats.pendingTitle")}</CardTitle>
                 <div className="p-2 bg-amber-200 rounded-lg">
                   <Clock className="h-5 w-5 text-amber-700" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-amber-900">{stats.pending}</div>
-                <p className="text-sm text-amber-700 mt-1">Awaiting response</p>
+                <p className="text-sm text-amber-700 mt-1">{t("adminQuestions.stats.pendingSub")}</p>
               </CardContent>
             </Card>
             
             <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-base font-semibold text-green-900">Answered</CardTitle>
+                <CardTitle className="text-base font-semibold text-green-900">{t("adminQuestions.stats.answeredTitle")}</CardTitle>
                 <div className="p-2 bg-green-200 rounded-lg">
                   <CheckCircle className="h-5 w-5 text-green-700" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-green-900">{stats.answered}</div>
-                <p className="text-sm text-green-700 mt-1">Responses given</p>
+                <p className="text-sm text-green-700 mt-1">{t("adminQuestions.stats.answeredSub")}</p>
               </CardContent>
             </Card>
             
             <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-base font-semibold text-purple-900">Closed</CardTitle>
+                <CardTitle className="text-base font-semibold text-purple-900">{t("adminQuestions.stats.closedTitle")}</CardTitle>
                 <div className="p-2 bg-purple-200 rounded-lg">
                   <XCircle className="h-5 w-5 text-purple-700" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-purple-900">{stats.closed}</div>
-                <p className="text-sm text-purple-700 mt-1">Completed</p>
+                <p className="text-sm text-purple-700 mt-1">{t("adminQuestions.stats.closedSub")}</p>
               </CardContent>
             </Card>
 
             <Card className="border-red-200 bg-gradient-to-br from-red-50 to-red-100 shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-base font-semibold text-red-900">Cancelled</CardTitle>
+                <CardTitle className="text-base font-semibold text-red-900">{t("adminQuestions.stats.cancelledTitle")}</CardTitle>
                 <div className="p-2 bg-red-200 rounded-lg">
                   <XCircle className="h-5 w-5 text-red-700" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-red-900">{stats.cancelled}</div>
-                <p className="text-sm text-red-700 mt-1">Cancelled</p>
+                <p className="text-sm text-red-700 mt-1">{t("adminQuestions.stats.cancelledSub")}</p>
               </CardContent>
             </Card>
           </div>
@@ -371,32 +373,32 @@ export default function AdminQuestionsPage() {
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-end">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
                 <div>
-                  <Label htmlFor="status_filter" className="text-sm font-medium text-blue-700">Filter by Status</Label>
+                  <Label htmlFor="status_filter" className="text-sm font-medium text-blue-700">{t("adminQuestions.filters.filterByStatus")}</Label>
                   <Select value={statusFilter} onValueChange={(value) => {
                     setStatusFilter(value as QuestionStatus | "all")
                     setCurrentPage(1)
                   }}>
                     <SelectTrigger className="mt-1 !bg-transparent border-2 border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-black">
-                      <SelectValue placeholder="All statuses" />
+                      <SelectValue placeholder={t("adminQuestions.filters.allStatuses")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All statuses</SelectItem>
-                      <SelectItem value={QuestionStatus.PENDING}>Pending</SelectItem>
-                      <SelectItem value={QuestionStatus.ANSWERED}>Answered</SelectItem>
-                      <SelectItem value={QuestionStatus.CLOSED}>Closed</SelectItem>
-                      <SelectItem value={QuestionStatus.CANCELLED}>Cancelled</SelectItem>
+                      <SelectItem value="all">{t("adminQuestions.filters.allStatuses")}</SelectItem>
+                      <SelectItem value={QuestionStatus.PENDING}>{t("adminQuestions.status.pending")}</SelectItem>
+                      <SelectItem value={QuestionStatus.ANSWERED}>{t("adminQuestions.status.answered")}</SelectItem>
+                      <SelectItem value={QuestionStatus.CLOSED}>{t("adminQuestions.status.closed")}</SelectItem>
+                      <SelectItem value={QuestionStatus.CANCELLED}>{t("adminQuestions.status.cancelled")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="search" className="text-sm font-medium text-blue-700">Search</Label>
+                  <Label htmlFor="search" className="text-sm font-medium text-blue-700">{t("adminQuestions.filters.searchLabel")}</Label>
                   <div className="relative mt-1">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-blue-400" />
                     <Input
                       id="search"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Search questions..."
+                      placeholder={t("adminQuestions.filters.searchPlaceholder")}
                       className="pl-10 !bg-transparent border-2 border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-black placeholder:text-gray-500"
                     />
                   </div>
@@ -409,7 +411,7 @@ export default function AdminQuestionsPage() {
                   className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-lg"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${loadingQuestions ? 'animate-spin' : ''}`} />
-                  Refresh
+                  {t("common.refresh")}
                 </Button>
               </div>
             </div>
@@ -424,9 +426,9 @@ export default function AdminQuestionsPage() {
                 <MessageSquare className="h-5 w-5 text-purple-600" />
               </div>
               <div>
-                <CardTitle className="text-slate-800 text-xl">User Questions</CardTitle>
+                <CardTitle className="text-slate-800 text-xl">{t("adminQuestions.card.title")}</CardTitle>
                 <CardDescription className="text-blue-600">
-                  Manage and respond to questions from church members
+                  {t("adminQuestions.card.desc")}
                 </CardDescription>
               </div>
             </div>
@@ -435,19 +437,19 @@ export default function AdminQuestionsPage() {
             {loadingQuestions ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-                <p className="text-blue-600">Loading questions...</p>
-                <p className="text-sm text-blue-500 mt-2">User: {user?.name} ({user?.role})</p>
+                <p className="text-blue-600">{t("adminQuestions.table.loading")}</p>
+                <p className="text-sm text-blue-500 mt-2">{t("adminQuestions.table.loadingUserLine", { name: user?.name || '-', role: user?.role || '-' })}</p>
               </div>
             ) : (
               <div className="bg-white border border-blue-200 rounded-lg overflow-hidden shadow-sm">
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-blue-50 border-b border-blue-200">
-                      <TableHead className="font-semibold text-slate-800">User</TableHead>
-                      <TableHead className="font-semibold text-slate-800">Question</TableHead>
-                      <TableHead className="font-semibold text-slate-800">Status</TableHead>
-                      <TableHead className="font-semibold text-slate-800">Date</TableHead>
-                      <TableHead className="text-right font-semibold text-slate-800">Actions</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminQuestions.table.user")}</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminQuestions.table.question")}</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminQuestions.table.status")}</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminQuestions.table.date")}</TableHead>
+                      <TableHead className="text-right font-semibold text-slate-800">{t("adminQuestions.table.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -455,15 +457,15 @@ export default function AdminQuestionsPage() {
                       <TableRow>
                         <TableCell colSpan={5} className="text-center py-12">
                           <HelpCircle className="h-12 w-12 text-blue-400 mx-auto mb-4" />
-                          <div className="text-slate-600 text-lg font-medium mb-2">No questions found</div>
-                          <div className="text-blue-400">Try adjusting your filters</div>
+                          <div className="text-slate-600 text-lg font-medium mb-2">{t("adminQuestions.table.emptyTitle")}</div>
+                          <div className="text-blue-400">{t("adminQuestions.table.emptyDesc")}</div>
                         </TableCell>
                       </TableRow>
                     ) : (
                       questions.map((question) => (
                         <TableRow key={question.id} className="hover:bg-blue-50 transition-colors border-b border-blue-100">
                           <TableCell className="font-medium text-slate-800">
-                            {question.user_name || 'Unknown User'}
+                            {question.user_name || t("adminQuestions.table.unknownUser")}
                           </TableCell>
                           <TableCell className="text-slate-700">
                             <div className="max-w-md">
@@ -486,7 +488,7 @@ export default function AdminQuestionsPage() {
                                 size="sm"
                                 onClick={() => openViewDialog(question)}
                                 className="h-8 w-8 p-0 text-blue-600 hover:bg-blue-100 hover:text-blue-700 rounded-md"
-                                title="View Question"
+                                title={t("adminQuestions.actions.viewQuestion")}
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
@@ -497,7 +499,7 @@ export default function AdminQuestionsPage() {
                                   size="sm"
                                   onClick={() => openResponseDialog(question)}
                                   className="h-8 w-8 p-0 text-green-600 hover:bg-green-100 hover:text-green-700 rounded-md"
-                                  title="Respond to Question"
+                                  title={t("adminQuestions.actions.respond")}
                                 >
                                   <Reply className="h-4 w-4" />
                                 </Button>
@@ -509,7 +511,7 @@ export default function AdminQuestionsPage() {
                                   size="sm"
                                   onClick={() => handleUpdateQuestionStatus(question.id, QuestionStatus.CLOSED)}
                                   className="h-8 w-8 p-0 text-purple-600 hover:bg-purple-100 hover:text-purple-700 rounded-md"
-                                  title="Close Question"
+                                  title={t("adminQuestions.actions.close")}
                                 >
                                   <XCircle className="h-4 w-4" />
                                 </Button>
@@ -521,25 +523,25 @@ export default function AdminQuestionsPage() {
                                     variant="ghost"
                                     size="sm"
                                     className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
-                                    title="Delete Question"
+                                    title={t("adminQuestions.actions.delete")}
                                   >
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent className="bg-white">
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle className="text-red-600">Delete Question</AlertDialogTitle>
+                                    <AlertDialogTitle className="text-red-600">{t("adminQuestions.delete.title")}</AlertDialogTitle>
                                     <AlertDialogDescription className="text-slate-600">
-                                      Are you sure you want to delete this question? This action cannot be undone.
+                                      {t("adminQuestions.delete.desc")}
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel className="border-blue-300 text-blue-700 hover:bg-blue-50">Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel className="border-blue-300 text-blue-700 hover:bg-blue-50">{t("common.cancel")}</AlertDialogCancel>
                                     <AlertDialogAction 
                                       onClick={() => handleDeleteQuestion(question)}
                                       className="bg-red-600 hover:bg-red-700"
                                     >
-                                      Delete
+                                      {t("adminQuestions.delete.confirm")}
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -558,7 +560,7 @@ export default function AdminQuestionsPage() {
             {questions.length > 0 && (
               <div className="flex items-center justify-between mt-6">
                 <div className="text-sm text-slate-600">
-                  Showing {((currentPage - 1) * 20) + 1} to {Math.min(currentPage * 20, totalQuestions)} of {totalQuestions} questions
+                  {t("adminQuestions.pagination.showing", {from: ((currentPage - 1) * 20) + 1, to: Math.min(currentPage * 20, totalQuestions), total: totalQuestions})}
                 </div>
                 <div className="flex items-center space-x-2">
                   <Button
@@ -569,10 +571,10 @@ export default function AdminQuestionsPage() {
                     className="border-blue-300 text-blue-700 hover:bg-blue-50"
                   >
                     <ChevronLeft className="h-4 w-4" />
-                    Previous
+                    {t("adminQuestions.pagination.previous")}
                   </Button>
                   <span className="text-sm text-slate-600">
-                    Page {currentPage}
+                    {t("adminQuestions.pagination.page", { page: currentPage })}
                   </span>
                   <Button
                     variant="outline"
@@ -581,7 +583,7 @@ export default function AdminQuestionsPage() {
                     disabled={!hasMore}
                     className="border-blue-300 text-blue-700 hover:bg-blue-50"
                   >
-                    Next
+                    {t("adminQuestions.pagination.next")}
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
@@ -594,9 +596,9 @@ export default function AdminQuestionsPage() {
         <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
           <DialogContent className="bg-white max-w-2xl">
             <DialogHeader>
-              <DialogTitle className="text-slate-800">Question Details</DialogTitle>
+              <DialogTitle className="text-slate-800">{t("adminQuestions.view.title")}</DialogTitle>
               <DialogDescription className="text-blue-600">
-                View question from {selectedQuestion?.user_name || 'Unknown User'}
+                {t("adminQuestions.view.desc", { name: selectedQuestion?.user_name || t("adminQuestions.table.unknownUser") })}
               </DialogDescription>
             </DialogHeader>
             {selectedQuestion && (
@@ -608,7 +610,7 @@ export default function AdminQuestionsPage() {
                       {format(new Date(selectedQuestion.created_at), 'MMM d, yyyy')}
                     </span>
                   </div>
-                  <h4 className="font-medium text-slate-800 mb-2">Question:</h4>
+                  <h4 className="font-medium text-slate-800 mb-2">{t("adminQuestions.view.questionLabel")}</h4>
                   <p className="text-slate-700 bg-blue-50 p-3 rounded-lg border border-blue-200">
                     {selectedQuestion.question}
                   </p>
@@ -618,7 +620,7 @@ export default function AdminQuestionsPage() {
                   <div>
                     <h4 className="font-medium text-slate-800 mb-2 flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
-                      Response:
+                      {t("adminQuestions.view.responseLabel")}:
                     </h4>
                     <p className="text-slate-700 bg-green-50 p-3 rounded-lg border border-green-200">
                       {selectedQuestion.admin_response}
@@ -634,14 +636,14 @@ export default function AdminQuestionsPage() {
             )}
             <DialogFooter>
               <Button variant="ghost" onClick={() => setViewDialogOpen(false)} className="border-blue-300 text-blue-700 hover:bg-blue-50">
-                Close
+                {t("adminQuestions.view.close")}
               </Button>
               {selectedQuestion && selectedQuestion.status === QuestionStatus.PENDING && (
                 <Button onClick={() => {
                   setViewDialogOpen(false)
                   openResponseDialog(selectedQuestion)
                 }} className="bg-green-600 hover:bg-green-700 text-white">
-                  Respond to Question
+                  {t("adminQuestions.actions.respond")}
                 </Button>
               )}
             </DialogFooter>
@@ -652,42 +654,42 @@ export default function AdminQuestionsPage() {
         <Dialog open={responseDialogOpen} onOpenChange={setResponseDialogOpen}>
           <DialogContent className="bg-white max-w-2xl">
             <DialogHeader>
-              <DialogTitle className="text-slate-800">Respond to Question</DialogTitle>
+              <DialogTitle className="text-slate-800">{t("adminQuestions.respond.title")}</DialogTitle>
               <DialogDescription className="text-blue-600">
-                Provide a response to {selectedQuestion?.user_name || 'the user'}'s question
+                {t("adminQuestions.respond.desc", { name: selectedQuestion?.user_name || t("adminQuestions.respond.theUser") })}
               </DialogDescription>
             </DialogHeader>
             {selectedQuestion && (
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium text-slate-800 mb-2">Question:</h4>
+                  <h4 className="font-medium text-slate-800 mb-2">{t("adminQuestions.view.questionLabel")}</h4>
                   <p className="text-slate-700 bg-blue-50 p-3 rounded-lg border border-blue-200">
                     {selectedQuestion.question}
                   </p>
                 </div>
                 <div>
-                  <Label htmlFor="admin_response" className="text-sm font-medium text-blue-700">Your Response</Label>
+                  <Label htmlFor="admin_response" className="text-sm font-medium text-blue-700">{t("adminQuestions.form.yourResponse")}</Label>
                   <Textarea
                     id="admin_response"
                     value={responseForm.admin_response}
                     onChange={(e) => setResponseForm({ admin_response: e.target.value })}
                     className="mt-1 bg-white border-2 border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-black placeholder:text-blue-400 rounded-lg"
-                    placeholder="Type your response here..."
+                    placeholder={t("adminQuestions.form.responsePlaceholder")}
                     rows={4}
                     maxLength={2000}
                   />
                   <p className="text-xs text-blue-500 mt-1">
-                    {responseForm.admin_response.length}/2000 characters
+                    {t("adminQuestions.form.charCount", { count: responseForm.admin_response.length, max: 2000 })}
                   </p>
                 </div>
               </div>
             )}
             <DialogFooter>
               <Button variant="ghost" onClick={() => setResponseDialogOpen(false)} className="border-blue-300 text-blue-700 hover:bg-blue-50">
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button onClick={handleRespondToQuestion} className="bg-green-600 hover:bg-green-700 text-white">
-                Submit Response
+                {t("adminQuestions.respond.submit")}
               </Button>
             </DialogFooter>
           </DialogContent>

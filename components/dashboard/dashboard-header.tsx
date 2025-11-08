@@ -222,7 +222,7 @@ export function DashboardHeader() {
                       onClick={() => setUserDropdownOpen(false)}
                     >
                       <User className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm">Profile Settings</span>
+<span className="text-sm">{t("profile.nav.profileSettings")}</span>
                     </Link>
                     
                     <div className="border-t border-gray-100 my-1"></div>

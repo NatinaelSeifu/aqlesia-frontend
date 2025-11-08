@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { authService } from "@/lib/auth"
 import type { ChangePasswordRequest } from "@/lib/auth"
 import { Eye, EyeOff, Lock, AlertCircle, CheckCircle, Shield, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface ChangePasswordProps {
   onSuccess?: () => void
@@ -17,6 +18,7 @@ interface ChangePasswordProps {
 }
 
 export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
+  const t = useTranslations()
   const [formData, setFormData] = useState<ChangePasswordRequest>({
     current_password: "",
     new_password: "",
@@ -36,27 +38,27 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
 
     // Validation
     if (!formData.current_password.trim()) {
-      setError("የአሁኑ ፓስወርድ ዘሩሪ")
+      setError(t("profile.changePassword.errors.currentRequired"))
       return
     }
 
     if (!formData.new_password.trim()) {
-      setError("አዲስ ፓስወርድ ዘሩሪ")
+      setError(t("profile.changePassword.errors.newRequired"))
       return
     }
 
     if (formData.new_password.length < 6) {
-      setError("New password must be at least 6 characters long")
+      setError(t("profile.changePassword.errors.minLength"))
       return
     }
 
     if (formData.new_password !== confirmPassword) {
-      setError("New passwords do not match")
+      setError(t("profile.changePassword.errors.mismatch"))
       return
     }
 
     if (formData.current_password === formData.new_password) {
-      setError("New password must be different from current password")
+      setError(t("profile.changePassword.errors.sameAsCurrent"))
       return
     }
 
@@ -73,7 +75,7 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
         onSuccess?.()
       }, 2000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to change password")
+      setError(err instanceof Error ? err.message : t("profile.changePassword.errors.changeFailed"))
     } finally {
       setLoading(false)
     }
@@ -98,8 +100,8 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">Password Changed Successfully!</h3>
-              <p className="text-gray-600 mt-2">Your password has been updated securely.</p>
+              <h3 className="text-xl font-semibold text-gray-900">{t("profile.changePassword.successTitle")}</h3>
+              <p className="text-gray-600 mt-2">{t("profile.changePassword.successDesc")}</p>
             </div>
           </div>
         </CardContent>
@@ -115,9 +117,9 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
             <Shield className="h-5 w-5 text-red-600" />
           </div>
           <div>
-            <CardTitle className="text-gray-900 text-xl">Change Password</CardTitle>
+            <CardTitle className="text-gray-900 text-xl">{t("profile.changePassword.title")}</CardTitle>
             <CardDescription className="text-gray-600">
-              Update your password to keep your account secure
+              {t("profile.changePassword.subtitle")}
             </CardDescription>
           </div>
         </div>
@@ -133,14 +135,14 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
 
           {/* Current Password */}
           <div className="space-y-2">
-            <Label htmlFor="current_password">የአሁኑ ፓስወርድ</Label>
+            <Label htmlFor="current_password">{t("profile.changePassword.current")}</Label>
             <div className="relative">
               <Input
                 id="current_password"
                 type={showCurrentPassword ? "text" : "password"}
                 value={formData.current_password}
                 onChange={(e) => handleChange("current_password", e.target.value)}
-                placeholder="የአሁኑ ፓስወርድ ያስገቡ"
+                placeholder={t("profile.changePassword.currentPlaceholder")}
                 className="pr-10 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500"
                 required
               />
@@ -162,14 +164,14 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
 
           {/* New Password */}
           <div className="space-y-2">
-            <Label htmlFor="new_password">አዲስ ፓስወርድ</Label>
+            <Label htmlFor="new_password">{t("profile.changePassword.new")}</Label>
             <div className="relative">
               <Input
                 id="new_password"
                 type={showNewPassword ? "text" : "password"}
                 value={formData.new_password}
                 onChange={(e) => handleChange("new_password", e.target.value)}
-                placeholder="አዲስ ፓስወርድ ያስገቡ"
+                placeholder={t("profile.changePassword.newPlaceholder")}
                 className="pr-10 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500"
                 required
               />
@@ -188,20 +190,20 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
               </Button>
             </div>
             <p className="text-xs text-gray-500">
-              Password must be at least 6 characters long
+              {t("profile.changePassword.minLengthHint")}
             </p>
           </div>
 
           {/* Confirm New Password */}
           <div className="space-y-2">
-            <Label htmlFor="confirm_password">አዲስ ፓስወርድ ያረጋግጡ</Label>
+            <Label htmlFor="confirm_password">{t("profile.changePassword.confirm")}</Label>
             <div className="relative">
               <Input
                 id="confirm_password"
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                placeholder="አዲስ ፓስወርድ ያረጋግጡ"
+                placeholder={t("profile.changePassword.confirmPlaceholder")}
                 className="pr-10 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500"
                 required
               />
@@ -231,7 +233,7 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
                 className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-medium shadow-lg"
               >
                 <X className="h-4 w-4 mr-2" />
-                Cancel
+                {t("common.cancel")}
               </Button>
             )}
             <Button 
@@ -242,12 +244,12 @@ export function ChangePassword({ onSuccess, onCancel }: ChangePasswordProps) {
               {loading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Changing...
+                  {t("profile.changePassword.changing")}
                 </>
               ) : (
                 <>
                   <Lock className="h-4 w-4 mr-2" />
-                  Change Password
+                  {t("profile.actions.changePassword")}
                 </>
               )}
             </Button>

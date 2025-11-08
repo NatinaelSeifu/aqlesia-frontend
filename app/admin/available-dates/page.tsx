@@ -54,9 +54,11 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Alert, AlertDescription } from "../../../components/ui/alert"
 import { availableDatesService, type AvailableDate, type CreateAvailableDate, type UpdateAvailableDate } from "../../../lib/available-dates"
 import { format, addDays, startOfWeek, endOfWeek } from "date-fns"
+import { useTranslations } from "next-intl"
 
 export default function AdminAvailableDatesPage() {
   const { user, loading } = useAuth()
+  const t = useTranslations()
   
   // State management
   const [availableDates, setAvailableDates] = useState<AvailableDate[]>([])
@@ -115,12 +117,12 @@ export default function AdminAvailableDatesPage() {
       setAvailableDates(dates)
     } catch (err) {
       console.error('Failed to load available dates:', err)
-      const errorMessage = err instanceof Error ? err.message : "Failed to load available dates"
+      const errorMessage = err instanceof Error ? err.message : t("adminAvailableDates.errors.loadFailed")
       
       if (errorMessage.includes('403') || errorMessage.includes('Forbidden')) {
-        setPageError(`Access denied: You don't have permission to view available dates. Role: ${user?.role}`)
+        setPageError(t("adminAvailableDates.errors.accessDenied", { role: user?.role || '' }))
       } else {
-        setPageError(`Failed to load available dates: ${errorMessage}`)
+        setPageError(t("adminAvailableDates.errors.loadDatesWithMessage", { message: errorMessage }))
         setError(errorMessage)
       }
     } finally {
@@ -132,7 +134,7 @@ export default function AdminAvailableDatesPage() {
     try {
       setError("")
       await availableDatesService.createAvailableDate(createForm)
-      setSuccess("Available date created successfully!")
+      setSuccess(t("adminAvailableDates.toasts.createSuccess"))
       setTimeout(() => setSuccess(""), 3000)
       setCreateDialogOpen(false)
       setCreateForm({
@@ -142,7 +144,7 @@ export default function AdminAvailableDatesPage() {
       })
       loadAvailableDates()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create available date")
+      setError(err instanceof Error ? err.message : t("adminAvailableDates.errors.createFailed"))
     }
   }
 
@@ -153,14 +155,14 @@ export default function AdminAvailableDatesPage() {
       setError("")
       const dateStr = format(new Date(selectedDate.slot_date), 'yyyy-MM-dd')
       await availableDatesService.updateAvailableDate(dateStr, editForm)
-      setSuccess("Available date updated successfully!")
+      setSuccess(t("adminAvailableDates.toasts.updateSuccess"))
       setTimeout(() => setSuccess(""), 3000)
       setEditDialogOpen(false)
       setSelectedDate(null)
       setEditForm({})
       loadAvailableDates()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update available date")
+      setError(err instanceof Error ? err.message : t("adminAvailableDates.errors.updateFailed"))
     }
   }
 
@@ -169,11 +171,11 @@ export default function AdminAvailableDatesPage() {
       setError("")
       const dateStr = format(new Date(date.slot_date), 'yyyy-MM-dd')
       await availableDatesService.deleteAvailableDate(dateStr)
-      setSuccess("Available date deleted successfully!")
+      setSuccess(t("adminAvailableDates.toasts.deleteSuccess"))
       setTimeout(() => setSuccess(""), 3000)
       loadAvailableDates()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete available date")
+      setError(err instanceof Error ? err.message : t("adminAvailableDates.errors.deleteFailed"))
     }
   }
 
@@ -191,7 +193,7 @@ export default function AdminAvailableDatesPage() {
       return (
         <Badge className="bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-300">
           <EyeOff className="h-3 w-3 mr-1" />
-          Inactive
+          {t("adminAvailableDates.status.inactive")}
         </Badge>
       )
     }
@@ -200,7 +202,7 @@ export default function AdminAvailableDatesPage() {
       return (
         <Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300">
           <XCircle className="h-3 w-3 mr-1" />
-          Full
+          {t("adminAvailableDates.status.full")}
         </Badge>
       )
     }
@@ -208,7 +210,7 @@ export default function AdminAvailableDatesPage() {
     return (
       <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300">
         <CheckCircle2 className="h-3 w-3 mr-1" />
-        Available
+        {t("adminAvailableDates.status.available")}
       </Badge>
     )
   }
@@ -227,11 +229,11 @@ export default function AdminAvailableDatesPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Page Error</h1>
+          <h1 className="text-2xl font-bold text-red-600 mb-4">{t("adminAvailableDates.errors.pageTitle")}</h1>
           <p className="text-gray-600 mb-4">{pageError}</p>
-          <p className="text-sm text-gray-500">User Role: {user?.role}</p>
+          <p className="text-sm text-gray-500">{t("adminAvailableDates.errors.userRole", { role: user?.role || '' })}</p>
           <Button onClick={() => window.location.reload()} className="mt-4">
-            Reload Page
+            {t("adminAvailableDates.errors.reloadPage")}
           </Button>
         </div>
       </div>
@@ -248,8 +250,8 @@ export default function AdminAvailableDatesPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-4">
             <Calendar className="h-8 w-8 text-white" />
           </div>
-          <h2 className="text-3xl font-bold mb-2 text-slate-800">Available Dates Management</h2>
-          <p className="text-blue-600 max-w-2xl mx-auto">Manage appointment availability dates and capacity for the church scheduling system</p>
+          <h2 className="text-3xl font-bold mb-2 text-slate-800">{t("adminAvailableDates.header.title")}</h2>
+          <p className="text-blue-600 max-w-2xl mx-auto">{t("adminAvailableDates.header.subtitle")}</p>
         </div>
 
         {/* Alerts */}
@@ -269,20 +271,20 @@ export default function AdminAvailableDatesPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-blue-900">Total Dates</CardTitle>
+              <CardTitle className="text-base font-semibold text-blue-900">{t("adminAvailableDates.stats.totalDatesTitle")}</CardTitle>
               <div className="p-2 bg-blue-200 rounded-lg">
                 <Calendar className="h-5 w-5 text-blue-700" />
               </div>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-blue-900">{availableDates.length}</div>
-              <p className="text-sm text-blue-700 mt-1">Available appointment dates</p>
+              <p className="text-sm text-blue-700 mt-1">{t("adminAvailableDates.stats.totalDatesSub")}</p>
             </CardContent>
           </Card>
           
           <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-green-900">Active Dates</CardTitle>
+              <CardTitle className="text-base font-semibold text-green-900">{t("adminAvailableDates.stats.activeDatesTitle")}</CardTitle>
               <div className="p-2 bg-green-200 rounded-lg">
                 <CheckCircle2 className="h-5 w-5 text-green-700" />
               </div>
@@ -291,13 +293,13 @@ export default function AdminAvailableDatesPage() {
               <div className="text-3xl font-bold text-green-900">
                 {availableDates.filter(d => d.is_active).length}
               </div>
-              <p className="text-sm text-green-700 mt-1">Currently active</p>
+              <p className="text-sm text-green-700 mt-1">{t("adminAvailableDates.stats.activeDatesSub")}</p>
             </CardContent>
           </Card>
           
           <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-amber-900">Total Capacity</CardTitle>
+              <CardTitle className="text-base font-semibold text-amber-900">{t("adminAvailableDates.stats.totalCapacityTitle")}</CardTitle>
               <div className="p-2 bg-amber-200 rounded-lg">
                 <Users className="h-5 w-5 text-amber-700" />
               </div>
@@ -306,13 +308,13 @@ export default function AdminAvailableDatesPage() {
               <div className="text-3xl font-bold text-amber-900">
                 {availableDates.reduce((sum, d) => sum + (d.is_active ? d.max_capacity : 0), 0)}
               </div>
-              <p className="text-sm text-amber-700 mt-1">Total appointment slots</p>
+              <p className="text-sm text-amber-700 mt-1">{t("adminAvailableDates.stats.totalCapacitySub")}</p>
             </CardContent>
           </Card>
           
           <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-base font-semibold text-purple-900">Booked</CardTitle>
+              <CardTitle className="text-base font-semibold text-purple-900">{t("adminAvailableDates.stats.bookedTitle")}</CardTitle>
               <div className="p-2 bg-purple-200 rounded-lg">
                 <Clock className="h-5 w-5 text-purple-700" />
               </div>
@@ -321,7 +323,7 @@ export default function AdminAvailableDatesPage() {
               <div className="text-3xl font-bold text-purple-900">
                 {availableDates.reduce((sum, d) => sum + d.current_bookings, 0)}
               </div>
-              <p className="text-sm text-purple-700 mt-1">Currently booked slots</p>
+              <p className="text-sm text-purple-700 mt-1">{t("adminAvailableDates.stats.bookedSub")}</p>
             </CardContent>
           </Card>
         </div>
@@ -332,7 +334,7 @@ export default function AdminAvailableDatesPage() {
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-end">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
                 <div>
-                  <Label htmlFor="start_date" className="text-sm font-medium text-blue-700">Start Date</Label>
+                  <Label htmlFor="start_date" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.filters.startDate")}</Label>
                   <Input
                     id="start_date"
                     type="date"
@@ -348,7 +350,7 @@ export default function AdminAvailableDatesPage() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="end_date" className="text-sm font-medium text-blue-700">End Date</Label>
+                  <Label htmlFor="end_date" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.filters.endDate")}</Label>
                   <Input
                     id="end_date"
                     type="date"
@@ -373,7 +375,7 @@ export default function AdminAvailableDatesPage() {
                     onCheckedChange={setIncludeInactive}
                   />
                   <Label htmlFor="include_inactive" className="text-sm font-medium text-blue-700">
-                    Include Inactive
+                    {t("adminAvailableDates.filters.includeInactive")}
                   </Label>
                 </div>
                 
@@ -382,26 +384,26 @@ export default function AdminAvailableDatesPage() {
                   className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-lg"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${loadingDates ? 'animate-spin' : ''}`} />
-                  Refresh
+                  {t("common.refresh")}
                 </Button>
                 
                 <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
                   <DialogTrigger asChild>
                     <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium shadow-lg">
                       <Plus className="h-4 w-4 mr-2" />
-                      Add Date
+                      {t("adminAvailableDates.actions.addDate")}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="bg-white">
                     <DialogHeader>
-                      <DialogTitle className="text-slate-800">Create Available Date</DialogTitle>
+                      <DialogTitle className="text-slate-800">{t("adminAvailableDates.create.title")}</DialogTitle>
                       <DialogDescription className="text-blue-600">
-                        Add a new date for appointment booking.
+                        {t("adminAvailableDates.create.desc")}
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="create_date" className="text-sm font-medium text-blue-700">Date</Label>
+                        <Label htmlFor="create_date" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.form.date")}</Label>
                         <Input
                           id="create_date"
                           type="date"
@@ -418,7 +420,7 @@ export default function AdminAvailableDatesPage() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="create_capacity" className="text-sm font-medium text-blue-700">Max Capacity</Label>
+                        <Label htmlFor="create_capacity" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.form.maxCapacity")}</Label>
                         <Input
                           id="create_capacity"
                           type="number"
@@ -442,16 +444,16 @@ export default function AdminAvailableDatesPage() {
                           onCheckedChange={(checked) => setCreateForm(prev => ({ ...prev, is_active: checked }))}
                         />
                         <Label htmlFor="create_active" className="text-sm font-medium text-blue-700">
-                          Active immediately
+                          {t("adminAvailableDates.form.activeImmediately")}
                         </Label>
                       </div>
                     </div>
                     <DialogFooter>
                       <Button variant="ghost" onClick={() => setCreateDialogOpen(false)} className="bg-white text-blue-700 hover:bg-blue-50 border-2 border-blue-300 rounded-lg">
-                        Cancel
+                        {t("common.cancel")}
                       </Button>
                       <Button onClick={handleCreateDate} className="bg-green-600 hover:bg-green-700 text-white">
-                        Create Date
+                        {t("adminAvailableDates.create.confirm")}
                       </Button>
                     </DialogFooter>
                   </DialogContent>
@@ -469,9 +471,9 @@ export default function AdminAvailableDatesPage() {
                 <Calendar className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <CardTitle className="text-slate-800 text-xl">Available Appointment Dates</CardTitle>
+                <CardTitle className="text-slate-800 text-xl">{t("adminAvailableDates.card.title")}</CardTitle>
                 <CardDescription className="text-blue-600">
-                  Manage appointment availability and capacity
+                  {t("adminAvailableDates.card.desc")}
                 </CardDescription>
               </div>
             </div>
@@ -486,12 +488,12 @@ export default function AdminAvailableDatesPage() {
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-blue-50 border-b border-blue-200">
-                      <TableHead className="font-semibold text-slate-800">Date</TableHead>
-                      <TableHead className="font-semibold text-slate-800">Max Capacity</TableHead>
-                      <TableHead className="font-semibold text-slate-800">Current Bookings</TableHead>
-                      <TableHead className="font-semibold text-slate-800">Available Spots</TableHead>
-                      <TableHead className="font-semibold text-slate-800">Status</TableHead>
-                      <TableHead className="text-right font-semibold text-slate-800">Actions</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminAvailableDates.table.date")}</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminAvailableDates.table.maxCapacity")}</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminAvailableDates.table.currentBookings")}</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminAvailableDates.table.availableSpots")}</TableHead>
+                      <TableHead className="font-semibold text-slate-800">{t("adminAvailableDates.table.status")}</TableHead>
+                      <TableHead className="text-right font-semibold text-slate-800">{t("adminAvailableDates.table.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -499,8 +501,8 @@ export default function AdminAvailableDatesPage() {
                       <TableRow>
                         <TableCell colSpan={6} className="text-center py-12">
                           <Calendar className="h-12 w-12 text-blue-400 mx-auto mb-4" />
-                          <div className="text-slate-600 text-lg font-medium mb-2">No available dates found</div>
-                          <div className="text-blue-400">Try adjusting your date range or filters</div>
+                          <div className="text-slate-600 text-lg font-medium mb-2">{t("adminAvailableDates.table.emptyTitle")}</div>
+                          <div className="text-blue-400">{t("adminAvailableDates.table.emptyDesc")}</div>
                         </TableCell>
                       </TableRow>
                     ) : (
@@ -522,7 +524,7 @@ export default function AdminAvailableDatesPage() {
                                 size="sm"
                                 onClick={() => openEditDialog(date)}
                                 className="h-8 w-8 p-0 text-blue-600 hover:bg-blue-100 hover:text-blue-700 rounded-md"
-                                title="Edit Date"
+                                title={t("adminAvailableDates.actions.editDate")}
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
@@ -533,30 +535,30 @@ export default function AdminAvailableDatesPage() {
                                     variant="ghost"
                                     size="sm"
                                     className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-md"
-                                    title="Delete Date"
+                                    title={t("adminAvailableDates.actions.deleteDate")}
                                   >
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent className="bg-white">
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle className="text-red-600">Delete Available Date</AlertDialogTitle>
+                                    <AlertDialogTitle className="text-red-600">{t("adminAvailableDates.delete.title")}</AlertDialogTitle>
                                     <AlertDialogDescription className="text-slate-600">
-                                      Are you sure you want to delete this available date? This action cannot be undone.
+                                      {t("adminAvailableDates.delete.desc")}
                                       {date.current_bookings > 0 && (
                                         <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded">
-                                          <strong className="text-amber-800">Warning:</strong> This date has {date.current_bookings} active booking(s).
+                                          <strong className="text-amber-800">{t("adminAvailableDates.delete.warningLabel")}</strong> {t("adminAvailableDates.delete.warningBody", { count: date.current_bookings })}
                                         </div>
                                       )}
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel className="border-blue-300 text-blue-700 hover:bg-blue-50">Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel className="border-blue-300 text-blue-700 hover:bg-blue-50">{t("common.cancel")}</AlertDialogCancel>
                                     <AlertDialogAction 
                                       onClick={() => handleDeleteDate(date)}
                                       className="bg-red-600 hover:bg-red-700"
                                     >
-                                      Delete
+                                      {t("adminAvailableDates.delete.confirm")}
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -577,14 +579,14 @@ export default function AdminAvailableDatesPage() {
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent className="bg-white">
             <DialogHeader>
-              <DialogTitle className="text-slate-800">Edit Available Date</DialogTitle>
+              <DialogTitle className="text-slate-800">{t("adminAvailableDates.edit.title")}</DialogTitle>
               <DialogDescription className="text-blue-600">
-                Update the capacity or status for {selectedDate && format(new Date(selectedDate.slot_date), 'MMM d, yyyy')}.
+                {t("adminAvailableDates.edit.desc", { date: selectedDate ? format(new Date(selectedDate.slot_date), 'MMM d, yyyy') : '' })}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="edit_capacity" className="text-sm font-medium text-blue-700">Max Capacity</Label>
+                <Label htmlFor="edit_capacity" className="text-sm font-medium text-blue-700">{t("adminAvailableDates.form.maxCapacity")}</Label>
                 <Input
                   id="edit_capacity"
                   type="number"
@@ -602,7 +604,7 @@ export default function AdminAvailableDatesPage() {
                 />
                 {selectedDate && editForm.max_capacity && editForm.max_capacity < selectedDate.current_bookings && (
                   <p className="text-sm text-red-600 mt-1">
-                    Cannot set capacity below current bookings ({selectedDate.current_bookings})
+                    {t("adminAvailableDates.edit.capacityBelowCurrent", { count: selectedDate.current_bookings })}
                   </p>
                 )}
               </div>
@@ -613,20 +615,20 @@ export default function AdminAvailableDatesPage() {
                   onCheckedChange={(checked) => setEditForm(prev => ({ ...prev, is_active: checked }))}
                 />
                 <Label htmlFor="edit_active" className="text-sm font-medium text-blue-700">
-                  Active for booking
+                  {t("adminAvailableDates.form.activeForBooking")}
                 </Label>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditDialogOpen(false)} className="border-blue-300 text-blue-700 hover:bg-blue-50">
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button 
                 onClick={handleEditDate} 
                 className="bg-blue-600 hover:bg-blue-700 text-white"
                 disabled={selectedDate && editForm.max_capacity && editForm.max_capacity < selectedDate.current_bookings}
               >
-                Update Date
+                {t("adminAvailableDates.edit.confirm")}
               </Button>
             </DialogFooter>
           </DialogContent>
