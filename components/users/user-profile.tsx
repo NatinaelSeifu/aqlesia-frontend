@@ -305,6 +305,7 @@ export function UserProfile() {
                   <SelectItem value="single">{t("profile.marriage.single")}</SelectItem>
                   <SelectItem value="married">{t("profile.marriage.married")}</SelectItem>
                   <SelectItem value="divorced">{t("profile.marriage.divorced")}</SelectItem>
+                  <SelectItem value="engaged">{t("profile.marriage.engaged")}</SelectItem>
                   <SelectItem value="widowed">{t("profile.marriage.widowed")}</SelectItem>
                 </SelectContent>
               </Select>
