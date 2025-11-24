@@ -11,6 +11,8 @@ import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker'
 import { cn } from '@/lib/utils'
 import { Button, buttonVariants } from '@/components/ui/button'
 
+const CalendarCtx = React.createContext<{ useEthiopian?: boolean; locale?: string }>({})
+
 function Calendar({
   className,
   classNames,
@@ -19,14 +21,24 @@ function Calendar({
   buttonVariant = 'ghost',
   formatters,
   components,
+  useEthiopian,
+  ethiopicLocale,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant']
+  useEthiopian?: boolean
+  ethiopicLocale?: string
 }) {
   const defaultClassNames = getDefaultClassNames()
 
+  const providerValue = React.useMemo(
+    () => ({ useEthiopian, locale: ethiopicLocale }),
+    [useEthiopian, ethiopicLocale],
+  )
+
   return (
-    <DayPicker
+    <CalendarCtx.Provider value={providerValue}>
+      <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
         'bg-background group/calendar p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
@@ -38,6 +50,16 @@ function Calendar({
       formatters={{
         formatMonthDropdown: (date) =>
           date.toLocaleString('default', { month: 'short' }),
+        formatCaption: (month, options) => {
+          if (useEthiopian) {
+            try {
+              const loc = (ethiopicLocale && ethiopicLocale.length ? ethiopicLocale : 'am-ET') + '-u-ca-ethiopic'
+              const out = new Intl.DateTimeFormat(loc, { month: 'long', year: 'numeric' }).format(month)
+              return out.replace(/\bERA1\b/g, 'EC')
+            } catch {}
+          }
+          return options?.locale?.localize?.month(month.getMonth(), { width: 'long' }) || month.toLocaleString('default', { month: 'long', year: 'numeric' })
+        },
         ...formatters,
       }}
       classNames={{
@@ -169,6 +191,7 @@ function Calendar({
       }}
       {...props}
     />
+    </CalendarCtx.Provider>
   )
 }
 
@@ -184,6 +207,18 @@ function CalendarDayButton({
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
+
+  const { useEthiopian, locale } = React.useContext(CalendarCtx)
+
+  const label = React.useMemo(() => {
+    if (!useEthiopian) return undefined
+    try {
+      const loc = (locale && locale.length ? locale : 'am-ET') + '-u-ca-ethiopic'
+      return new Intl.DateTimeFormat(loc, { day: 'numeric' }).format(day.date)
+    } catch {
+      return String(day.date.getDate())
+    }
+  }, [useEthiopian, locale, day.date])
 
   return (
     <Button
@@ -206,7 +241,10 @@ function CalendarDayButton({
         className,
       )}
       {...props}
-    />
+    >
+      {/* Replace default label when Ethiopic requested */}
+      {label ? <span>{label}</span> : props.children}
+    </Button>
   )
 }
 

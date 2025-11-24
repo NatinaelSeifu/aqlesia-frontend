@@ -9,6 +9,7 @@ import { TelegramLink } from "@/components/auth/telegram-link";
 import { useAuth } from "@/hooks/use-auth";
 import { Shield, Users } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 type AuthView = "login" | "register" | "forgot-password" | "telegram-link";
 
@@ -16,6 +17,7 @@ export default function HomePage() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { user, loading } = useAuth();
+	const t = useTranslations();
 
 	// Get initial view from URL or default to login
 	const getInitialView = (): AuthView => {
@@ -119,7 +121,7 @@ export default function HomePage() {
 				<div className="absolute inset-0">
 					<Image
 						src="/virgin-marry.png"
-						alt="Virgin Mary - Ethiopian Orthodox"
+						alt={t("home.maryAlt")}
 						fill
 						className="object-cover"
 						priority

@@ -14,10 +14,12 @@ import { UsersList } from "@/components/users/users-list"
 import { PERMISSIONS } from "@/lib/permissions"
 import { ArrowLeft, Shield } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 export default function AdminPage() {
   const { user, loading } = useAuth()
   const [activeTab, setActiveTab] = useState("overview")
+  const t = useTranslations()
 
   useEffect(() => {
     if (!loading && !user) {
@@ -54,8 +56,8 @@ export default function AdminPage() {
           <ProtectedRoute requiredPermission={PERMISSIONS.ADMIN_SETTINGS}>
             <div className="text-center py-12">
               <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">{"System Settings"}</h3>
-              <p className="text-muted-foreground">{"System configuration options will be available here."}</p>
+              <h3 className="text-lg font-semibold mb-2">{t("admin.settings.title")}</h3>
+              <p className="text-muted-foreground">{t("admin.settings.desc")}</p>
             </div>
           </ProtectedRoute>
         )
@@ -77,12 +79,12 @@ export default function AdminPage() {
               <Link href="/dashboard">
                 <Button variant="outline" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  {"Back to Dashboard"}
+                  {t("common.backToDashboard")}
                 </Button>
               </Link>
               <div className="flex items-center space-x-2">
                 <Shield className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">{"Admin Panel"}</h1>
+                <h1 className="text-2xl font-bold text-primary">{t("common.adminPanel")}</h1>
               </div>
             </div>
 
@@ -102,11 +104,11 @@ export default function AdminPage() {
           <div className="container mx-auto px-4">
             <div className="flex space-x-8 overflow-x-auto">
               {[
-                { id: "overview", label: "Overview" },
-                { id: "appointments", label: "Appointments" },
-                { id: "users", label: "Users" },
-                { id: "reports", label: "Reports" },
-                { id: "settings", label: "Settings" },
+                { id: "overview", label: t("admin.tabs.overview") },
+                { id: "appointments", label: t("admin.tabs.appointments") },
+                { id: "users", label: t("admin.tabs.users") },
+                { id: "reports", label: t("admin.tabs.reports") },
+                { id: "settings", label: t("admin.tabs.settings") },
               ].map((tab) => (
                 <button
                   key={tab.id}

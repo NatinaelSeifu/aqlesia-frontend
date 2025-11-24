@@ -1,0 +1,822 @@
+{
+  "common": {
+    "appName": "Aqlesia",
+    "logout": "Logout",
+    "toggleMenu": "Toggle Menu",
+    "closeMenu": "Close menu",
+    "backToDashboard": "Back to Dashboard",
+    "adminPanel": "Admin Panel",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
+    "reload": "Reload",
+    "cancel": "Cancel"
+  },
+  "nav": {
+    "aqlesia": "Aqlesia",
+    "manageUsers": "Manage Users",
+    "manageAppointments": "Manage Appointments",
+    "manageCommunion": "Manage Communion",
+    "availableDates": "Available Dates",
+    "questions": "Questions",
+    "profile": "Profile",
+    "appointments": "Appointments",
+    "communion": "Communion",
+    "users": "Users"
+  },
+  "admin": {
+    "tabs": {
+      "overview": "Overview",
+      "appointments": "Appointments",
+      "users": "Users",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "settings": {
+      "title": "System Settings",
+      "desc": "System configuration options will be available here."
+    }
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back",
+    "signInToAccount": "Sign in to your Aqlesia account",
+    "phone": "Phone",
+    "phonePlaceholder": "+251912345678 or 0912345678",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPasswordQ": "Forgot password?",
+    "signingIn": "Signing in...",
+    "signIn": "Sign In",
+    "dontHaveAccount": "Don't have an account? ",
+    "signUp": "Sign up",
+    "createAccount": "Create Account",
+    "joinSystem": "Join Aqlesia church management system",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account? ",
+    "registrationSuccessTitle": "Registration Successful!",
+    "registrationSuccessBody": "Your account has been created. You can now sign in.",
+    "forgot": {
+      "title": "Forgot Password",
+      "desc": "Enter your phone number to reset your password",
+      "phonePlaceholder": "+251912345678 or 0912345678",
+      "telegramRequiredTitle": "Telegram connection required",
+      "telegramInfo": "The reset link is sent via Telegram. If you haven't connected your Telegram account, use the Telegram Link button below to connect.",
+      "telegramLink": "Telegram Link",
+      "sendOtp": "Send OTP Code",
+      "sendingOtp": "Sending OTP...",
+      "backToLogin": "Back to Login"
+    }
+  },
+  "dashboard": {
+    "welcomeBackName": "Welcome back, {name}",
+    "adminMessage": "Manage your church operations and community engagement",
+    "managerMessage": "Coordinate appointments and support church community",
+    "userMessage": "Manage your appointments and communion requests",
+    "stats": {
+      "admin": {
+        "totalUsers": "Total Users",
+        "registeredUsers": "Registered users",
+        "pendingAppointments": "Pending Appointments",
+        "awaitingReview": "Awaiting review",
+        "communionRequests": "Communion Requests",
+        "pendingApproval": "Pending approval",
+        "totalAppointments": "Total Appointments",
+        "allTime": "All time"
+      },
+      "manager": {
+        "myAppointments": "My Appointments",
+        "totalBookings": "Total bookings",
+        "pendingReviews": "Pending Reviews",
+        "awaitingAction": "Awaiting action",
+        "managedUsers": "Managed Users",
+        "underManagement": "Under management",
+        "completed": "Completed",
+        "finishedSessions": "Finished sessions"
+      },
+      "user": {
+        "myAppointments": "My Appointments",
+        "pendingCount": "{count} pending",
+        "communionRequests": "Communion Requests",
+        "approvedCount": "{count} approved",
+        "completedSessions": "Completed Sessions",
+        "finishedAppointments": "Finished appointments",
+        "profileStatus": "Profile Status",
+        "active": "Active",
+        "accountVerified": "Account verified"
+      }
+    }
+  },
+  "home": {
+    "maryAlt": "Virgin Mary - Ethiopian Orthodox"
+  },
+  "appointments": {
+    "title": "Appointments",
+    "subtitle": "Book new appointments and manage your scheduled ones",
+    "tabs": {
+      "bookNew": "Book New",
+      "book": "Book",
+      "myAppointments": "My Appointments",
+      "myApps": "My Apps"
+    },
+    "schedule": {
+      "title": "Schedule New Appointment",
+      "desc": "Choose an available date and book your appointment"
+    },
+    "list": {
+      "title": "Your Scheduled Appointments",
+      "desc": "View and track the status of your appointments",
+      "allTitle": "All Appointments",
+      "myTitle": "My Appointments",
+      "loading": "Loading appointments...",
+      "bookedOn": "Booked on",
+      "view": "View",
+      "detailsTitle": "Appointment Details",
+      "empty": {
+        "title": "No Appointments Found",
+        "descAll": "No appointments have been scheduled yet. When patients book appointments, they'll appear here.",
+        "descMine": "You haven't scheduled any appointments yet. Click the 'Book New' tab to schedule your first appointment."
+      },
+      "errors": {
+        "loadFailed": "Failed to load appointments",
+        "cancelFailed": "Failed to cancel appointment",
+        "completeFailed": "Failed to complete appointment",
+        "noPermissionAll": "You don't have permission to view all appointments."
+      }
+    },
+    "form": {
+      "header": {
+        "title": "Book New Appointment",
+        "desc": "Schedule your appointment. Available on Monday, Wednesday, and Friday only."
+      },
+      "info": "Appointments are available on Monday, Wednesday, and Friday. Maximum 10 appointments per day. You can only have one active appointment at a time.",
+      "selectDateLabel": "Select Appointment Date",
+      "loadingDates": "Loading dates...",
+      "noDates": "No available dates found.",
+      "available": "Available",
+      "full": "Full",
+      "notesLabel": "Notes (Optional)",
+      "notesPlaceholder": "Add any additional notes about your appointment...",
+      "booking": "Booking...",
+      "bookAppointment": "Book Appointment",
+      "success": {
+        "title": "Appointment Booked!",
+        "body": "Your appointment has been successfully scheduled.",
+        "date": "Date",
+        "notes": "Notes",
+        "redirect": "Redirecting to your appointments..."
+      },
+      "errors": {
+        "loadDates": "Failed to load available dates. Please try again.",
+        "selectDate": "Please select an appointment date",
+        "createFailed": "Failed to create appointment",
+        "alreadyActive": "You already have an active appointment. Please cancel your existing appointment before booking a new one.",
+        "dateFull": "This date is no longer available. Please select a different date.",
+        "invalidDate": "Please select a valid appointment date."
+      }
+    }
+  },
+  "communion": {
+    "header": {
+      "title": "Holy Communion",
+      "subtitle": "Submit your communion date request and track your spiritual journey"
+    },
+    "request": {
+      "title": "Submit Request",
+      "desc": "Select your communion date",
+      "lastTakenLabel": "When did you last take communion?",
+      "onlyPastInfo": "Only past communion dates allowed",
+      "selectedPrefix": "Selected:",
+      "submitting": "Submitting...",
+      "submitButton": "Submit Request",
+      "clearSelection": "Clear Selection"
+    },
+    "history": {
+      "title": "Request History",
+      "desc": "Track your submissions",
+      "loading": "Loading history...",
+      "emptyTitle": "No requests yet",
+      "emptyDesc": "Your submissions will appear here",
+      "requested": "Requested",
+      "requests": "requests",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "byName": "by {name}"
+    },
+    "status": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pending": "Pending"
+    },
+    "toasts": {
+      "loadErrorTitle": "Failed to load communions",
+      "tryAgain": "Please try again later",
+      "dateRequiredTitle": "Date required",
+      "dateRequiredDesc": "Please select a communion date",
+      "submitSuccessTitle": "Communion request submitted",
+      "submitSuccessDesc": "Your communion request has been submitted successfully and is pending approval.",
+      "submitErrorTitle": "Submission failed"
+    },
+    "pagination": {
+      "pageOf": "Page {current} of {total}"
+    }
+  },
+  "adminUsers": {
+    "header": {
+      "title": "User Management",
+      "desc": "Manage and monitor all registered users in the system"
+    },
+    "stats": {
+      "totalTitle": "Total Users",
+      "totalSub": "Total registered users",
+      "currentPageTitle": "Current Page",
+      "adminsOnPage": "Admins on this page",
+      "pageOfTitle": "Page {current} of {total}",
+      "usersOnPage": "Users on this page"
+    },
+    "card": {
+      "title": "All Users",
+      "desc": "Complete list of system users with management actions"
+    },
+    "searchPlaceholder": "Search users by name, phone, or role...",
+    "table": {
+      "name": "First Name",
+      "lastName": "K Name",
+      "phone": "Phone",
+      "role": "Role",
+      "jobTitle": "Job Title",
+      "partnerName": "Partner Name",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "user": "User"
+    },
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "inactive": "Inactive",
+      "unknown": "Unknown"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "approveUser": "Approve User",
+      "rejectUser": "Reject User",
+      "deleteUser": "Delete User"
+    },
+    "view": {
+      "title": "User Details",
+      "desc": "Detailed information about the user",
+      "telegram": "Telegram"
+    },
+    "empty": {
+      "title": "No users found",
+      "desc": "Try adjusting your search criteria"
+    },
+    "delete": {
+      "title": "Delete User",
+      "desc": "Are you sure you want to delete this user? This action cannot be undone.",
+      "userLabel": "User:",
+      "phoneLabel": "Phone:",
+      "confirm": "Delete User"
+    },
+    "pagination": {
+      "showing": "Showing {from} to {to} of {total} users",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "errors": {
+      "noPermission": "You don't have permission to view this page.",
+      "managePermission": "You need admin or manager privileges to manage users.",
+      "loadUsers": "Failed to load users",
+      "deleteUser": "Failed to delete user",
+      "updateStatus": "Failed to update user status"
+    }
+  },
+  "questions": {
+    "header": {
+      "title": "My Questions",
+      "subtitle": "Ask questions and get answers from the church administration"
+    },
+    "stats": {
+      "totalTitle": "Total Questions",
+      "totalSub": "Questions submitted",
+      "pendingTitle": "Pending",
+      "pendingSub": "Awaiting response",
+      "answeredTitle": "Answered",
+      "answeredSub": "Received responses",
+      "closedTitle": "Closed",
+      "closedSub": "Completed questions"
+    },
+    "sections": {
+      "yourQuestions": "Your Questions"
+    },
+    "actions": {
+      "askQuestion": "Ask Question"
+    },
+    "create": {
+      "title": "Ask a Question",
+      "desc": "Submit your question and get an answer from the church administration.",
+      "submit": "Submit Question"
+    },
+    "edit": {
+      "title": "Edit Question",
+      "desc": "Update your question. You can only edit pending questions.",
+      "update": "Update Question"
+    },
+    "form": {
+      "yourQuestion": "Your Question",
+      "placeholder": "Type your question here...",
+      "charCount": "{count}/{max} characters"
+    },
+    "empty": {
+      "title": "No questions yet",
+      "desc": "You can ask any question for the priest, and they will answer it.",
+      "askFirst": "Ask Your First Question"
+    },
+    "view": {
+      "yourQuestion": "Your Question:",
+      "response": "Response:"
+    },
+    "delete": {
+      "title": "Delete Question",
+      "desc": "Are you sure you want to delete this question? This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "status": {
+      "pending": "Pending",
+      "answered": "Answered",
+      "closed": "Closed",
+      "cancelled": "Cancelled"
+    },
+    "errors": {
+      "loadFailed": "Failed to load questions",
+      "submitFailed": "Failed to submit question",
+      "updateFailed": "Failed to update question",
+      "deleteFailed": "Failed to delete question"
+    },
+    "validation": {
+      "enterQuestion": "Please enter a question"
+    },
+    "toasts": {
+      "createSuccess": "Question submitted successfully!",
+      "updateSuccess": "Question updated successfully!",
+      "deleteSuccess": "Question deleted successfully!"
+    },
+    "pagination": {
+      "pageOf": "Page {current} of {total}",
+      "totalAvailable": "Total: {total}",
+      "currentCount": "Current page: {count} items"
+    }
+  },
+  "adminAppointments": {
+    "header": {
+      "title": "Appointment Management",
+      "subtitle": "Review, manage, and track all appointment requests from church members"
+    },
+    "stats": {
+      "totalTitle": "Total Appointments",
+      "totalSub": "All appointments",
+      "pendingTitle": "Pending & Overdue",
+      "pendingLine": "{overdue} overdue, {pending} pending",
+      "completedTodayTitle": "Completed Today",
+      "completedTodaySub": "Completed today"
+    },
+    "searchPlaceholder": "Search appointments...",
+    "tabs": {
+      "pendingFull": "Pending Appointments ({count})",
+      "pendingShort": "Pending ({count})",
+      "allFull": "All Appointments ({count})",
+      "allShort": "All ({count})"
+    },
+    "sections": {
+      "pendingTitle": "Pending Appointments",
+      "allTitle": "All Appointments"
+    },
+    "table": {
+      "user": "User",
+      "phone": "Phone",
+      "date": "Date",
+      "status": "Status",
+      "bookedAt": "Booked At",
+      "actions": "Actions",
+      "loading": "Loading...",
+      "emptyTitle": "No appointments found",
+      "emptyDesc": "Try refreshing or check back later",
+      "unknownUser": "Unknown User",
+      "na": "N/A"
+    },
+    "status": {
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "overdue": "Overdue",
+      "pending": "Pending"
+    },
+    "tooltips": {
+      "complete": "Mark as Complete",
+      "cancel": "Cancel Appointment"
+    },
+    "dialog": {
+      "complete": {
+        "title": "Complete Appointment",
+        "desc": "Are you sure you want to mark this appointment as completed for {name}?",
+        "confirm": "Complete"
+      },
+      "cancel": {
+        "title": "Cancel Appointment",
+        "desc": "Are you sure you want to cancel this appointment for {name}?",
+        "confirm": "Cancel Appointment"
+      }
+    },
+    "toasts": {
+      "completeSuccessTitle": "Appointment completed",
+      "completeSuccessDesc": "The appointment has been marked as completed successfully.",
+      "completeErrorTitle": "Failed to complete appointment",
+      "cancelSuccessTitle": "Appointment cancelled",
+      "cancelSuccessDesc": "The appointment has been cancelled successfully.",
+      "cancelErrorTitle": "Failed to cancel appointment",
+      "loadAllErrorTitle": "Failed to load appointments",
+      "loadPendingErrorTitle": "Failed to load pending appointments"
+    },
+    "errors": {
+      "tryAgain": "Please try again later",
+      "accessDenied": "Access denied: You don't have permission to view appointments. Role: {role}",
+      "loadAll": "Failed to load appointments: {message}",
+      "pageTitle": "Page Error",
+      "userRole": "User Role: {role}",
+      "reloadPage": "Reload Page"
+    }
+  }
+,
+  "adminCommunion": {
+    "header": {
+      "title": "Communion Management",
+      "subtitle": "Review, approve, and manage all communion requests from church members",
+      "titleCard": "Communion Management - Card View",
+      "subtitleCard": "Manage communion requests with visual cards"
+    },
+    "stats": {
+      "totalTitle": "Total Requests",
+      "totalSub": "All communion requests",
+      "pendingTitle": "Pending Approval",
+      "pendingSub": "Awaiting approval",
+      "approvedTodayTitle": "Approved Today",
+      "approvedTodaySub": "Approved today"
+    },
+    "searchPlaceholder": "Search communion requests...",
+    "tabs": {
+      "pendingFull": "Pending Requests ({count})",
+      "pendingShort": "Pending ({count})",
+      "allFull": "All Requests ({count})",
+      "allShort": "All ({count})"
+    },
+    "sections": {
+      "pendingTitle": "Pending Communion Requests",
+      "allTitle": "All Communion Requests"
+    },
+    "table": {
+      "user": "User",
+      "phone": "Phone",
+      "date": "Date",
+      "status": "Status",
+      "requestedAt": "Requested At",
+      "actions": "Actions",
+      "loading": "Loading...",
+      "emptyTitle": "No communion requests found",
+      "emptyDesc": "Try refreshing or check back later",
+      "unknownUser": "Unknown User",
+      "na": "N/A"
+    },
+    "status": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pending": "Pending"
+    },
+    "tooltips": {
+      "approve": "Approve Request",
+      "reject": "Reject Request",
+      "delete": "Delete Request"
+    },
+    "dialog": {
+      "approve": {
+        "title": "Approve Communion Request",
+        "desc": "Are you sure you want to approve this communion request from {name}?",
+        "confirm": "Approve"
+      },
+      "reject": {
+        "title": "Reject Communion Request",
+        "desc": "Are you sure you want to reject this communion request from {name}?",
+        "confirm": "Reject"
+      },
+      "delete": {
+        "title": "Delete Communion Request",
+        "desc": "Are you sure you want to delete this communion request? This action cannot be undone.",
+        "confirm": "Delete"
+      }
+    },
+    "toasts": {
+      "statusApprovedTitle": "Communion request approved",
+      "statusApprovedDesc": "The communion request has been approved successfully.",
+      "statusRejectedTitle": "Communion request rejected",
+      "statusRejectedDesc": "The communion request has been rejected successfully.",
+      "failedApproveTitle": "Failed to approve request",
+      "failedRejectTitle": "Failed to reject request",
+      "deleteSuccessTitle": "Communion request deleted",
+      "deleteSuccessDesc": "The communion request has been deleted successfully.",
+      "deleteErrorTitle": "Failed to delete request",
+      "loadAllErrorTitle": "Failed to load communion requests",
+      "loadPendingErrorTitle": "Failed to load pending requests",
+      "tryAgain": "Please try again later"
+    },
+    "pagination": {
+      "showing": "Showing {from} to {to} of {total}",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {totalPages}"
+    },
+    "views": {
+      "tableView": "Table View",
+      "cardView": "Card View"
+    }
+  },
+  "adminAvailableDates": {
+    "header": {
+      "title": "Available Dates Management",
+      "subtitle": "Manage appointment availability dates and capacity for the church scheduling system"
+    },
+    "stats": {
+      "totalDatesTitle": "Total Dates",
+      "totalDatesSub": "Available appointment dates",
+      "activeDatesTitle": "Active Dates",
+      "activeDatesSub": "Currently active",
+      "totalCapacityTitle": "Total Capacity",
+      "totalCapacitySub": "Total appointment slots",
+      "bookedTitle": "Booked",
+      "bookedSub": "Currently booked slots"
+    },
+    "filters": {
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "includeInactive": "Include Inactive"
+    },
+    "actions": {
+      "addDate": "Add Date",
+      "editDate": "Edit Date",
+      "deleteDate": "Delete Date"
+    },
+    "create": {
+      "title": "Create Available Date",
+      "desc": "Add a new date for appointment booking.",
+      "confirm": "Create Date"
+    },
+    "edit": {
+      "title": "Edit Available Date",
+      "desc": "Update the capacity or status for {date}.",
+      "confirm": "Update Date",
+      "capacityBelowCurrent": "Cannot set capacity below current bookings ({count})"
+    },
+    "form": {
+      "date": "Date",
+      "maxCapacity": "Max Capacity",
+      "activeImmediately": "Active immediately",
+      "activeForBooking": "Active for booking"
+    },
+    "card": {
+      "title": "Available Appointment Dates",
+      "desc": "Manage appointment availability and capacity"
+    },
+    "table": {
+      "date": "Date",
+      "maxCapacity": "Max Capacity",
+      "currentBookings": "Current Bookings",
+      "availableSpots": "Available Spots",
+      "status": "Status",
+      "actions": "Actions",
+      "emptyTitle": "No available dates found",
+      "emptyDesc": "Try adjusting your date range or filters"
+    },
+    "status": {
+      "inactive": "Inactive",
+      "full": "Full",
+      "available": "Available"
+    },
+    "delete": {
+      "title": "Delete Available Date",
+      "desc": "Are you sure you want to delete this available date? This action cannot be undone.",
+      "warningLabel": "Warning:",
+      "warningBody": " This date has {count} active booking(s).",
+      "confirm": "Delete"
+    },
+    "toasts": {
+      "createSuccess": "Available date created successfully!",
+      "updateSuccess": "Available date updated successfully!",
+      "deleteSuccess": "Available date deleted successfully!"
+    },
+    "errors": {
+      "loadFailed": "Failed to load available dates",
+      "createFailed": "Failed to create available date",
+      "updateFailed": "Failed to update available date",
+      "deleteFailed": "Failed to delete available date",
+      "accessDenied": "Access denied: You don't have permission to view available dates. Role: {role}",
+      "loadDatesWithMessage": "Failed to load available dates: {message}",
+      "pageTitle": "Page Error",
+      "userRole": "User Role: {role}",
+      "reloadPage": "Reload Page"
+    }
+  },
+  "adminQuestions": {
+    "header": {
+      "title": "Questions Management",
+      "subtitle": "Manage and respond to user questions from the church community"
+    },
+    "alerts": {
+      "errorTitle": "Error:",
+      "debugInfo": "Debug Info",
+      "userRole": "Current User Role: {role}",
+      "loadingState": "Loading State: {state}",
+      "questionsCount": "Questions Count: {count}",
+      "apiUrl": "API URL: {url}"
+    },
+    "stats": {
+      "totalTitle": "Total",
+      "totalSub": "All questions",
+      "pendingTitle": "Pending",
+      "pendingSub": "Awaiting response",
+      "answeredTitle": "Answered",
+      "answeredSub": "Responses given",
+      "closedTitle": "Closed",
+      "closedSub": "Completed",
+      "cancelledTitle": "Cancelled",
+      "cancelledSub": "Cancelled"
+    },
+    "filters": {
+      "filterByStatus": "Filter by Status",
+      "allStatuses": "All statuses",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search questions..."
+    },
+    "card": {
+      "title": "User Questions",
+      "desc": "Manage and respond to questions from church members"
+    },
+    "table": {
+      "loading": "Loading questions...",
+      "loadingUserLine": "User: {name} ({role})",
+      "user": "User",
+      "question": "Question",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions",
+      "emptyTitle": "No questions found",
+      "emptyDesc": "Try adjusting your filters",
+      "unknownUser": "Unknown User"
+    },
+    "status": {
+      "pending": "Pending",
+      "answered": "Answered",
+      "closed": "Closed",
+      "cancelled": "Cancelled"
+    },
+    "actions": {
+      "viewQuestion": "View Question",
+      "respond": "Respond to Question",
+      "close": "Close Question",
+      "delete": "Delete Question"
+    },
+    "delete": {
+      "title": "Delete Question",
+      "desc": "Are you sure you want to delete this question? This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "pagination": {
+      "showing": "Showing {from} to {to} of {total} questions",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page}"
+    },
+    "view": {
+      "title": "Question Details",
+      "desc": "View question from {name}",
+      "questionLabel": "Question:",
+      "responseLabel": "Response",
+      "close": "Close"
+    },
+    "respond": {
+      "title": "Respond to Question",
+      "desc": "Provide a response to {name}'s question",
+      "theUser": "the user",
+      "submit": "Submit Response"
+    },
+    "form": {
+      "yourResponse": "Your Response",
+      "responsePlaceholder": "Type your response here...",
+      "charCount": "{count}/{max} characters"
+    },
+    "toasts": {
+      "responseSuccess": "Response submitted successfully!",
+      "statusUpdateSuccess": "Question status updated successfully!",
+      "deleteSuccess": "Question deleted successfully!"
+    },
+    "errors": {
+      "loadFailed": "Failed to load questions",
+      "responseFailed": "Failed to submit response",
+      "updateStatusFailed": "Failed to update status",
+      "deleteFailed": "Failed to delete question"
+    }
+  },
+  "profile": {
+    "header": {
+      "title": "Profile Settings",
+      "subtitle": "Update your personal information and account preferences"
+    },
+    "avatar": {
+      "helperText": "Click to upload a new profile picture"
+    },
+    "actions": {
+      "changePassword": "Change Password",
+      "add": "Add",
+      "updateProfile": "Update Profile",
+      "updating": "Updating..."
+    },
+    "card": {
+      "title": "Personal Information",
+      "desc": "Keep your profile information up to date and secure."
+    },
+    "sections": {
+      "basicInfo": "Basic Information",
+      "professionalInfo": "Professional Information",
+      "personalInfo": "Personal Information"
+    },
+    "form": {
+      "firstName": "First Name",
+      "lastName": "K Name",
+      "phone": "Phone",
+      "jobTitle": "Job Title",
+      "education": "Education",
+      "marriageStatus": "Marriage Status",
+      "partnerName": "Partner Name",
+      "childrenNames": "Children's Names"
+    },
+    "marriage": {
+      "single": "Single",
+      "married": "Married",
+      "divorced": "Divorced",
+      "engaged": "Engaged",
+      "widowed": "Widowed"
+    },
+    "placeholders": {
+      "firstName": "Enter first name",
+      "lastName": "Enter kiristina name",
+      "phone": "Enter phone number",
+      "jobTitle": "e.g. Software Engineer, Teacher, Doctor",
+      "education": "e.g. Bachelor's Degree, Master's Degree",
+      "currentStatus": "Current: {status}",
+      "selectMarriageStatus": "Select marriage status",
+      "partnerName": "Enter partner's name",
+      "childName": "Enter child name",
+      "addAnotherChild": "Add another child name"
+    },
+    "children": {
+      "current": "Current children ({count}):",
+      "clickToRemove": "Click to remove",
+      "alreadyExists": "This child name already exists"
+    },
+    "toasts": {
+      "updateSuccess": "Profile updated successfully!"
+    },
+    "validation": {
+      "nameRequired": "First name is required",
+      "lastnameRequired": "Last name is required",
+      "phoneRequired": "Phone is required"
+    },
+    "errors": {
+      "updateFailed": "Update failed"
+    },
+    "nav": {
+      "profileSettings": "Profile Settings"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "subtitle": "Update your password to keep your account secure",
+      "successAlert": "Password changed successfully! Your account is now more secure.",
+      "successTitle": "Password Changed Successfully!",
+      "successDesc": "Your password has been updated securely.",
+      "current": "Current Password",
+      "currentPlaceholder": "Enter current password",
+      "new": "New Password",
+      "newPlaceholder": "Enter new password",
+      "confirm": "Confirm New Password",
+      "confirmPlaceholder": "Confirm new password",
+      "minLengthHint": "Password must be at least 6 characters long",
+      "changing": "Changing...",
+      "errors": {
+        "currentRequired": "Current password is required",
+        "newRequired": "New password is required",
+        "minLength": "New password must be at least 6 characters long",
+        "mismatch": "New passwords do not match",
+        "sameAsCurrent": "New password must be different from current password",
+        "changeFailed": "Failed to change password"
+      }
+    }
+  }
+}

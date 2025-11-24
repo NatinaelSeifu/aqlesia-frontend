@@ -20,10 +20,12 @@ import { Communion, communionService } from "../../../../lib/communion"
 import { CommunionRequestCard } from "../../../../components/admin/communion-request-card"
 import { format } from "date-fns"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 export default function AdminCommunionCardsPage() {
   const { user, loading } = useAuth()
   const { toast } = useToast()
+  const t = useTranslations()
   
   // State management
   const [allCommunions, setAllCommunions] = useState<Communion[]>([])
@@ -117,52 +119,52 @@ export default function AdminCommunionCardsPage() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8 flex justify-between items-start">
-          <div>
-            <h2 className="text-3xl font-bold mb-2">Communion Management - Card View</h2>
-            <p className="text-muted-foreground">Manage communion requests with visual cards</p>
-          </div>
-          <div className="flex space-x-2">
-            <Link href="/admin/communion">
-              <Button variant="outline" size="sm">
-                <List className="h-4 w-4 mr-2" />
-                Table View
+          <div className="mb-8 flex justify-between items-start">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">{t("adminCommunion.header.titleCard")}</h2>
+              <p className="text-muted-foreground">{t("adminCommunion.header.subtitleCard")}</p>
+            </div>
+            <div className="flex space-x-2">
+              <Link href="/admin/communion">
+                <Button variant="outline" size="sm">
+                  <List className="h-4 w-4 mr-2" />
+                  {t("adminCommunion.views.tableView")}
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm" disabled>
+                <Grid3X3 className="h-4 w-4 mr-2" />
+                {t("adminCommunion.views.cardView")}
               </Button>
-            </Link>
-            <Button variant="outline" size="sm" disabled>
-              <Grid3X3 className="h-4 w-4 mr-2" />
-              Card View
-            </Button>
+            </div>
           </div>
-        </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("adminCommunion.stats.totalTitle")}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{allTotal}</div>
-              <p className="text-xs text-muted-foreground">All communion requests</p>
+              <p className="text-xs text-muted-foreground">{t("adminCommunion.stats.totalSub")}</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Approval</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("adminCommunion.stats.pendingTitle")}</CardTitle>
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{pendingTotal}</div>
-              <p className="text-xs text-muted-foreground">Awaiting approval</p>
+              <p className="text-xs text-muted-foreground">{t("adminCommunion.stats.pendingSub")}</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Approved Today</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("adminCommunion.stats.approvedTodayTitle")}</CardTitle>
               <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -173,7 +175,7 @@ export default function AdminCommunionCardsPage() {
                   format(new Date(c.approved_at), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
                 ).length}
               </div>
-              <p className="text-xs text-muted-foreground">Approved today</p>
+              <p className="text-xs text-muted-foreground">{t("adminCommunion.stats.approvedTodaySub")}</p>
             </CardContent>
           </Card>
         </div>
@@ -181,16 +183,16 @@ export default function AdminCommunionCardsPage() {
         {/* Tabs for different views */}
         <Tabs defaultValue="pending" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="pending">Pending Requests ({pendingTotal})</TabsTrigger>
-            <TabsTrigger value="all">All Requests ({allTotal})</TabsTrigger>
+            <TabsTrigger value="pending">{t("adminCommunion.tabs.pendingFull", { count: pendingTotal })}</TabsTrigger>
+            <TabsTrigger value="all">{t("adminCommunion.tabs.allFull", { count: allTotal })}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="pending" className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium">Pending Communion Requests</h3>
+              <h3 className="text-lg font-medium">{t("adminCommunion.sections.pendingTitle")}</h3>
               <Button onClick={loadPendingCommunions} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("common.refresh")}
               </Button>
             </div>
             
@@ -201,7 +203,7 @@ export default function AdminCommunionCardsPage() {
             ) : pendingCommunions.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center">
-                  <p className="text-muted-foreground">No pending communion requests found</p>
+                  <p className="text-muted-foreground">{t("adminCommunion.table.emptyTitle")}</p>
                 </CardContent>
               </Card>
             ) : (
@@ -225,17 +227,17 @@ export default function AdminCommunionCardsPage() {
                   disabled={pendingPage === 1 || loadingPending}
                   variant="outline"
                 >
-                  Previous
+                  {t("adminCommunion.pagination.previous")}
                 </Button>
                 <span className="flex items-center px-3 py-2">
-                  Page {pendingPage} of {Math.ceil(pendingTotal / pageSize)}
+                  {t("adminCommunion.pagination.pageOf", { page: pendingPage, totalPages: Math.ceil(pendingTotal / pageSize) })}
                 </span>
                 <Button 
                   onClick={() => setPendingPage(p => p + 1)}
                   disabled={pendingPage >= Math.ceil(pendingTotal / pageSize) || loadingPending}
                   variant="outline"
                 >
-                  Next
+                  {t("adminCommunion.pagination.next")}
                 </Button>
               </div>
             )}
@@ -243,10 +245,10 @@ export default function AdminCommunionCardsPage() {
           
           <TabsContent value="all" className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium">All Communion Requests</h3>
+              <h3 className="text-lg font-medium">{t("adminCommunion.sections.allTitle")}</h3>
               <Button onClick={loadAllCommunions} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("common.refresh")}
               </Button>
             </div>
             
@@ -257,7 +259,7 @@ export default function AdminCommunionCardsPage() {
             ) : allCommunions.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center">
-                  <p className="text-muted-foreground">No communion requests found</p>
+                  <p className="text-muted-foreground">{t("adminCommunion.table.emptyTitle")}</p>
                 </CardContent>
               </Card>
             ) : (
@@ -281,17 +283,17 @@ export default function AdminCommunionCardsPage() {
                   disabled={allPage === 1 || loadingAll}
                   variant="outline"
                 >
-                  Previous
+                  {t("adminCommunion.pagination.previous")}
                 </Button>
                 <span className="flex items-center px-3 py-2">
-                  Page {allPage} of {Math.ceil(allTotal / pageSize)}
+                  {t("adminCommunion.pagination.pageOf", { page: allPage, totalPages: Math.ceil(allTotal / pageSize) })}
                 </span>
                 <Button 
                   onClick={() => setAllPage(p => p + 1)}
                   disabled={allPage >= Math.ceil(allTotal / pageSize) || loadingAll}
                   variant="outline"
                 >
-                  Next
+                  {t("adminCommunion.pagination.next")}
                 </Button>
               </div>
             )}

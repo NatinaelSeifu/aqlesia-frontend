@@ -117,6 +117,24 @@ class ApiService {
     })
     return this.handleResponse(response)
   }
+
+  async uploadAvatar(id: string, file: File) {
+    const formData = new FormData()
+    formData.append("file", file)
+
+    const token = localStorage.getItem("access_token")
+    const headers: Record<string, string> = {}
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`
+    }
+
+    const response = await fetch(`${API_BASE_URL}/users/${id}/avatar`, {
+      method: "POST",
+      headers,
+      body: formData,
+    })
+    return this.handleResponse(response)
+  }
 }
 
 export const apiService = new ApiService()

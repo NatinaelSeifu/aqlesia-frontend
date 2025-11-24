@@ -9,11 +9,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Lock, CheckCircle, User, Settings } from "lucide-react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 export default function ProfilePage() {
   const { user, loading } = useAuth()
   const searchParams = useSearchParams()
   const [showPasswordSuccess, setShowPasswordSuccess] = useState(false)
+  const t = useTranslations()
 
   useEffect(() => {
     if (!loading && !user) {
@@ -50,14 +52,14 @@ export default function ProfilePage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-4">
               <User className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold mb-2 text-gray-900">Profile Settings</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Update your personal information and account preferences</p>
+            <h2 className="text-3xl font-bold mb-2 text-gray-900">{t("profile.header.title")}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">{t("profile.header.subtitle")}</p>
           </div>
           <div className="flex justify-center">
             <Link href="/profile/change-password">
               <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-lg">
                 <Lock className="h-4 w-4 mr-2" />
-                Change Password
+                {t("profile.actions.changePassword")}
               </Button>
             </Link>
           </div>
@@ -69,7 +71,7 @@ export default function ProfilePage() {
                 <CheckCircle className="h-5 w-5 text-green-700" />
               </div>
               <AlertDescription className="ml-3 text-green-800 font-medium">
-                Password changed successfully! Your account is now more secure.
+                {t("profile.changePassword.successAlert")}
               </AlertDescription>
             </Alert>
           </div>

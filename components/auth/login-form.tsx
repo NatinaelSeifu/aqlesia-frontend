@@ -16,6 +16,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/hooks/use-auth";
 import { Phone, Lock, AlertCircle, Key } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface LoginFormProps {
 	onSuccess?: () => void;
@@ -32,6 +33,7 @@ export function LoginForm({
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const { login, loading } = useAuth();
+	const t = useTranslations();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -49,10 +51,10 @@ export function LoginForm({
 		<Card className="w-full max-w-md mx-auto border-none shadow-none bg-transparent overflow-hidden">
 			<CardHeader className="text-center bg-transparent border-b-0">
 				<CardTitle className="text-2xl font-bold text-gray-900">
-					{"Welcome Back"}
+					{t("auth.welcomeBack")}
 				</CardTitle>
 				<CardDescription className="text-gray-600">
-					{"Sign in to your Aqlesia account"}
+					{t("auth.signInToAccount")}
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="p-8">
@@ -68,14 +70,14 @@ export function LoginForm({
 
 					<div className="space-y-2">
 						<Label htmlFor="phone" className="text-gray-700 font-medium">
-							{"ስልክ"}
+							{t("auth.phone")}
 						</Label>
 						<div className="relative">
 							<Phone className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
 							<Input
 								id="phone"
 								type="tel"
-								placeholder="+251912345678 or 0912345678"
+								placeholder={t("auth.phonePlaceholder")}
 								value={phoneNumber}
 								onChange={(e) => setPhoneNumber(e.target.value)}
 								className="pl-10 bg-transparent border-gray-300 focus:border-blue-500 focus:ring-blue-500"
@@ -86,14 +88,14 @@ export function LoginForm({
 
 					<div className="space-y-2">
 						<Label htmlFor="password" className="text-gray-700 font-medium">
-							{"ፓስወርድ"}
+							{t("auth.password")}
 						</Label>
 						<div className="relative">
 							<Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
 							<Input
 								id="password"
 								type="password"
-								placeholder="ፓስወርድዎን ያስገቡ"
+								placeholder={t("auth.passwordPlaceholder")}
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								className="pl-10 bg-transparent border-gray-300 focus:border-blue-500 focus:ring-blue-500"
@@ -107,7 +109,7 @@ export function LoginForm({
 									onClick={onForgotPassword}
 									className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium transition-colors"
 								>
-									{"ፓስወርድ ረሱ?"}
+									{t("auth.forgotPasswordQ")}
 								</button>
 							</div>
 						)}
@@ -119,19 +121,19 @@ export function LoginForm({
 						disabled={loading}
 					>
 						<Key className="h-4 w-4 mr-2" />
-						{loading ? "Signing in..." : "Sign In"}
+						{loading ? t("auth.signingIn") : t("auth.signIn")}
 					</Button>
 				</form>
 
 				<div className="mt-8 text-center">
 					<p className="text-sm text-gray-600">
-						{"Don't have an account? "}
+						{t("auth.dontHaveAccount")}
 						<button
 							type="button"
 							onClick={onSwitchToRegister}
 							className="text-blue-600 hover:text-blue-700 hover:underline font-medium transition-colors"
 						>
-							{"Sign up"}
+							{t("auth.signUp")}
 						</button>
 					</p>
 				</div>

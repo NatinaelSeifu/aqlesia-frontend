@@ -28,6 +28,8 @@ import type { Appointment } from "@/lib/appointments"
 import type { UserRole } from "@/lib/permissions"
 import { useAuth } from "@/hooks/use-auth"
 import { Calendar, Clock, FileText, X, CheckCircle, AlertCircle, User, Phone, Eye, RefreshCw } from "lucide-react"
+import { useTranslations, useLocale } from "next-intl"
+import { formatEthiopianDate, formatEthiopianWeekday } from "@/lib/date"
 
 interface AppointmentsListProps {
   showAllAppointments?: boolean
@@ -45,6 +47,8 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
   const [cancelLoading, setCancelLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(6)
+  const t = useTranslations()
+  const locale = useLocale()
 
   useEffect(() => {
     loadAppointments()
@@ -101,7 +105,7 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
       setAppointments(appointmentsList)
     } catch (err) {
       console.error('Error loading appointments:', err)
-      setError(err instanceof Error ? err.message : "Failed to load appointments")
+      setError(err instanceof Error ? err.message : t("appointments.list.errors.loadFailed"))
       setAppointments([]) // Set to empty array on error
     } finally {
       setLoading(false)
@@ -137,7 +141,7 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
       setTimeout(() => setSuccess(""), 5000)
     } catch (err) {
       console.error('Error cancelling appointment:', err)
-      setError(err instanceof Error ? err.message : "Failed to cancel appointment")
+      setError(err instanceof Error ? err.message : t("appointments.list.errors.cancelFailed"))
     } finally {
       setCancelLoading(false)
     }
@@ -150,7 +154,7 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
         (appointments || []).map((apt) => (apt.id === appointment.id ? { ...apt, status: "completed" as const } : apt)),
       )
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to complete appointment")
+      setError(err instanceof Error ? err.message : t("appointments.list.errors.completeFailed"))
     }
   }
 
@@ -235,7 +239,7 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{"You don't have permission to view all appointments."}</AlertDescription>
+        <AlertDescription>{t("appointments.list.errors.noPermissionAll")}</AlertDescription>
       </Alert>
     )
   }
@@ -245,7 +249,7 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
       <div className="flex items-center justify-center py-8">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-          <span className="text-gray-700">Loading appointments...</span>
+          <span className="text-gray-700">{t("appointments.list.loading")}</span>
         </div>
       </div>
     )
@@ -268,15 +272,15 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
       )}
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-900">{showAllAppointments ? "All Appointments" : "My Appointments"}</h3>
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900">{showAllAppointments ? t("appointments.list.allTitle") : t("appointments.list.myTitle")}</h3>
         <Button 
           onClick={loadAppointments} 
           className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium shadow-lg self-start sm:self-auto"
           size="sm"
         >
           <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-          <span className="hidden sm:inline">Refresh</span>
-          <span className="sm:hidden">Reload</span>
+          <span className="hidden sm:inline">{t("common.refresh")}</span>
+          <span className="sm:hidden">{t("common.reload")}</span>
         </Button>
       </div>
 
@@ -287,11 +291,11 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full mb-6">
                 <Calendar className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">No Appointments Found</h3>
+              <h3 className="text-xl font-semibold mb-3 text-gray-900">{t("appointments.list.empty.title")}</h3>
               <p className="text-gray-600 mb-4 max-w-sm mx-auto">
                 {showAllAppointments
-                  ? "No appointments have been scheduled yet. When patients book appointments, they'll appear here."
-                  : "You haven't scheduled any appointments yet. Click the 'Book New' tab to schedule your first appointment."}
+                  ? t("appointments.list.empty.descAll")
+                  : t("appointments.list.empty.descMine")}
               </p>
             </div>
           </CardContent>
@@ -315,19 +319,10 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-gray-900 text-base sm:text-lg">
-                            {new Date(appointment.appointment_date).toLocaleDateString("en-US", {
-                              weekday: "short",
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
+                            {`${formatEthiopianDate(new Date(appointment.appointment_date), locale)} (${formatEthiopianWeekday(new Date(appointment.appointment_date), locale)})`}
                           </div>
                           <div className="text-xs sm:text-sm text-gray-500">
-                            Booked on {new Date(appointment.created_at).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
+                            {t("appointments.list.bookedOn")} {formatEthiopianDate(new Date(appointment.created_at), locale)}
                           </div>
                         </div>
                       </div>
@@ -386,14 +381,14 @@ export function AppointmentsList({ showAllAppointments = false }: AppointmentsLi
                             className="rounded-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-sm hover:shadow ring-1 ring-blue-400/30 text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                           >
                             <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                            View
+                            {t("appointments.list.view")}
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="bg-white max-w-md [&>button]:opacity-100 [&>button]:text-gray-500 [&>button:hover]:text-gray-700 [&>button]:bg-gray-100 [&>button:hover]:bg-gray-200 [&>button]:rounded-full [&>button]:p-1">
                           <DialogHeader>
                             <DialogTitle className="text-gray-900 flex items-center space-x-2">
                               <Calendar className="h-5 w-5 text-purple-600" />
-                              <span>Appointment Details</span>
+                              <span>{t("appointments.list.detailsTitle")}</span>
                             </DialogTitle>
                           </DialogHeader>
                           {selectedAppointment && (

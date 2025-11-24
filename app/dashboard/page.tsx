@@ -6,10 +6,12 @@ import { useAuth } from "@/hooks/use-auth"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { StatsOverview } from "@/components/dashboard/stats-overview"
 import { User } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function DashboardPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
+  const t = useTranslations()
 
   useEffect(() => {
     if (!loading && !user) {
@@ -29,11 +31,11 @@ export default function DashboardPage() {
 
   const getWelcomeMessage = () => {
     if (user.role === "admin") {
-      return "Manage your church operations and community engagement"
+      return t("dashboard.adminMessage")
     } else if (user.role === "manager") {
-      return "Coordinate appointments and support church community"
+      return t("dashboard.managerMessage")
     } else {
-      return "Manage your appointments and communion requests"
+      return t("dashboard.userMessage")
     }
   }
 
@@ -48,7 +50,7 @@ export default function DashboardPage() {
               <User className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-semibold mb-2 text-gray-900">Welcome back, {user.name}</h1>
+              <h1 className="text-4xl font-semibold mb-2 text-gray-900">{t("dashboard.welcomeBackName", {name: user.name})}</h1>
               <p className="text-gray-600 text-lg">{getWelcomeMessage()}</p>
             </div>
           </div>
