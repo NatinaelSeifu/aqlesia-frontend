@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Pagination,
   PaginationContent,
@@ -51,6 +52,7 @@ export function UsersList() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<User | null>(null)
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null)
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null)
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
@@ -353,7 +355,28 @@ export function UsersList() {
                 <TableBody>
                   {filteredUsers.map((user) => (
                     <TableRow key={user.id} className="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                      <TableCell className="font-medium text-gray-900">{user.name || "—"}</TableCell>
+                      <TableCell className="font-medium text-gray-900">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="cursor-pointer transition-transform hover:scale-105"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (user.profile_image) {
+                                setZoomedImage(user.profile_image)
+                              }
+                            }}
+                          >
+                            <Avatar className="h-9 w-9 border border-gray-200">
+                              <AvatarImage src={user.profile_image} alt={user.name} className="object-cover" />
+                              <AvatarFallback className="bg-indigo-100 text-indigo-700 font-medium">
+                                {user.name?.charAt(0).toUpperCase()}
+                                {user.lastname?.charAt(0).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                          <span>{user.name || "—"}</span>
+                        </div>
+                      </TableCell>
                       <TableCell className="text-gray-700">{user.lastname || "—"}</TableCell>
                       <TableCell>
                         <div className="flex items-center text-gray-700">
@@ -627,6 +650,21 @@ export function UsersList() {
               {t("adminUsers.delete.confirm")}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Image Zoom Dialog */}
+      <Dialog open={!!zoomedImage} onOpenChange={(open) => !open && setZoomedImage(null)}>
+        <DialogContent className="sm:max-w-md p-0 overflow-hidden bg-transparent border-none shadow-none">
+          <div className="relative aspect-square w-full">
+            {zoomedImage && (
+              <img 
+                src={zoomedImage} 
+                alt="Profile Zoom" 
+                className="w-full h-full object-contain rounded-lg"
+              />
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>
