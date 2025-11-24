@@ -729,6 +729,9 @@
       "title": "Profile Settings",
       "subtitle": "Update your personal information and account preferences"
     },
+    "avatar": {
+      "helperText": "Click to upload a new profile picture"
+    },
     "actions": {
       "changePassword": "Change Password",
       "add": "Add",

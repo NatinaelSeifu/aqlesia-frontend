@@ -11,6 +11,7 @@ export interface User {
   partner_name?: string
   childrens_name?: string[]
   telegram_id?: string
+  profile_image?: string
   created_at: string
   updated_at: string
 }

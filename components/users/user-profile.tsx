@@ -23,14 +23,16 @@ import {
   CheckCircle,
   Settings,
   UserCircle,
-  X
+  X,
+  Camera,
+  Loader2
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 export function UserProfile() {
   const { user: currentUser } = useAuth()
   const t = useTranslations()
-  const [userProfile, setUserProfile] = useState(null)
+  const [userProfile, setUserProfile] = useState<any>(null)
   const [formData, setFormData] = useState({
     name: "",
     lastname: "",
@@ -45,6 +47,8 @@ export function UserProfile() {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [childName, setChildName] = useState("")
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
+
   // Fetch fresh user data
   const fetchUserProfile = async () => {
     if (!currentUser?.id) return
@@ -149,6 +153,49 @@ export function UserProfile() {
     }))
   }
 
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !currentUser?.id) return
+
+    // Basic validation
+    if (file.size > 5 * 1024 * 1024) {
+      setError(t("profile.validation.fileTooLarge"))
+      return
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
+    if (!allowedTypes.includes(file.type)) {
+      setError(t("profile.validation.invalidFileType"))
+      return
+    }
+
+    setUploadingAvatar(true)
+    setError("")
+
+    try {
+      const response = await apiService.uploadAvatar(currentUser.id, file)
+      if (response.image_url) {
+        // Update local state to show new image immediately
+        setUserProfile((prev: any) => ({
+          ...prev,
+          profile_image: response.image_url
+        }))
+        
+        // Update local storage so other components (and next reload) see the change
+        const storedUser = localStorage.getItem("user")
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser)
+          parsedUser.profile_image = response.image_url
+          localStorage.setItem("user", JSON.stringify(parsedUser))
+        }
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("profile.errors.uploadFailed"))
+    } finally {
+      setUploadingAvatar(false)
+    }
+  }
+
   if (!currentUser) return null
 
   // Ensure form data has been initialized
@@ -175,6 +222,46 @@ export function UserProfile() {
       </CardHeader>
       
       <CardContent className="p-8">
+        <div className="flex flex-col items-center mb-8">
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100">
+              {userProfile?.profile_image || currentUser?.profile_image ? (
+                <img 
+                  src={userProfile?.profile_image || currentUser?.profile_image} 
+                  alt="Profile" 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-blue-100 text-blue-500">
+                  <User className="w-16 h-16" />
+                </div>
+              )}
+              
+              {uploadingAvatar && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 text-white animate-spin" />
+                </div>
+              )}
+            </div>
+            
+            <label 
+              htmlFor="avatar-upload" 
+              className={`absolute bottom-0 right-0 p-2 bg-blue-600 text-white rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition-colors ${uploadingAvatar ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              <Camera className="w-5 h-5" />
+              <input 
+                id="avatar-upload" 
+                type="file" 
+                accept="image/jpeg,image/png,image/webp" 
+                className="hidden" 
+                onChange={handleAvatarUpload}
+                disabled={uploadingAvatar}
+              />
+            </label>
+          </div>
+          <p className="mt-2 text-sm text-gray-500">{t("profile.avatar.helperText")}</p>
+        </div>
+
         <form key={currentUser?.id} onSubmit={handleSubmit} className="space-y-8">
           {error && (
             <Alert variant="destructive" className="border-red-200 bg-red-50">
