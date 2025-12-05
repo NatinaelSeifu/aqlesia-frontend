@@ -51,6 +51,7 @@ export function DashboardHeader() {
       return [
         { href: "/appointments", label: t("nav.appointments"), icon: Calendar },
         { href: "/admin/appointments", label: t("nav.manageAppointments"), icon: CalendarCheck },
+        { href: "/admin/available-dates", label: t("nav.availableDates"), icon: CalendarCheck },
         { href: "/communion", label: t("nav.communion"), icon: MessageSquare },
         { href: "/users", label: t("nav.users", {default: "Users"} as any) as unknown as string, icon: Users },
         { href: "/questions", label: t("nav.questions"), icon: HelpCircle },
