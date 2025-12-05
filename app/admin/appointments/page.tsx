@@ -77,7 +77,17 @@ export default function AdminAppointmentsPage() {
       if (Array.isArray(appointments)) list = appointments;
       else if (appointments?.appointments) list = appointments.appointments;
       else if (appointments?.data) list = appointments.data;
-      setPendingAppointments(list.filter(a => a.status === "pending"));
+      
+      // Filter to only include pending appointments that are NOT overdue
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      setPendingAppointments(list.filter(a => {
+        if (a.status !== "pending") return false;
+        const appointmentDate = new Date(a.appointment_date);
+        appointmentDate.setHours(0, 0, 0, 0);
+        return appointmentDate >= today; // Only include today or future dates
+      }));
     } catch (error) {
       toast({title: t("adminAppointments.toasts.loadPendingErrorTitle"), description: error instanceof Error ? error.message : t("adminAppointments.errors.tryAgain"), variant: "destructive"});
     } finally {
@@ -192,7 +202,7 @@ export default function AdminAppointmentsPage() {
             <CardContent className="pt-2 sm:pt-4">
               <div className="text-2xl sm:text-3xl font-bold text-amber-900">{pendingAppointments.length}</div>
               <p className="text-xs sm:text-sm text-amber-700 mt-1">
-                {t("adminAppointments.stats.pendingLine", {overdue: pendingAppointments.filter(isOverdue).length, pending: pendingAppointments.filter(a => !isOverdue(a)).length})}
+                {t("adminAppointments.stats.pendingTitle")}
               </p>
             </CardContent>
           </Card>

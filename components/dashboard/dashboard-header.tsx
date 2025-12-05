@@ -207,7 +207,7 @@ export function DashboardHeader() {
                       </Avatar>
                       <div className="flex flex-col">
                         <span className="text-sm font-semibold text-gray-900">{user.name} {user.lastname}</span>
-                        <span className="text-xs text-gray-500">{user.email}</span>
+                        <span className="text-xs text-gray-500">{user.phone_number}</span>
                         {(user.role === 'admin' || user.role === 'manager') && (
                           <span className="text-xs text-blue-600 font-medium capitalize">{user.role}</span>
                         )}

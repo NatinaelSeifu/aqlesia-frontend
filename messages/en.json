@@ -377,7 +377,7 @@
     "stats": {
       "totalTitle": "Total Appointments",
       "totalSub": "All appointments",
-      "pendingTitle": "Pending & Overdue",
+      "pendingTitle": "Pending",
       "pendingLine": "{overdue} overdue, {pending} pending",
       "completedTodayTitle": "Completed Today",
       "completedTodaySub": "Completed today"
